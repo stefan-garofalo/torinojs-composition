@@ -8,3 +8,9 @@ Seed sections as the repo grows:
 - Specs
 - Decisions
 - Recent ingest activity
+
+## Specs
+
+| Domain | Spec | Status |
+|--------|------|--------|
+| presentation | [[specs/presentation/dark-javascript-visual-system/SPEC]] | Implemented |

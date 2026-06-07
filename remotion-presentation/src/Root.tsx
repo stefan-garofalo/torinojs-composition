@@ -1,6 +1,12 @@
 import "./index.css";
 import { Composition } from "remotion";
-import { MyComposition } from "./Composition";
+import {
+  MyComposition,
+  VISUAL_SYSTEM_DURATION_IN_FRAMES,
+  VISUAL_SYSTEM_FPS,
+  VISUAL_SYSTEM_HEIGHT,
+  VISUAL_SYSTEM_WIDTH,
+} from "./Composition";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -8,10 +14,10 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="MyComp"
         component={MyComposition}
-        durationInFrames={60}
-        fps={30}
-        width={1280}
-        height={720}
+        durationInFrames={VISUAL_SYSTEM_DURATION_IN_FRAMES}
+        fps={VISUAL_SYSTEM_FPS}
+        width={VISUAL_SYSTEM_WIDTH}
+        height={VISUAL_SYSTEM_HEIGHT}
       />
     </>
   );
