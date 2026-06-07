@@ -1,0 +1,1 @@
+{"targetFile":".agents/subagents/manifest.mjs","specFile":".devpunks/specs/subagents/manifest-spec.json","finalPacks":["debug","docs","frontend","planning","quality","react","requirements","research","subagents","typescript"],"workspaces":["remotion-presentation","wiki"],"specialists":[]}

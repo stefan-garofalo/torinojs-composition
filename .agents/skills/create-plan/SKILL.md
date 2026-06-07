@@ -10,7 +10,7 @@ description: Creates execution-ready `PLAN.md` artifacts by explicitly wrapping 
 - **Role:** higher-order planning orchestrator
 - **Entrypoint type:** public entrypoint
 - **Upstream:** approved `SPEC.md` or explicit planning request
-- **Delegates to:** `planning-discovery` for bounded readonly orientation when subagents are available; `$grill-me`, `$parallel-research`, `$swarm-planner`, `$tdd`; `plan-reviewer` for the final readonly plan review
+- **Delegates to:** `$grill-me`, `$parallel-research`, `$swarm-planner`, `$tdd`
 - **Downstream:** execution-ready `PLAN.md` for `implement-spec`
 - **Entry conditions:** scope is clear enough to plan; stop if required planning inputs or tools are missing
 - **Stop conditions:** `PLAN.md` and backlog sync are complete; no implementation started
@@ -46,28 +46,13 @@ Create a plan first. Never implement code in this skill.
 1. Derive host, owner, tracker, and scope from repo state instead of assuming them.
 2. Ask only for missing high-impact inputs such as scope, goal, or backlog target.
 3. Every plan-shaping question must use the exact block: `Decision`, `Recommendation`, `Question`, `Why it matters`.
-4. Keep `$grill-me`, `$parallel-research`, `$swarm-planner`, and `$tdd` as visible inner phases of one planning run; record when `$parallel-research`, `planning-discovery`, or `plan-reviewer` is used or intentionally skipped because the work is not split-friendly or subagents are unavailable.
+4. Keep `$grill-me`, `$parallel-research`, `$swarm-planner`, and `$tdd` as visible inner phases of one planning run; record when `$parallel-research` is used or intentionally skipped because the work is not split-friendly.
 5. Resolve each task's scoped guidance from root `AGENTS.md` down to the nearest `AGENTS.md` for its `location`.
 6. Use each task's required skill guidance while shaping its scope, dependencies, validation, RED target, and review mode; do not merely list skills after the plan is written.
 7. Assign each task the exact existing skills required by those scoped `Primary skills here` lists, merging all scopes for cross-directory tasks.
 8. Normalize every task with stable ids, `depends_on`, `location`, `description`, `validation`, `status`, `log`, `files edited/created`, owning-story backlog references, `assigned_skills`, `tdd_target`, and `review_mode`.
 9. Keep the saved plan standalone: include situation, issue, solution shape, assumptions, findings, research, dependency graph, testing strategy, skill-routing notes, risks, validation gates, unresolved questions, and a resolved decision ledger.
 10. Stop after plan creation and backlog sync. Do not implement code or spawn implementation workers.
-
-### Stack-aware preservation
-
-If `SPEC.md` contains `Dependency Readiness` or `Branch/Base Intent`, copy those
-sections into `PLAN.md` and validate that they are internally consistent.
-
-- Preserve the exact dependency status: `No Stack Required`,
-  `Branch/Base Intent`, or `Blocked`.
-- Do not decide stack topology in `create-plan`.
-- Do not convert task-level `depends_on` into stacked PRs. Intra-epic task
-  dependencies stay inside one PR and only control implementation order.
-- If `Dependency Readiness` is `Blocked`, stop planning and report the blocker
-  instead of producing an execution-ready plan.
-- If `Branch/Base Intent` exists, make implementation tasks reference that
-  branch/base intent as an execution constraint.
 
 ### Review modes
 

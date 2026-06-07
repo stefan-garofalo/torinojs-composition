@@ -1,0 +1,132 @@
+# Wiki Schema
+
+This file defines how any agent operates within `wiki/`. Read it before creating or modifying wiki content.
+
+## Skill Routing
+
+Primary skills here: `create-spec`, `create-plan`, `implement-spec`, `simplify`.
+
+- Phase skills such as `docs-ingest-phase` are global orchestration entrypoints, not scoped primary skills. Invoke them from the parent goal/handoff flow when needed; do not list them in scoped `AGENTS.md` primary-skill lines.
+- Use `create-plan` to turn an approved spec into an execution-ready `PLAN.md`.
+- Use `implement-spec` to execute an approved spec folder. Choose the execution mode inside the skill: `sequential` or `parallel`.
+- Write canonical project operations under `content/docs/project/`.
+- Keep `content/docs/project/` as the default scaffolded route tree. Product/domain routes belong to the individual project and should be added only when the repo deliberately defines them.
+- Keep project-owned domain source indexes under `content/docs/project/domains/` when the repo defines routed domain surfaces.
+- Do not create or maintain a separate `domains/` article tree.
+- `SPEC.md` and `IMPLEMENTATION-NOTES.md` remain source material, but the ingest orchestrator may update their frontmatter/link bookkeeping (`ingested`, `last_ingested`, backlinks) as part of the pipeline.
+
+## Directory Conventions
+
+### `content/docs/project/` — Project Operations
+
+Canonical routed pages for internal project operations: specs, plans, implementation notes, maintenance logs, decisions, repo guidance, and runbooks.
+
+### `raw/` — Immutable Sources
+
+Human-authored source material. Agent reads but **never edits**.
+
+- `meetings/` — meeting notes, transcripts
+- `external/` — external docs, reference material
+- `assets/` — binary files, images, PDFs
+
+### `specs/` — Feature Specifications
+
+PM-authored specifications organized by domain. Agents should treat their product intent as source material and should not rewrite requirements casually, but the ingest orchestrator may update frontmatter/link bookkeeping when processing them into domain knowledge.
+
+- `specs/CONSTITUTION.md` — repo-level implementation rules and sanity checks for spec-driven skills
+- `specs/<domain>/<domain>-specs.md` — domain spec page map (entry point for discovery)
+- `specs/<domain>/<spec-name>/SPEC.md` — individual spec file
+- `specs/<domain>/<spec-name>/PLAN.md` — optional implementation plan for that spec
+- `specs/<domain>/<spec-name>/IMPLEMENTATION-NOTES.md` — run-local reviewer context for that spec implementation; carries its own frontmatter and `ingested` tracking
+
+## Frontmatter Schema
+
+### Base (all wiki pages)
+
+```yaml
+---
+domain: auth | user-management | documents
+type: concept | flow | decision | contract | index | spec | implementation-notes
+surface: wiki | project
+permission: internal | project
+links: []
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+---
+```
+
+### Spec-only addition
+
+```yaml
+status: draft | review | approved | implemented
+```
+
+`status` is required when `type: spec`, omitted for all others.
+
+### Routed concept and flow pages
+
+```yaml
+ingested: true | false
+last_ingested: YYYY-MM-DD | null
+source:
+  - specs/<domain>/<spec>/SPEC.md
+```
+
+Tracks whether the LLM has processed the page. Enables staleness queries.
+
+### Implementation notes (`type: implementation-notes`)
+
+```yaml
+---
+domain: <domain>
+type: implementation-notes
+spec: <spec-id> # e.g. CP-120
+links:
+  - "[[specs/<domain>/<spec>/SPEC]]" # always: own spec
+  - "[[content/docs/<domain>/<flow-or-concept>]]" # added after routed pages are written
+ingested: true | false
+last_ingested: YYYY-MM-DD | null
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+---
+```
+
+`ingested: true` means the notes were processed by `$docs-ingest-phase` and their deviations/surprises are reflected in the domain flow and concept pages. Set only by the ingest orchestrator — never by hand.
+
+### Raw files
+
+```yaml
+ingested: true | false
+last_ingested: YYYY-MM-DD | null
+```
+
+## Ingest Workflow
+
+When processing source material into routed domain knowledge:
+
+1. Read source fully
+2. Identify which domains it touches
+3. For each domain: update or create routed flow pages first, then routed concept pages
+4. Flag contradictions with `> [!warning] CONTRADICTS [[page]]`
+5. Append entry to `log.md` (cap at 50 entries — drop oldest if over)
+6. Update route `meta.json` files and root `index.md` if new pages created
+7. Set `ingested: true` and `last_ingested` on processed source and created/updated pages, including `IMPLEMENTATION-NOTES.md` when present
+
+## Cross-Domain Linking Rules
+
+- Link routed pages with normal Markdown links or existing wiki link conventions used by the repo.
+- A concept in one domain should link to related concepts in other domains.
+- Backlinks from routed pages to source specs should point to `specs/domain/spec-name`.
+
+## Lint Rules
+
+- Orphan pages (no inbound links) = knowledge gaps
+- Pages without frontmatter = malformed
+- Stale pages (not updated in 30+ days after related ingest) = review needed
+- Contradictions flagged but unresolved = action items
+
+## Relationship to `docs/`
+
+- `wiki/` owns business specs and domain contracts (the "what")
+- `docs/` owns implemented architecture and reference (the "how it works now")
+- `content/docs/project/tech-debt/<domain>/<spec>/<debt-slug>.md` owns persistent implementation drift tied to one spec; keep temporary execution notes in the spec folder instead

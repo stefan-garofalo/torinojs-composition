@@ -18,8 +18,11 @@
     "@types/react": "19.2.7",
     "@types/web": "0.0.166",
     "eslint": "9.19.0",
+    "eslint-plugin-react-you-might-not-need-an-effect": "latest",
+    "oxlint": "latest",
     "prettier": "3.8.1",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "ultracite": "latest"
   },
   "scripts": {
     "dev": "remotion studio",
