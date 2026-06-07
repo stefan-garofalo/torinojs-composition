@@ -6,6 +6,7 @@ Seed sections as the repo grows:
 
 - Domains
 - Specs
+  - [Presenter specs](specs/presenter/presenter-specs.md)
 - Decisions
 - Recent ingest activity
 

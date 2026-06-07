@@ -4,6 +4,7 @@ import {
   CodePlusDxStage,
   NarrativeStage,
 } from "./components/stage";
+import { PresenterDeck } from "./presenter/deck";
 
 export const VISUAL_SYSTEM_FPS = 60;
 export const VISUAL_SYSTEM_WIDTH = 1920;
@@ -85,4 +86,8 @@ export const MyComposition = () => {
       </Series.Sequence>
     </Series>
   );
+};
+
+export const PresenterComposition = () => {
+  return <PresenterDeck />;
 };
