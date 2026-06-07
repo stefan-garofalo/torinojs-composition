@@ -1,1 +1,81 @@
 @import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-stage-yellow: var(--stage-js-yellow);
+  --color-stage-dark: var(--stage-dark-base);
+  --font-sans: "Geist", "Avenir Next", "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", "JetBrains Mono", "SFMono-Regular", monospace;
+  --radius: 0.625rem;
+  --radius-xs: calc(var(--radius) * 0.5);
+  --radius-sm: calc(var(--radius) * 0.75);
+  --radius-md: calc(var(--radius) * 0.875);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --spacing-stage-gutter: var(--stage-gutter);
+  --spacing-stage-gap: var(--stage-gap);
+  --spacing-stage-panel: var(--stage-panel-padding);
+  --ease-stage: var(--motion-ease-standard);
+}
+
+:root,
+.dark {
+  color-scheme: dark;
+  --stage-js-yellow: #F0DB4F;
+  --stage-dark-base: #323330;
+  --background: #323330;
+  --foreground: #F5F5F4;
+  --card: #262725;
+  --card-foreground: #F5F5F4;
+  --popover: #232421;
+  --popover-foreground: #F5F5F4;
+  --primary: #F0DB4F;
+  --primary-foreground: #25250E;
+  --secondary: #3B3C39;
+  --secondary-foreground: #F5F5F4;
+  --muted: #444540;
+  --muted-foreground: #C9C9C1;
+  --accent: #F0DB4F;
+  --accent-foreground: #25250E;
+  --border: #55564F;
+  --input: #444540;
+  --ring: #F0DB4F;
+  --stage-surface-raised: #3B3C39;
+  --stage-surface-code: #232421;
+  --stage-text-soft: #E2E2D9;
+  --stage-text-muted: #C9C9C1;
+  --stage-gutter: 5rem;
+  --stage-gap: 2rem;
+  --stage-panel-padding: 1.5rem;
+  --motion-ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-duration-fast: 180ms;
+  --motion-duration-standard: 320ms;
+  --motion-duration-slow: 560ms;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Geist", "Avenir Next", "Segoe UI", sans-serif;
+}
