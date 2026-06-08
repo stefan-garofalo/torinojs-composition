@@ -1,9 +1,13 @@
+import type { CSSProperties } from "react";
 import type { UIState } from "../remocn/live-code-compilation";
-
-const FONT_FAMILY =
-  "var(--font-geist-sans), -apple-system, BlinkMacSystemFont, sans-serif";
-const MONO_FAMILY =
-  "var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace";
+import { stageTokens } from "../stage/tokens";
+import {
+  notificationPreviewByVariant,
+  type NotificationPreviewAction,
+  type NotificationPreviewData,
+  type NotificationPreviewMedia,
+  type NotificationPreviewVariantId,
+} from "./notification-preview-data";
 
 export interface MockNotificationPreviewProps {
   accentColor?: string;
@@ -12,204 +16,420 @@ export interface MockNotificationPreviewProps {
 }
 
 export function MockNotificationPreview({
-  accentColor = "#f0db4f",
+  accentColor = stageTokens.color.jsYellow,
   frame = 0,
   ui = {},
 }: MockNotificationPreviewProps) {
-  const tone = String(ui.tone ?? "neutral");
-  const title = String(ui.title ?? "Queued for review");
-  const message = String(
-    ui.message ?? "A policy check is waiting for moderator context.",
-  );
-  const source = String(ui.source ?? "composition.review");
+  const variantId = resolveVariantId(ui);
+  const notification = notificationPreviewByVariant[variantId];
   const compact = ui.compact === true;
-  const showActions = ui.showActions === true;
-  const reviewed = ui.reviewed === true;
   const entrance = Math.min(1, Math.max(0, (frame - 18) / 18));
 
   return (
-    <div
+    <section
       style={{
-        width: compact ? 520 : 610,
-        borderRadius: compact ? 18 : 26,
-        border: "1px solid rgba(255,255,255,0.1)",
-        background:
-          "linear-gradient(180deg, rgba(24,24,27,0.94), rgba(10,10,12,0.96))",
-        boxShadow: "0 26px 70px rgba(0,0,0,0.45)",
-        color: "#f8fafc",
-        fontFamily: FONT_FAMILY,
+        ...shellStyle,
+        gap: compact ? 14 : 18,
         opacity: 0.72 + entrance * 0.28,
-        padding: compact ? 22 : 30,
+        padding: compact ? 24 : 30,
         transform: `translateY(${Math.round((1 - entrance) * 18)}px)`,
+        width: compact ? 520 : 620,
       }}
     >
-      <div
-        style={{
-          alignItems: "center",
-          display: "flex",
-          gap: 12,
-          justifyContent: "space-between",
-        }}
-      >
-        <div
-          style={{
-            color: "rgba(248,250,252,0.58)",
-            fontFamily: MONO_FAMILY,
-            fontSize: 13,
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-          }}
-        >
-          Moderation event
-        </div>
-        <StatusPill
-          accentColor={accentColor}
-          label={reviewed ? "Resolved" : tone}
-          reviewed={reviewed}
-        />
-      </div>
-      <div
-        style={{
-          display: "grid",
-          gap: compact ? 10 : 14,
-          marginTop: compact ? 18 : 24,
-        }}
-      >
-        <h3
-          style={{
-            fontSize: compact ? 30 : 38,
-            fontWeight: 650,
-            letterSpacing: 0,
-            lineHeight: 1.05,
-            margin: 0,
-          }}
-        >
-          {title}
-        </h3>
-        <p
-          style={{
-            color: "rgba(248,250,252,0.68)",
-            fontSize: compact ? 18 : 21,
-            lineHeight: 1.35,
-            margin: 0,
-          }}
-        >
-          {message}
-        </p>
-      </div>
-      <div
-        style={{
-          borderTop: "1px solid rgba(255,255,255,0.08)",
-          display: "grid",
-          gap: 12,
-          gridTemplateColumns: "1fr auto",
-          marginTop: compact ? 20 : 28,
-          paddingTop: compact ? 16 : 20,
-        }}
-      >
+      <header style={headerStyle}>
         <div>
-          <div
-            style={{
-              color: "rgba(248,250,252,0.45)",
-              fontFamily: MONO_FAMILY,
-              fontSize: 12,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-            }}
-          >
-            Source
-          </div>
-          <div
-            style={{
-              color: "rgba(248,250,252,0.82)",
-              fontFamily: MONO_FAMILY,
-              fontSize: 17,
-              marginTop: 7,
-            }}
-          >
-            {source}
-          </div>
+          <p style={eyebrowStyle}>{notification.eyebrow}</p>
+          <h3 style={{ ...titleStyle, fontSize: compact ? 30 : 36 }}>
+            {String(ui.title ?? notification.eyebrow)}
+          </h3>
         </div>
-        {showActions ? (
-          <div style={{ display: "flex", gap: 10 }}>
-            <ActionButton label="Hold" tone="neutral" />
-            <ActionButton label="Approve" tone="accent" />
-          </div>
-        ) : (
-          <div
-            style={{
-              alignSelf: "center",
-              borderRadius: 999,
-              color: "rgba(248,250,252,0.5)",
-              fontFamily: MONO_FAMILY,
-              fontSize: 13,
-            }}
-          >
-            Shape pending
-          </div>
-        )}
-      </div>
-    </div>
+        {notification.badge ? <Badge label={notification.badge} /> : null}
+      </header>
+      <p style={{ ...subtitleStyle, fontSize: compact ? 20 : 23 }}>
+        {String(ui.message ?? notification.title)}
+      </p>
+      <div style={separatorStyle} />
+      <NotificationCard
+        accentColor={accentColor}
+        compact={compact}
+        data={notification}
+      />
+    </section>
   );
 }
 
-function StatusPill({
+function resolveVariantId(ui: UIState): NotificationPreviewVariantId {
+  const value = ui.variantId;
+  if (
+    value === "follow-request" ||
+    value === "post-like" ||
+    value === "dm-request" ||
+    value === "photo-tag" ||
+    value === "moderation" ||
+    value === "post-comment"
+  ) {
+    return value;
+  }
+  return "moderation";
+}
+
+function NotificationCard({
   accentColor,
-  label,
-  reviewed,
+  compact,
+  data,
 }: {
   accentColor: string;
-  label: string;
-  reviewed: boolean;
+  compact: boolean;
+  data: NotificationPreviewData;
 }) {
   return (
-    <div
+    <article
       style={{
-        alignItems: "center",
-        background: reviewed ? `${accentColor}22` : "rgba(255,255,255,0.06)",
-        border: `1px solid ${reviewed ? `${accentColor}66` : "rgba(255,255,255,0.1)"}`,
-        borderRadius: 999,
-        color: reviewed ? "#f8fafc" : "rgba(248,250,252,0.64)",
-        display: "flex",
-        fontFamily: MONO_FAMILY,
-        fontSize: 13,
-        gap: 8,
-        padding: "8px 12px",
-        textTransform: "uppercase",
+        ...cardStyle,
+        gap: compact ? 18 : 22,
+        padding: compact ? 22 : 28,
       }}
     >
-      <span
-        style={{
-          background: reviewed ? accentColor : "rgba(248,250,252,0.36)",
-          borderRadius: 5,
-          height: 9,
-          width: 9,
-        }}
-      />
-      {label}
+      <div style={rowStyle}>
+        {data.systemIcon ? (
+          <SystemIcon accentColor={accentColor} compact={compact}>
+            {data.systemIcon}
+          </SystemIcon>
+        ) : (
+          <Avatar compact={compact} data={data} />
+        )}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={notificationHeaderStyle}>
+            <p style={{ ...actorStyle, fontSize: compact ? 23 : 27 }}>
+              {data.actor}
+            </p>
+            <span style={timeStyle}>{data.timestamp}</span>
+          </div>
+          <h4
+            style={{ ...notificationTitleStyle, fontSize: compact ? 26 : 31 }}
+          >
+            {data.title}
+          </h4>
+        </div>
+      </div>
+
+      <p style={{ ...bodyStyle, fontSize: compact ? 20 : 23 }}>{data.body}</p>
+      {data.quote ? (
+        <blockquote style={quoteStyle}>{data.quote}</blockquote>
+      ) : null}
+      {data.media ? (
+        <MediaPreview compact={compact} media={data.media} />
+      ) : null}
+      {data.meta ? <p style={metaStyle}>{data.meta}</p> : null}
+      {data.actions ? <ActionRow actions={data.actions} /> : null}
+    </article>
+  );
+}
+
+function Avatar({
+  compact,
+  data,
+}: {
+  compact: boolean;
+  data: NotificationPreviewData;
+}) {
+  const size = compact ? 58 : 70;
+
+  return (
+    <div
+      aria-label={data.avatar.label}
+      style={{
+        ...avatarStyle,
+        background: data.avatar.background,
+        fontSize: compact ? 19 : 22,
+        height: size,
+        width: size,
+      }}
+    >
+      {data.avatar.initials}
     </div>
   );
 }
 
-function ActionButton({
-  label,
-  tone,
+function SystemIcon({
+  accentColor,
+  children,
+  compact,
 }: {
-  label: string;
-  tone: "accent" | "neutral";
+  accentColor: string;
+  children: string;
+  compact: boolean;
 }) {
+  const size = compact ? 58 : 70;
+
   return (
     <div
+      aria-label="System icon"
       style={{
-        background: tone === "accent" ? "#f0db4f" : "rgba(255,255,255,0.08)",
-        borderRadius: 12,
-        color: tone === "accent" ? "#1f1f1f" : "rgba(248,250,252,0.78)",
-        fontSize: 15,
-        fontWeight: 650,
-        padding: "12px 16px",
+        ...avatarStyle,
+        background: `${accentColor}22`,
+        border: `1px solid ${stageTokens.color.borderStrong}`,
+        color: accentColor,
+        fontSize: compact ? 28 : 34,
+        height: size,
+        width: size,
       }}
     >
-      {label}
+      {children}
     </div>
   );
 }
+
+function Badge({ label }: { label: string }) {
+  return <span style={badgeStyle}>{label}</span>;
+}
+
+function MediaPreview({
+  compact,
+  media,
+}: {
+  compact: boolean;
+  media: NotificationPreviewMedia;
+}) {
+  const isAccent = media.tone === "accent";
+  const isWarning = media.tone === "warning";
+
+  return (
+    <div
+      aria-label={media.label}
+      style={{
+        ...mediaStyle,
+        background: isWarning
+          ? "linear-gradient(135deg, rgba(240, 219, 79, 0.28), rgba(78, 61, 33, 0.5))"
+          : isAccent
+            ? "linear-gradient(135deg, rgba(240, 219, 79, 0.42), rgba(70, 73, 65, 0.72))"
+            : "linear-gradient(135deg, rgba(88, 94, 99, 0.72), rgba(45, 47, 49, 0.92))",
+        minHeight: compact ? 118 : 148,
+      }}
+    >
+      <div style={mediaGridStyle}>
+        <span style={mediaChipStyle} />
+        <span style={{ ...mediaChipStyle, opacity: 0.58 }} />
+        <span style={{ ...mediaChipStyle, opacity: 0.34 }} />
+      </div>
+    </div>
+  );
+}
+
+function ActionRow({
+  actions,
+}: {
+  actions: readonly NotificationPreviewAction[];
+}) {
+  return (
+    <div style={actionsStyle}>
+      {actions.map((action) => (
+        <span
+          key={action.label}
+          style={
+            action.tone === "primary"
+              ? primaryActionStyle
+              : secondaryActionStyle
+          }
+        >
+          {action.label}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+const shellStyle: CSSProperties = {
+  background: stageTokens.color.surfaceElevated,
+  border: `1px solid ${stageTokens.color.border}`,
+  borderRadius: stageTokens.radius.card,
+  boxShadow: "0 24px 70px rgba(0, 0, 0, 0.34)",
+  boxSizing: "border-box",
+  color: stageTokens.color.text,
+  display: "grid",
+  fontFamily: stageTokens.font.sans,
+};
+
+const headerStyle: CSSProperties = {
+  alignItems: "start",
+  display: "flex",
+  gap: 18,
+  justifyContent: "space-between",
+};
+
+const eyebrowStyle: CSSProperties = {
+  color: stageTokens.color.jsYellow,
+  fontFamily: stageTokens.font.mono,
+  fontSize: 18,
+  letterSpacing: 0,
+  lineHeight: 1.1,
+  margin: "0 0 10px",
+  textTransform: "uppercase",
+};
+
+const titleStyle: CSSProperties = {
+  color: stageTokens.color.text,
+  fontWeight: 720,
+  letterSpacing: 0,
+  lineHeight: 1.04,
+  margin: 0,
+};
+
+const subtitleStyle: CSSProperties = {
+  color: stageTokens.color.textMuted,
+  lineHeight: 1.34,
+  margin: 0,
+};
+
+const separatorStyle: CSSProperties = {
+  background: stageTokens.color.border,
+  height: 1,
+  width: "100%",
+};
+
+const cardStyle: CSSProperties = {
+  background: "rgba(27, 28, 29, 0.74)",
+  border: `1px solid ${stageTokens.color.border}`,
+  borderRadius: stageTokens.radius.card,
+  boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.04)",
+  display: "grid",
+};
+
+const rowStyle: CSSProperties = {
+  alignItems: "start",
+  display: "flex",
+  gap: 18,
+};
+
+const avatarStyle: CSSProperties = {
+  alignItems: "center",
+  border: `1px solid ${stageTokens.color.border}`,
+  borderRadius: 999,
+  boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.14)",
+  color: stageTokens.color.codeText,
+  display: "flex",
+  flex: "0 0 auto",
+  fontFamily: stageTokens.font.mono,
+  fontWeight: 700,
+  justifyContent: "center",
+  lineHeight: 1,
+};
+
+const notificationHeaderStyle: CSSProperties = {
+  alignItems: "baseline",
+  display: "flex",
+  gap: 14,
+  justifyContent: "space-between",
+};
+
+const actorStyle: CSSProperties = {
+  color: stageTokens.color.textSubtle,
+  fontFamily: stageTokens.font.mono,
+  lineHeight: 1.1,
+  margin: 0,
+};
+
+const timeStyle: CSSProperties = {
+  color: stageTokens.color.textMuted,
+  flex: "0 0 auto",
+  fontFamily: stageTokens.font.mono,
+  fontSize: 17,
+  lineHeight: 1,
+};
+
+const notificationTitleStyle: CSSProperties = {
+  color: stageTokens.color.text,
+  fontWeight: 690,
+  letterSpacing: 0,
+  lineHeight: 1.12,
+  margin: "8px 0 0",
+};
+
+const bodyStyle: CSSProperties = {
+  color: stageTokens.color.textMuted,
+  lineHeight: 1.36,
+  margin: 0,
+};
+
+const quoteStyle: CSSProperties = {
+  borderLeft: `3px solid ${stageTokens.color.borderStrong}`,
+  color: stageTokens.color.codeText,
+  fontFamily: stageTokens.font.mono,
+  fontSize: 20,
+  lineHeight: 1.35,
+  margin: 0,
+  padding: "2px 0 2px 18px",
+};
+
+const metaStyle: CSSProperties = {
+  color: stageTokens.color.jsYellow,
+  fontFamily: stageTokens.font.mono,
+  fontSize: 18,
+  lineHeight: 1.2,
+  margin: 0,
+};
+
+const badgeStyle: CSSProperties = {
+  background: "rgba(240, 219, 79, 0.12)",
+  border: `1px solid ${stageTokens.color.borderStrong}`,
+  borderRadius: stageTokens.radius.control,
+  color: stageTokens.color.jsYellow,
+  flex: "0 0 auto",
+  fontFamily: stageTokens.font.mono,
+  fontSize: 16,
+  lineHeight: 1,
+  padding: "9px 11px",
+};
+
+const mediaStyle: CSSProperties = {
+  border: `1px solid ${stageTokens.color.border}`,
+  borderRadius: stageTokens.radius.card,
+  boxSizing: "border-box",
+  overflow: "hidden",
+  padding: 16,
+};
+
+const mediaGridStyle: CSSProperties = {
+  display: "grid",
+  gap: 10,
+  gridTemplateColumns: "1.2fr 0.8fr",
+  height: "100%",
+};
+
+const mediaChipStyle: CSSProperties = {
+  background: "rgba(244, 244, 239, 0.18)",
+  borderRadius: stageTokens.radius.control,
+  display: "block",
+  minHeight: 36,
+};
+
+const actionsStyle: CSSProperties = {
+  display: "flex",
+  gap: 12,
+  marginTop: 2,
+};
+
+const actionBaseStyle: CSSProperties = {
+  borderRadius: stageTokens.radius.control,
+  boxSizing: "border-box",
+  display: "inline-flex",
+  fontSize: 19,
+  fontWeight: 680,
+  justifyContent: "center",
+  lineHeight: 1,
+  minWidth: 128,
+  padding: "14px 18px",
+};
+
+const primaryActionStyle: CSSProperties = {
+  ...actionBaseStyle,
+  background: stageTokens.color.jsYellow,
+  color: stageTokens.color.darkBase,
+};
+
+const secondaryActionStyle: CSSProperties = {
+  ...actionBaseStyle,
+  background: "rgba(245, 245, 244, 0.04)",
+  border: `1px solid ${stageTokens.color.border}`,
+  color: stageTokens.color.text,
+};

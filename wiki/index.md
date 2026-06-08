@@ -11,7 +11,8 @@ Seed sections as the repo grows:
 
 ## Specs
 
-| Domain | Spec | Status |
-|--------|------|--------|
-| presentation | [[specs/presentation/dark-javascript-visual-system/SPEC]] | Implemented |
-| presentation | [[specs/presentation/remocn-slide-system/SPEC]] | Implemented |
+| Domain       | Spec                                                               | Status      |
+| ------------ | ------------------------------------------------------------------ | ----------- |
+| presentation | [[specs/presentation/dark-javascript-visual-system/SPEC]]          | Implemented |
+| presentation | [[specs/presentation/remocn-slide-system/SPEC]]                    | Implemented |
+| presentation | [[specs/presentation/GH-12-mock-notification-preview-system/SPEC]] | Implemented |
