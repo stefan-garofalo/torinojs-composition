@@ -14,3 +14,4 @@ Seed sections as the repo grows:
 | Domain | Spec | Status |
 |--------|------|--------|
 | presentation | [[specs/presentation/dark-javascript-visual-system/SPEC]] | Implemented |
+| presentation | [[specs/presentation/remocn-slide-system/SPEC]] | Implemented |

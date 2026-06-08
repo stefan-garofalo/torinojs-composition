@@ -1,10 +1,26 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useCurrentFrame } from "remotion";
 
 export interface LiveCodeCompilationProps {
   accentColor?: string;
+  background?: string;
+  backdrop?: string;
   speed?: number;
+  codeEvents?: readonly CodeEvent[];
+  codeTitle?: string;
+  codeMaxWidth?: number;
+  codeFontSize?: number;
+  codeBodyMinHeight?: number;
+  previewLabel?: string;
+  leftFlex?: number;
+  rightFlex?: number;
+  renderPreview?: (props: {
+    accentColor: string;
+    frame: number;
+    ui: UIState;
+  }) => ReactNode;
   className?: string;
 }
 
@@ -13,21 +29,22 @@ const FONT_FAMILY =
 const MONO_FAMILY =
   "var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace";
 
-interface UIState {
+export interface UIState {
   background?: string;
   color?: string;
   padding?: string;
   borderRadius?: string;
   fontWeight?: number;
   label?: string;
+  [key: string]: string | number | boolean | undefined;
 }
 
-interface CodeEvent {
+export interface CodeEvent {
   code: string;
   ui: UIState;
 }
 
-const EVENTS: CodeEvent[] = [
+const DEFAULT_EVENTS: CodeEvent[] = [
   {
     code: "export function Button() {\n  return (\n    <button",
     ui: {},
@@ -68,16 +85,15 @@ interface TimelineEntry extends CodeEvent {
   end: number;
 }
 
-const TIMELINE: TimelineEntry[] = (() => {
+function buildTimeline(events: readonly CodeEvent[]): TimelineEntry[] {
   let cursor = INITIAL_OFFSET;
-  return EVENTS.map((ev) => {
+  return events.map((ev) => {
     const start = cursor;
     const end = start + Math.ceil(ev.code.length / CHARS_PER_FRAME);
     cursor = end + DWELL_FRAMES;
     return { ...ev, start, end };
   });
-})();
-const TIMELINE_END = TIMELINE[TIMELINE.length - 1].end;
+}
 
 function highlightLine(line: string, accentColor: string) {
   // very simple tokenizer: keywords, strings, props
@@ -109,16 +125,30 @@ function highlightLine(line: string, accentColor: string) {
 
 export function LiveCodeCompilation({
   accentColor = "#3b82f6",
+  background = "#070708",
+  backdrop = "radial-gradient(ellipse at 20% 30%, rgba(59,130,246,0.08), transparent 60%), radial-gradient(ellipse at 80% 70%, rgba(168,85,247,0.06), transparent 60%)",
   speed = 1,
+  codeEvents = DEFAULT_EVENTS,
+  codeTitle = "Button.tsx",
+  codeMaxWidth = 560,
+  codeFontSize = 14,
+  codeBodyMinHeight = 360,
+  previewLabel = "Preview · HMR",
+  leftFlex = 1,
+  rightFlex = 1,
+  renderPreview,
   className,
 }: LiveCodeCompilationProps) {
-  const frame = useCurrentFrame() * speed;
+  const remotionFrame = useCurrentFrame();
+  const frame = remotionFrame * speed;
+  const timeline = buildTimeline(codeEvents);
+  const timelineEnd = timeline[timeline.length - 1]?.end ?? 0;
 
   // Build the visible code character-by-character from the auto-staggered
   // timeline. UI state only flips once a fragment is fully typed.
   let visibleCode = "";
   const ui: UIState = {};
-  for (const t of TIMELINE) {
+  for (const t of timeline) {
     if (frame < t.start) break;
     const elapsed = frame - t.start;
     const charsTyped = Math.min(
@@ -133,9 +163,33 @@ export function LiveCodeCompilation({
   const buttonLabel = ui.label ?? "Button";
 
   // Blinking caret while typing is still in progress.
-  const cursorVisible =
-    frame < TIMELINE_END && Math.floor(frame / 12) % 2 === 0;
+  const cursorVisible = frame < timelineEnd && Math.floor(frame / 12) % 2 === 0;
   const lastLineIndex = lines.length - 1;
+  const preview = renderPreview?.({
+    accentColor,
+    frame: remotionFrame,
+    ui,
+  }) ?? (
+    <button
+      type="button"
+      style={{
+        background: ui.background ?? "rgba(255,255,255,0.06)",
+        color: ui.color ?? "rgba(255,255,255,0.4)",
+        padding: ui.padding ?? "10px 20px",
+        borderRadius: ui.borderRadius ?? "4px",
+        fontWeight: ui.fontWeight ?? 400,
+        fontSize: 18,
+        fontFamily: FONT_FAMILY,
+        border: ui.background ? "none" : "1px dashed rgba(255,255,255,0.15)",
+        cursor: "pointer",
+        boxShadow: ui.background
+          ? `0 10px 30px ${ui.background}55, 0 0 0 1px rgba(255,255,255,0.08)`
+          : "none",
+      }}
+    >
+      {buttonLabel}
+    </button>
+  );
 
   return (
     <div
@@ -143,7 +197,7 @@ export function LiveCodeCompilation({
       style={{
         position: "absolute",
         inset: 0,
-        background: "#070708",
+        background,
         overflow: "hidden",
         fontFamily: FONT_FAMILY,
         display: "flex",
@@ -154,15 +208,14 @@ export function LiveCodeCompilation({
         style={{
           position: "absolute",
           inset: 0,
-          background:
-            "radial-gradient(ellipse at 20% 30%, rgba(59,130,246,0.08), transparent 60%), radial-gradient(ellipse at 80% 70%, rgba(168,85,247,0.06), transparent 60%)",
+          background: backdrop,
         }}
       />
 
       {/* LEFT: Glass code window */}
       <div
         style={{
-          flex: 1,
+          flex: leftFlex,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -173,7 +226,7 @@ export function LiveCodeCompilation({
         <div
           style={{
             width: "100%",
-            maxWidth: 560,
+            maxWidth: codeMaxWidth,
             position: "relative",
             borderRadius: 14,
             padding: 1,
@@ -236,7 +289,7 @@ export function LiveCodeCompilation({
                   fontFamily: MONO_FAMILY,
                 }}
               >
-                Button.tsx
+                {codeTitle}
               </div>
             </div>
             {/* Code body */}
@@ -244,10 +297,10 @@ export function LiveCodeCompilation({
               style={{
                 padding: "20px 22px",
                 fontFamily: MONO_FAMILY,
-                fontSize: 14,
+                fontSize: codeFontSize,
                 lineHeight: 1.65,
                 color: "#e4e4e7",
-                minHeight: 360,
+                minHeight: codeBodyMinHeight,
                 boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
               }}
             >
@@ -300,7 +353,7 @@ export function LiveCodeCompilation({
       {/* RIGHT: Live preview */}
       <div
         style={{
-          flex: 1,
+          flex: rightFlex,
           position: "relative",
           display: "flex",
           alignItems: "center",
@@ -339,33 +392,11 @@ export function LiveCodeCompilation({
               letterSpacing: "0.08em",
             }}
           >
-            Preview · HMR
+            {previewLabel}
           </div>
         </div>
 
-        {/* The button — all styles applied with no transition */}
-        <button
-          type="button"
-          style={{
-            background: ui.background ?? "rgba(255,255,255,0.06)",
-            color: ui.color ?? "rgba(255,255,255,0.4)",
-            padding: ui.padding ?? "10px 20px",
-            borderRadius: ui.borderRadius ?? "4px",
-            fontWeight: ui.fontWeight ?? 400,
-            fontSize: 18,
-            fontFamily: FONT_FAMILY,
-            border: ui.background
-              ? "none"
-              : "1px dashed rgba(255,255,255,0.15)",
-            cursor: "pointer",
-            transition: "none",
-            boxShadow: ui.background
-              ? `0 10px 30px ${ui.background}55, 0 0 0 1px rgba(255,255,255,0.08)`
-              : "none",
-          }}
-        >
-          {buttonLabel}
-        </button>
+        {preview}
       </div>
     </div>
   );
