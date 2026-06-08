@@ -133,7 +133,7 @@ export function LiveCodeCompilation({
   codeMaxWidth = 560,
   codeFontSize = 14,
   codeBodyMinHeight = 360,
-  previewLabel = "Preview · HMR",
+  previewLabel = "Preview",
   leftFlex = 1,
   rightFlex = 1,
   renderPreview,

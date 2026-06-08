@@ -20,12 +20,7 @@ export const talkSlides = [
     family: "narrative",
     durationInFrames: narrativeDuration,
     content: {
-      leftItems: [
-        "Follow requests",
-        "Post likes",
-        "DM requests",
-        "Photo tags",
-      ],
+      leftItems: ["Follow requests", "Post likes", "DM requests", "Photo tags"],
       rightText: "Useful, but already carrying product rules.",
       code: {
         language: "tsx",
@@ -147,8 +142,8 @@ const primary =
   {
     id: "make-supported-shapes-explicit",
     title: "Make supported shapes explicit",
-    family: "code-only",
-    durationInFrames: codeOnlyDuration,
+    family: "code-dx",
+    durationInFrames: codeDxDuration,
     content: {
       bullets: [
         "FollowRequestNotification",
@@ -156,6 +151,15 @@ const primary =
         "DMRequestNotification",
         "PhotoTagNotification",
         "ModerationNotification",
+        "PostCommentNotification",
+      ],
+      previewFocus: [
+        "follow back action",
+        "post thumbnail",
+        "message preview and actions",
+        "photo thumbnail and remove tag",
+        "system icon and appeal",
+        "comment preview and reply",
       ],
       code: {
         language: "tsx",
@@ -166,6 +170,7 @@ const primary =
   DMRequestNotification,
   PhotoTagNotification,
   ModerationNotification,
+  PostCommentNotification,
 }`,
       },
     },
@@ -178,16 +183,10 @@ const primary =
     content: {
       bullets: [
         "no `showActor={false}`",
-        "no `primaryAction=\"viewDecision\"`",
+        'no `primaryAction="viewDecision"`',
         "no generic moderation branch",
       ],
-      previewFocus: [
-        "system icon",
-        "body",
-        "report reason",
-        "actions",
-        "date",
-      ],
+      previewFocus: ["system icon", "body", "report reason", "actions", "date"],
       code: {
         language: "tsx",
         fileName: "moderation-notification.tsx",
