@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { presenterTheme } from "../../theme/presenter-theme";
+import { stageTokens } from "../stage";
 
 type FullStageProps = {
   children: ReactNode;
@@ -8,18 +8,20 @@ type FullStageProps = {
 
 export function FullStage({
   children,
-  background = presenterTheme.colors.ink,
+  background,
 }: FullStageProps) {
   return (
     <div
       style={{
-        width: "100%",
+        background:
+          background ??
+          `radial-gradient(circle at 8% 14%, rgba(240, 219, 79, 0.14), transparent 30%), linear-gradient(135deg, ${stageTokens.color.darkBase}, ${stageTokens.color.backgroundDeep})`,
+        color: stageTokens.color.text,
+        fontFamily: stageTokens.font.sans,
         height: "100%",
-        position: "relative",
         overflow: "hidden",
-        background,
-        color: presenterTheme.colors.paper,
-        fontFamily: presenterTheme.fontSans,
+        position: "relative",
+        width: "100%",
       }}
     >
       {children}
@@ -35,8 +37,8 @@ export function StageGrid({ children }: { children: ReactNode }) {
         inset: 0,
         display: "grid",
         gridTemplateColumns: "minmax(0, 0.95fr) minmax(0, 1.05fr)",
-        gap: 56,
-        padding: "96px 104px",
+        gap: stageTokens.stage.gap,
+        padding: `${stageTokens.stage.insetY}px ${stageTokens.stage.insetX}px`,
       }}
     >
       {children}
@@ -55,9 +57,9 @@ export function PresenterPanel({ children, style }: PanelProps) {
       style={{
         position: "relative",
         overflow: "hidden",
-        borderRadius: 8,
-        border: `1px solid ${presenterTheme.colors.line}`,
-        background: presenterTheme.colors.panel,
+        borderRadius: stageTokens.radius.card,
+        border: `1px solid ${stageTokens.color.border}`,
+        background: stageTokens.color.surface,
         boxShadow: "0 36px 100px rgba(0,0,0,0.32)",
         ...style,
       }}
@@ -71,9 +73,9 @@ export function Kicker({ children, style }: PanelProps) {
   return (
     <div
       style={{
-        fontFamily: presenterTheme.fontMono,
+        fontFamily: stageTokens.font.mono,
         fontSize: 22,
-        color: presenterTheme.colors.yellow,
+        color: stageTokens.color.jsYellow,
         textTransform: "uppercase",
         letterSpacing: 0,
         ...style,

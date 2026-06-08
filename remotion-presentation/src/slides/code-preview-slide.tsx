@@ -1,18 +1,20 @@
 import { interpolate, useCurrentFrame } from "remotion";
 import { MockNotificationPreview } from "../components/preview/mock-notification-preview";
 import {
+  LiveCodeCompilation,
+  type CodeEvent,
+} from "../components/remocn/live-code-compilation";
+import {
   FullStage,
   Kicker,
   PresenterPanel,
-  StageGrid,
 } from "../components/presenter/stage-primitives";
-import { GlassCodeBlock } from "../components/remocn/glass-code-block";
+import { stageTokens } from "../components/stage";
 import {
   DEFAULT_POST_CUE_PADDING_FRAMES,
   PANEL_OR_LARGE_TRANSITION_FRAMES,
   TEXT_OR_SMALL_TRANSITION_FRAMES,
 } from "../timeline";
-import { presenterTheme } from "../theme/presenter-theme";
 import type { SampleSlideProps } from "./sample-slide-props";
 import type { SlideDefinition } from "./types";
 
@@ -22,20 +24,37 @@ const shapeCueStart = 162;
 const slideChangeCueStart = 228;
 const slideChangeHold = slideChangeCueStart + TEXT_OR_SMALL_TRANSITION_FRAMES;
 
-const notificationCode = `type NotificationShape =
+const notificationCodeEvents: CodeEvent[] = [
+  {
+    code: `type NotificationShape =
   | { kind: "follow"; actor: User }
   | { kind: "like"; actor: User; post: Post }
   | { kind: "moderation"; decisionId: string };
-
+`,
+    ui: { variant: "shape" },
+  },
+  {
+    code: `
 function NotificationItem({ shape }: Props) {
   return (
-    <NotificationShell>
+    <NotificationShell>`,
+    ui: { variant: "shell" },
+  },
+  {
+    code: `
       <NotificationIcon shape={shape} />
-      <NotificationCopy shape={shape} />
+      <NotificationCopy shape={shape} />`,
+    ui: { variant: "content" },
+  },
+  {
+    code: `
       <NotificationActions shape={shape} />
     </NotificationShell>
   );
-}`;
+}`,
+    ui: { variant: "actions", label: "Review" },
+  },
+];
 
 export function CodePreviewSlide({ frame }: SampleSlideProps) {
   const remotionFrame = useCurrentFrame();
@@ -68,87 +87,85 @@ export function CodePreviewSlide({ frame }: SampleSlideProps) {
 
   return (
     <FullStage>
-      <StageGrid>
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          display: "grid",
+          gridTemplateRows: "auto minmax(0, 1fr) auto",
+          gap: 24,
+          padding: `${stageTokens.stage.insetY}px ${stageTokens.stage.insetX}px`,
+        }}
+      >
         <div
           style={{
-            display: "grid",
-            gridTemplateRows: "auto minmax(0, 1fr)",
-            gap: 24,
             opacity: codeOpacity,
             transform: `translateX(${codeX}px)`,
           }}
         >
-          <div>
-            <Kicker>compound component</Kicker>
-            <h1
-              style={{
-                margin: "18px 0 0",
-                fontSize: 56,
-                lineHeight: 1,
-                fontWeight: 780,
-                letterSpacing: 0,
-              }}
-            >
-              Put the shape in the type, then let the UI assemble itself.
-            </h1>
-          </div>
-
-          <PresenterPanel>
-            <GlassCodeBlock
-              code={notificationCode}
-              title="NotificationItem.tsx"
-              width={720}
-              height={620}
-              fontSize={17}
-              background="#101014"
-              glassColor="rgba(15,15,19,0.9)"
-              staggerFrames={3}
-            />
-          </PresenterPanel>
+          <Kicker>compound component</Kicker>
+          <h1
+            style={{
+              margin: "18px 0 0",
+              fontSize: 56,
+              lineHeight: 1,
+              fontWeight: 780,
+              letterSpacing: 0,
+              maxWidth: 1180,
+            }}
+          >
+            Put the shape in the type, then let the UI assemble itself.
+          </h1>
         </div>
 
-        <div
+        <PresenterPanel
           style={{
-            display: "grid",
-            gridTemplateRows: "1fr 180px",
-            gap: 24,
             opacity: previewOpacity,
+            background: stageTokens.color.surfaceCode,
           }}
         >
-          <PresenterPanel
-            style={{
-              display: "grid",
-              placeItems: "center",
-              background: "#15151b",
-            }}
-          >
-            <MockNotificationPreview
-              frame={currentFrame}
-              revealStartFrame={previewCueStart}
-            />
-          </PresenterPanel>
+          <LiveCodeCompilation
+            accentColor={stageTokens.color.jsYellow}
+            background={stageTokens.color.surfaceCode}
+            backdrop="radial-gradient(circle at 18% 18%, rgba(240,219,79,0.12), transparent 34%)"
+            codeEvents={notificationCodeEvents}
+            codeTitle="NotificationItem.tsx"
+            codeMaxWidth={760}
+            codeFontSize={16}
+            codeBodyMinHeight={488}
+            leftFlex={1.08}
+            rightFlex={0.92}
+            previewLabel="Preview"
+            speed={2.9}
+            renderPreview={({ frame: previewFrame }) => (
+              <MockNotificationPreview
+                frame={previewFrame}
+                revealStartFrame={previewCueStart}
+              />
+            )}
+          />
+        </PresenterPanel>
 
-          <PresenterPanel
+        <PresenterPanel
+          style={{
+            opacity: shapeOpacity,
+            padding: "22px 28px",
+            background: stageTokens.color.jsYellow,
+            color: "#25250E",
+          }}
+        >
+          <div
             style={{
-              opacity: shapeOpacity,
-              padding: 28,
-              background: presenterTheme.colors.yellow,
-              color: presenterTheme.colors.ink,
+              fontSize: 34,
+              lineHeight: 1.08,
+              fontWeight: 780,
             }}
           >
-            <div
-              style={{
-                fontSize: 34,
-                lineHeight: 1.08,
-                fontWeight: 780,
-              }}
-            >
-              The rendered surface stays familiar. The supported shape stops
-              hiding in branches.
-            </div>
-          </PresenterPanel>
-        </div>
-      </StageGrid>
+            The rendered surface stays familiar. The supported shape stops
+            hiding in branches.
+          </div>
+        </PresenterPanel>
+      </div>
     </FullStage>
   );
 }

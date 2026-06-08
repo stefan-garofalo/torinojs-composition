@@ -1,5 +1,5 @@
 import { interpolate } from "remotion";
-import { presenterTheme } from "../../theme/presenter-theme";
+import { stageTokens } from "../stage";
 
 type MockNotificationPreviewProps = {
   frame: number;
@@ -34,12 +34,12 @@ export function MockNotificationPreview({
         opacity: shellOpacity,
         transform: `translateY(${shellY}px)`,
         width: 560,
-        borderRadius: 8,
-        border: `1px solid ${presenterTheme.colors.line}`,
-        background: "#0c0c10",
+        borderRadius: stageTokens.radius.card,
+        border: `1px solid ${stageTokens.color.border}`,
+        background: stageTokens.color.surfaceCode,
         boxShadow: "0 30px 90px rgba(0,0,0,0.5)",
         overflow: "hidden",
-        color: presenterTheme.colors.paper,
+        color: stageTokens.color.text,
       }}
     >
       <div
@@ -49,8 +49,8 @@ export function MockNotificationPreview({
           alignItems: "center",
           justifyContent: "space-between",
           padding: "0 20px",
-          borderBottom: `1px solid ${presenterTheme.colors.line}`,
-          background: "#121217",
+          borderBottom: `1px solid ${stageTokens.color.border}`,
+          background: stageTokens.color.surface,
         }}
       >
         <div style={{ fontSize: 18, fontWeight: 650 }}>Notifications</div>
@@ -59,8 +59,8 @@ export function MockNotificationPreview({
             width: 10,
             height: 10,
             borderRadius: 5,
-            background: presenterTheme.colors.green,
-            boxShadow: `0 0 18px ${presenterTheme.colors.green}`,
+            background: "#62d26f",
+            boxShadow: "0 0 18px #62d26f",
           }}
         />
       </div>
@@ -74,20 +74,20 @@ export function MockNotificationPreview({
             gap: 14,
             alignItems: "center",
             padding: 14,
-            borderRadius: 8,
-            background: "#18181f",
-            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: stageTokens.radius.card,
+            background: stageTokens.color.surfaceElevated,
+            border: `1px solid ${stageTokens.color.border}`,
           }}
         >
           <div
             style={{
               width: 44,
               height: 44,
-              borderRadius: 8,
+              borderRadius: stageTokens.radius.control,
               display: "grid",
               placeItems: "center",
               background: "rgba(250,204,21,0.14)",
-              color: presenterTheme.colors.yellow,
+              color: stageTokens.color.jsYellow,
               fontWeight: 800,
             }}
           >
@@ -97,7 +97,9 @@ export function MockNotificationPreview({
             <div style={{ fontSize: 18, fontWeight: 700 }}>
               Moderation decision
             </div>
-            <div style={{ marginTop: 5, fontSize: 14, color: "#a1a1aa" }}>
+            <div
+              style={{ marginTop: 5, fontSize: 14, color: stageTokens.color.textMuted }}
+            >
               System event, appeal available
             </div>
           </div>
@@ -105,11 +107,11 @@ export function MockNotificationPreview({
             type="button"
             style={{
               padding: "10px 14px",
-              borderRadius: 6,
-              border: "1px solid rgba(255,255,255,0.14)",
-              background: "#22222b",
-              color: presenterTheme.colors.paper,
-              font: `600 14px ${presenterTheme.fontSans}`,
+              borderRadius: stageTokens.radius.control,
+              border: `1px solid ${stageTokens.color.border}`,
+              background: stageTokens.color.surface,
+              color: stageTokens.color.text,
+              font: `600 14px ${stageTokens.font.sans}`,
             }}
           >
             Review
@@ -120,16 +122,16 @@ export function MockNotificationPreview({
           style={{
             opacity: detailOpacity,
             padding: 16,
-            borderRadius: 8,
-            background: "#101014",
-            border: "1px solid rgba(255,255,255,0.07)",
+            borderRadius: stageTokens.radius.card,
+            background: stageTokens.color.surface,
+            border: `1px solid ${stageTokens.color.border}`,
           }}
         >
           <div
             style={{
-              fontFamily: presenterTheme.fontMono,
+              fontFamily: stageTokens.font.mono,
               fontSize: 13,
-              color: presenterTheme.colors.cyan,
+              color: stageTokens.color.codeString,
             }}
           >
             shape-specific slots
@@ -141,7 +143,7 @@ export function MockNotificationPreview({
               gridTemplateColumns: "1fr 1fr 1fr",
               gap: 10,
               fontSize: 13,
-              color: "#d4d4d8",
+              color: stageTokens.color.text,
             }}
           >
             <Slot label="icon" value="system" />
@@ -159,11 +161,13 @@ function Slot({ label, value }: { label: string; value: string }) {
     <div
       style={{
         padding: "10px 12px",
-        borderRadius: 6,
+        borderRadius: stageTokens.radius.control,
         background: "rgba(255,255,255,0.04)",
       }}
     >
-      <div style={{ color: "#71717a", fontSize: 11 }}>{label}</div>
+      <div style={{ color: stageTokens.color.textSubtle, fontSize: 11 }}>
+        {label}
+      </div>
       <div style={{ marginTop: 5, fontWeight: 700 }}>{value}</div>
     </div>
   );

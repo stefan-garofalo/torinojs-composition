@@ -5,12 +5,12 @@ import {
   PresenterPanel,
 } from "../components/presenter/stage-primitives";
 import { StaggeredFadeUp } from "../components/remocn/staggered-fade-up";
+import { stageTokens } from "../components/stage";
 import {
   DEFAULT_POST_CUE_PADDING_FRAMES,
   PANEL_OR_LARGE_TRANSITION_FRAMES,
   TEXT_OR_SMALL_TRANSITION_FRAMES,
 } from "../timeline";
-import { presenterTheme } from "../theme/presenter-theme";
 import type { SampleSlideProps } from "./sample-slide-props";
 import type { SlideDefinition } from "./types";
 
@@ -50,20 +50,20 @@ export function NarrativeEntranceSlide({ frame }: SampleSlideProps) {
   );
 
   return (
-    <FullStage background={presenterTheme.colors.paper}>
+    <FullStage background="#f8fafc">
       <div
         style={{
           position: "absolute",
           inset: 0,
           display: "grid",
           gridTemplateRows: "1fr 310px",
-          color: presenterTheme.colors.ink,
+          color: "#09090b",
         }}
       >
         <div style={{ position: "relative", overflow: "hidden" }}>
           <StaggeredFadeUp
             text="Make the shape visible"
-            color={presenterTheme.colors.ink}
+            color="#09090b"
             fontSize={104}
             fontWeight={760}
             staggerDelay={3}
@@ -80,10 +80,10 @@ export function NarrativeEntranceSlide({ frame }: SampleSlideProps) {
           <div
             style={{
               padding: "48px 64px",
-              background: presenterTheme.colors.yellow,
+              background: stageTokens.color.jsYellow,
             }}
           >
-            <Kicker style={{ color: presenterTheme.colors.ink }}>
+            <Kicker style={{ color: "#25250E" }}>
               React API design
             </Kicker>
             <div
@@ -108,13 +108,13 @@ export function NarrativeEntranceSlide({ frame }: SampleSlideProps) {
                 transform: `translateY(${structureY}px)`,
                 height: "100%",
                 padding: 34,
-                background: "#111114",
+                background: stageTokens.color.surfaceCode,
               }}
             >
               <div
                 style={{
                   fontSize: 20,
-                  color: presenterTheme.colors.muted,
+                  color: stageTokens.color.textMuted,
                   lineHeight: 1.4,
                 }}
               >
@@ -140,7 +140,7 @@ export function NarrativeEntranceSlide({ frame }: SampleSlideProps) {
                         padding: "14px 12px",
                         borderRadius: 6,
                         background: "rgba(255,255,255,0.06)",
-                        color: presenterTheme.colors.paper,
+                        color: stageTokens.color.text,
                         textAlign: "center",
                         fontSize: 16,
                         fontWeight: 650,

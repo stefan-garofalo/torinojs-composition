@@ -5,6 +5,8 @@ export interface StageCodeBlockProps {
   code: string;
   title?: string;
   maxLines?: number;
+  fontSize?: number;
+  lineHeight?: number;
   style?: CSSProperties;
 }
 
@@ -43,6 +45,8 @@ export function StageCodeBlock({
   code,
   title = "stage.tsx",
   maxLines = 13,
+  fontSize = 28,
+  lineHeight = 1.48,
   style,
 }: StageCodeBlockProps) {
   const visibleLines = code.split("\n").slice(0, maxLines);
@@ -89,8 +93,8 @@ export function StageCodeBlock({
       <pre
         style={{
           flex: 1,
-          fontSize: 28,
-          lineHeight: 1.48,
+          fontSize,
+          lineHeight,
           margin: 0,
           padding: "30px 34px",
           whiteSpace: "pre-wrap",
@@ -101,7 +105,7 @@ export function StageCodeBlock({
             key={`${index}-${line}`}
             style={{
               display: "block",
-              minHeight: 41,
+              minHeight: Math.round(fontSize * lineHeight),
             }}
           >
             {tokenizeLine(line).map((token, tokenIndex) => (
