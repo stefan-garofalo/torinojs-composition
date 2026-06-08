@@ -1,0 +1,1 @@
+- remocn-typography-background.md — Remocn typography demos can bring full-scene backgrounds; set transparent background when embedding in dark slides.

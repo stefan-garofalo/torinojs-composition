@@ -9,6 +9,7 @@ export interface StaggeredFadeUpProps {
   fontSize?: number;
   color?: string;
   fontWeight?: number;
+  background?: string;
   speed?: number;
   className?: string;
 }
@@ -20,6 +21,7 @@ export function StaggeredFadeUp({
   fontSize = 72,
   color = "#171717",
   fontWeight = 600,
+  background = "white",
   speed = 1,
   className,
 }: StaggeredFadeUpProps) {
@@ -35,7 +37,7 @@ export function StaggeredFadeUp({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "white",
+        background,
       }}
     >
       <span
