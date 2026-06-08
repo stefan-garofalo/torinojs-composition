@@ -1,1 +1,2 @@
 - remocn-typography-background.md — Remocn typography demos can bring full-scene backgrounds; set transparent background when embedding in dark slides.
+- presenter-runtime.md — Use `bun run presenter` for rehearsal/delivery; Remotion Studio is only the debugging surface.

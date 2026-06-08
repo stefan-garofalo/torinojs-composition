@@ -25,6 +25,14 @@ npm i
 npm run dev
 ```
 
+**Start Presenter**
+
+```console
+bun run presenter
+```
+
+Use the presenter URL for rehearsal/delivery. It renders the deck as a clean fullscreen Remotion Player surface with keyboard-only navigation: `Space`/`ArrowRight` next, `ArrowLeft` previous, `Home` first, `End` last, `R` replay current slide. Current navigation is slide-level because the merged 16-slide content does not yet carry slide-local semantic cue arrays. Remotion Studio remains the debugging surface.
+
 **Render video**
 
 ```console

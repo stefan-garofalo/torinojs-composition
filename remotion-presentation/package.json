@@ -22,10 +22,12 @@
     "oxlint": "latest",
     "prettier": "3.8.1",
     "typescript": "5.9.3",
-    "ultracite": "latest"
+    "ultracite": "latest",
+    "vite": "8.0.16"
   },
   "scripts": {
     "dev": "remotion studio",
+    "presenter": "vite --host 0.0.0.0",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc"

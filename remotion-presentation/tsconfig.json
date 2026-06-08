@@ -15,5 +15,5 @@
       "@/*": ["src/*"]
     }
   },
-  "exclude": ["remotion.config.ts", "oxlint.config.ts"]
+  "exclude": ["remotion.config.ts", "oxlint.config.ts", "vite.config.ts"]
 }
