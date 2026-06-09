@@ -51,20 +51,20 @@ export const talkSlides = [
     content: {
       previewMode: "final",
       previewFocus: [
-        "one lean post-like component",
-        "actor plus body plus media",
-        "single responsibility",
+        "one product shape",
+        "actor + body + media",
+        "simple because singular",
       ],
       previewSteps: [
         {
           afterLine: 1,
-          message: "Start with one notification shape that owns one job.",
+          message: "One notification shape can stay simple.",
           variantId: "post-like",
         },
         {
           afterLine: 5,
           compact: true,
-          message: "The component can stay lean while the behavior is singular.",
+          message: "The trouble starts when this shape becomes the shared container.",
           reviewed: true,
           showActions: true,
           variantId: "post-like",
@@ -85,20 +85,20 @@ export const talkSlides = [
     content: {
       previewMode: "final",
       previewFocus: [
-        "follow behavior arrives",
-        "generic item gets first action hook",
-        "type check enters the row",
+        "follow request arrives",
+        "one branch feels reasonable",
+        "behavior starts entering the surface",
       ],
       previewSteps: [
         {
           afterLine: 2,
-          message: "Follow request adds the first interactive behavior.",
+          message: "A follow request adds one reasonable action.",
           variantId: "follow-request",
         },
         {
           afterLine: 9,
           compact: true,
-          message: "A type check decides whether the row owns follow-back.",
+          message: "The branch is still small enough to feel harmless.",
           reviewed: true,
           showActions: true,
           variantId: "follow-request",
@@ -119,20 +119,20 @@ export const talkSlides = [
     content: {
       previewMode: "final",
       previewFocus: [
-        "message request arrives",
-        "accept and ignore hooks",
-        "the shared row gets wider",
+        "DM request arrives",
+        "accept + ignore",
+        "the renderer starts parsing shape",
       ],
       previewSteps: [
         {
           afterLine: 4,
-          message: "DM request adds two handlers to the shared item.",
+          message: "DM request adds decisions, hooks, and routes.",
           variantId: "dm-request",
         },
         {
           afterLine: 15,
           compact: true,
-          message: "Accept and ignore now live beside the previous branches.",
+          message: "The shared item now knows which actions are legal.",
           reviewed: true,
           showActions: true,
           variantId: "dm-request",
@@ -153,20 +153,20 @@ export const talkSlides = [
     content: {
       previewMode: "final",
       previewFocus: [
-        "follow request usage",
-        "dm request usage",
-        "the call sites still look acceptable",
+        "short follow usage",
+        "short DM usage",
+        "complexity hides as a set",
       ],
       previewSteps: [
         {
           afterLine: 1,
-          message: "From the outside, follow still looks like a small variation.",
+          message: "A single call site still looks reviewable.",
           variantId: "follow-request",
         },
         {
           afterLine: 7,
           compact: true,
-          message: "DM request still fits the same generic surface.",
+          message: "But the API fails as combinations grow.",
           reviewed: true,
           showActions: true,
           variantId: "dm-request",
@@ -195,34 +195,34 @@ export const talkSlides = [
         "appeal handlers",
       ],
       previewMode: "final",
-      rightText: "Supporting moderation means teaching the generic item another product.",
+      rightText: "The generic item is learning another product concept.",
       previewFocus: [
-        "moderation adds a new href branch",
-        "actor identity becomes optional",
-        "decision and appeal handlers move inside",
+        "moderation adds product rules",
+        "actor identity becomes conditional",
+        "decision and appeal move inside",
       ],
       previewSteps: [
         {
           afterLine: 4,
-          message: "Moderation adds decision hooks to the generic item.",
+          message: "Moderation looks like another type, but changes the rules.",
           variantId: "moderation",
         },
         {
           afterLine: 11,
           compact: true,
-          message: "The row contract now branches on moderation navigation.",
+          message: "Navigation now depends on the hidden product shape.",
           variantId: "moderation",
         },
         {
           afterLine: 17,
           compact: true,
-          message: "Actor rendering becomes a system-icon branch.",
+          message: "Identity is no longer always an actor.",
           variantId: "moderation",
         },
         {
           afterLine: 22,
           compact: true,
-          message: "Decision and appeal handlers live in the shared component.",
+          message: "The renderer now owns product behavior.",
           reviewed: true,
           showActions: true,
           variantId: "moderation",
@@ -249,27 +249,27 @@ export const talkSlides = [
       ],
       rightText: "Looks like another notification.\nBehaves like a new shape.",
       previewFocus: [
-        "showActor changes the row contract",
-        "system icon replaces actor identity",
-        "decision and appeal actions alter behavior",
+        "showActor encodes identity",
+        "system icon changes the shape",
+        "decision and appeal encode behavior",
       ],
       previewSteps: [
         {
           afterLine: 2,
           compact: false,
-          message: "A generic item is now carrying moderation shape.",
+          message: "We are no longer configuring details of the same row.",
           variantId: "moderation",
         },
         {
           afterLine: 5,
           compact: true,
-          message: "System icon replaces actor identity.",
+          message: "Identity, navigation, copy, actions, and permissions changed.",
           variantId: "moderation",
         },
         {
           afterLine: 8,
           compact: true,
-          message: "Decision and appeal behavior leak into props.",
+          message: "Another prop is the wrong level of expression.",
           reviewed: true,
           showActions: true,
           variantId: "moderation",
@@ -289,10 +289,10 @@ export const talkSlides = [
     durationInFrames: codeOnlyDuration,
     content: {
       bullets: [
-        "icon branch",
-        "href branch",
-        "action branch",
-        "permission branch",
+        "one prop chooses icon",
+        "one prop chooses href",
+        "one prop chooses action",
+        "one prop patches a mode",
       ],
       code: {
         language: "tsx",
@@ -335,10 +335,10 @@ const primary =
     content: {
       layout: "right-column",
       subtitle: "Composition is for shape",
-      claim: "Configuration handles stable values. Composition exposes new parts, actions, and navigation.",
+      claim: "Configuration is for values. Composition is for shape.",
       bullets: [
-        "Stable row, new label: prop",
-        "Stable row, loading state: prop",
+        "Stable shape, new label: prop",
+        "Stable shape, loading state: prop",
         "New parts / actions / navigation: composition",
       ],
     },
@@ -351,20 +351,20 @@ const primary =
     content: {
       previewMode: "final",
       previewFocus: [
-        "container becomes a primitive",
-        "row shape moves inside",
-        "variant owns composition",
+        "row becomes a primitive",
+        "shared frame stays boring",
+        "variant owns behavior",
       ],
       previewSteps: [
         {
           afterLine: 1,
-          message: "First pull the shared row surface into a primitive.",
+          message: "Start by extracting the shared row as a stable primitive.",
           variantId: "moderation",
         },
         {
           afterLine: 6,
           compact: true,
-          message: "The variant composes the row instead of configuring it.",
+          message: "The row renders; the variant decides the product shape.",
           reviewed: true,
           showActions: true,
           variantId: "moderation",
@@ -385,14 +385,14 @@ const primary =
     content: {
       previewMode: "final",
       previewFocus: [
-        "actor becomes a primitive",
-        "system icon is local",
-        "no showActor flag",
+        "identity becomes explicit",
+        "system icon is chosen in JSX",
+        "no optional actor fiction",
       ],
       previewSteps: [
         {
           afterLine: 6,
-          message: "Moderation chooses a system icon directly.",
+          message: "Moderation renders system identity directly.",
           reviewed: true,
           showActions: true,
           variantId: "moderation",
@@ -412,11 +412,11 @@ const primary =
     durationInFrames: codeDxDuration,
     content: {
       previewMode: "final",
-      previewFocus: ["body primitive", "timestamp primitive", "copy lives with shape"],
+      previewFocus: ["named body slot", "named timestamp slot", "copy belongs to shape"],
       previewSteps: [
         {
           afterLine: 8,
-          message: "The copy and timestamp are named slots, not prop branches.",
+          message: "Copy stops being a special case inside a generic renderer.",
           reviewed: true,
           showActions: true,
           variantId: "moderation",
@@ -436,11 +436,11 @@ const primary =
     durationInFrames: codeDxDuration,
     content: {
       previewMode: "final",
-      previewFocus: ["media primitive", "only shapes that need it render it"],
+      previewFocus: ["media as a visible part", "only shapes that need media render it"],
       previewSteps: [
         {
           afterLine: 8,
-          message: "Media is a primitive used by shapes that actually need media.",
+          message: "Media appears only in the shapes that truly need it.",
           reviewed: true,
           showActions: true,
           variantId: "photo-tag",
@@ -460,11 +460,11 @@ const primary =
     durationInFrames: codeDxDuration,
     content: {
       previewMode: "final",
-      previewFocus: ["actions primitive", "two DM actions", "behavior belongs to the variant"],
+      previewFocus: ["actions as behavior", "two DM decisions", "behavior belongs to the shape"],
       previewSteps: [
         {
           afterLine: 8,
-          message: "The two DM actions become a local composition choice.",
+          message: "Accept and ignore become visible behavior primitives.",
           reviewed: true,
           showActions: true,
           variantId: "dm-request",
@@ -492,25 +492,25 @@ const primary =
       previewSteps: [
         {
           afterLine: 1,
-          message: "The shape has a name.",
+          message: "The supported behavior has a name.",
           variantId: "moderation",
         },
         {
           afterLine: 5,
           compact: true,
-          message: "The container receives an already-derived view model.",
+          message: "The row is still an abstraction, but it is readable.",
           variantId: "moderation",
         },
         {
           afterLine: 8,
           compact: true,
-          message: "Reason and visibility are local primitives.",
+          message: "Reason and visibility are explicit parts of this shape.",
           variantId: "moderation",
         },
         {
           afterLine: 10,
           compact: true,
-          message: "Actions are part of the moderation composition.",
+          message: "Actions are visible in the composed shape.",
           reviewed: true,
           showActions: true,
           variantId: "moderation",
@@ -541,52 +541,49 @@ const primary =
         "PostCommentNotification",
       ],
       previewFocus: [
-        "follow back action",
-        "post thumbnail",
-        "message preview and actions",
-        "photo thumbnail and remove tag",
-        "system icon and appeal",
-        "comment preview and reply",
+        "named variants",
+        "supported shapes",
+        "local reasoning",
       ],
       previewSteps: [
         {
           afterLine: 2,
-          message: "After one good abstraction, the exports stay named.",
+          message: "The module exports supported shapes by name.",
           previewAll: true,
           variantId: "follow-request",
         },
         {
           afterLine: 3,
           compact: true,
-          message: "Post like keeps thumbnail behavior local.",
+          message: "Post like stops being a prop combination.",
           previewAll: true,
           variantId: "post-like",
         },
         {
           afterLine: 4,
           compact: true,
-          message: "DM request owns accept and ignore actions.",
+          message: "DM request becomes the shape you render.",
           previewAll: true,
           variantId: "dm-request",
         },
         {
           afterLine: 5,
           compact: true,
-          message: "Photo tag owns review media and remove tag.",
+          message: "Photo tag owns media and remove-tag behavior.",
           previewAll: true,
           variantId: "photo-tag",
         },
         {
           afterLine: 6,
           compact: true,
-          message: "Moderation owns system review shape.",
+          message: "Moderation gets a real place in the API.",
           previewAll: true,
           variantId: "moderation",
         },
         {
           afterLine: 20,
           compact: true,
-          message: "The registry backtests the supported shape set.",
+          message: "The public question becomes: which supported shape is this?",
           previewAll: true,
           reviewed: true,
           showActions: true,
@@ -609,12 +606,12 @@ const primary =
       layout: "yellow",
       subtitle: "Flexibility inside.\nLocal reasoning outside.",
       bullets: [
-        "primitives",
-        "context structure",
-        "variant logic",
+        "visual primitives",
+        "behavior primitives",
+        "provider contracts",
         "named variants",
         "supported shapes",
-        "stable imports",
+        "local reasoning",
       ],
     },
   },
@@ -624,14 +621,14 @@ const primary =
     family: "code-only",
     durationInFrames: codeOnlyDuration,
     content: {
-      subtitle: "the primitives read one derived view",
+      subtitle: "primitives consume an interface",
       codeFontSize: 16,
       codeHeight: 790,
       codeWidth: 1500,
       bullets: [
         "`state`: what primitives render",
         "`actions`: what primitives trigger",
-        "`meta`: refs, ids, labels, formatting",
+        "`meta`: refs, ids, labels, tracking",
       ],
       code: {
         language: "tsx",
@@ -668,14 +665,14 @@ function useNotification() {
     family: "code-dx",
     durationInFrames: codeDxDuration,
     content: {
-      subtitle: "Post comments do not become more props.",
+      subtitle: "New complexity gets a new place.",
       bullets: [
-        "shares post thumbnail",
-        "shares text preview",
+        "reuses actor / body / media",
+        "owns comment preview",
         "owns reply behavior",
       ],
       previewFocus: [
-        "shared actor primitive",
+        "reused actor primitive",
         "comment preview",
         "post thumbnail",
         "reply action",
@@ -683,25 +680,25 @@ function useNotification() {
       previewSteps: [
         {
           afterLine: 1,
-          message: "New behavior gets a new named place.",
+          message: "Composition does not remove complexity; it gives it a home.",
           variantId: "post-comment",
         },
         {
           afterLine: 8,
           compact: true,
-          message: "Comment preview is explicit in the composition.",
+          message: "The comment preview is not hidden behind a mode.",
           variantId: "post-comment",
         },
         {
           afterLine: 9,
           compact: true,
-          message: "Post/thread media stays local to this shape.",
+          message: "Media is reused without pretending every shape has it.",
           variantId: "post-comment",
         },
         {
           afterLine: 10,
           compact: true,
-          message: "Reply is a fake action owned by the variant.",
+          message: "Reply behavior is owned by the post-comment shape.",
           reviewed: true,
           showActions: true,
           variantId: "post-comment",
@@ -721,12 +718,12 @@ function useNotification() {
     durationInFrames: narrativeDuration,
     content: {
       layout: "right-column",
-      subtitle: "Fewer shapes to reason about.",
-      claim: "Named variants keep the public surface small while the internal kit stays flexible.",
+      subtitle: "Fewer public modes to keep in your head.",
+      claim: "Every public prop combination is a state someone can write, review, test, and maintain.",
       bullets: [
-        "flag bags widen the space",
+        "flag bags widen the state space",
         "explicit variants narrow the public set",
-        "fewer public modes to understand",
+        "TypeScript helps with named shapes",
       ],
     },
   },
@@ -740,7 +737,7 @@ function useNotification() {
       bullets: [
         "Supported behavior gets a name.",
         "Supported shape becomes visible.",
-        "Flexibility inside. Local reasoning outside.",
+        "No archeology required.",
       ],
     },
   },
