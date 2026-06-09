@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "installCommand": "cd remotion-presentation && bun install",
+  "buildCommand": "cd remotion-presentation && bun run build:presenter",
+  "outputDirectory": "remotion-presentation/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
