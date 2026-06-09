@@ -1,11 +1,12 @@
 "use client";
 
 import { spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { titleVw } from "../../lib/viewport-units";
 
 export interface MaskedSlideRevealProps {
   text: string;
   staggerDelay?: number;
-  fontSize?: number;
+  fontSize?: number | string;
   color?: string;
   fontWeight?: number;
   speed?: number;
@@ -15,7 +16,7 @@ export interface MaskedSlideRevealProps {
 export function MaskedSlideReveal({
   text,
   staggerDelay = 3,
-  fontSize = 72,
+  fontSize = titleVw(72),
   color = "#171717",
   fontWeight = 700,
   speed = 1,

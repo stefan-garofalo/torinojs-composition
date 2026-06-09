@@ -22,9 +22,9 @@ export const stageTokens = {
   },
   font: {
     sans:
-      "var(--font-geist-sans), Geist, ui-sans-serif, system-ui, sans-serif",
+      "var(--font-sans), Montserrat, ui-sans-serif, system-ui, sans-serif",
     mono:
-      "var(--font-geist-mono), Geist Mono, ui-monospace, SFMono-Regular, Menlo, monospace",
+      "var(--font-mono), Geist Mono, ui-monospace, SFMono-Regular, Menlo, monospace",
   },
   radius: {
     card: 8,

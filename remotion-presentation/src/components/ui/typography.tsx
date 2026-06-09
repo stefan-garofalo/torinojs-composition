@@ -1,4 +1,5 @@
 import type { CSSProperties, HTMLAttributes } from "react";
+import { titleVw, vw } from "../../lib/viewport-units";
 
 type TextProps = HTMLAttributes<HTMLElement> & {
   style?: CSSProperties;
@@ -10,7 +11,7 @@ export function TypographyH3({ style, ...props }: TextProps) {
       style={{
         color: "var(--foreground)",
         fontFamily: "var(--font-sans)",
-        fontSize: "1.5rem",
+        fontSize: titleVw(24),
         fontWeight: 600,
         letterSpacing: 0,
         lineHeight: 1.08,
@@ -28,7 +29,7 @@ export function TypographyP({ style, ...props }: TextProps) {
       style={{
         color: "var(--foreground)",
         fontFamily: "var(--font-sans)",
-        fontSize: "0.9375rem",
+        fontSize: vw(15),
         lineHeight: 1.35,
         margin: 0,
         ...style,
@@ -44,7 +45,7 @@ export function TypographySmall({ style, ...props }: TextProps) {
       style={{
         color: "var(--muted-foreground)",
         fontFamily: "var(--font-sans)",
-        fontSize: "0.8125rem",
+        fontSize: vw(13),
         fontWeight: 500,
         lineHeight: 1.15,
         ...style,
@@ -60,7 +61,7 @@ export function TypographyMuted({ style, ...props }: TextProps) {
       style={{
         color: "var(--muted-foreground)",
         fontFamily: "var(--font-sans)",
-        fontSize: "0.8125rem",
+        fontSize: vw(13),
         lineHeight: 1.3,
         margin: 0,
         ...style,
@@ -77,7 +78,7 @@ export function TypographyBlockquote({ style, ...props }: TextProps) {
         borderLeft: "2px solid var(--border)",
         color: "var(--muted-foreground)",
         fontFamily: "var(--font-sans)",
-        fontSize: "0.875rem",
+        fontSize: vw(14),
         lineHeight: 1.3,
         margin: 0,
         paddingLeft: 14,

@@ -7,6 +7,7 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
+import { titleVw } from "../../lib/viewport-units";
 
 export interface MarkerHighlightProps {
   before?: string;
@@ -15,7 +16,7 @@ export interface MarkerHighlightProps {
   markerColor?: string;
   baseColor?: string;
   highlightedTextColor?: string;
-  fontSize?: number;
+  fontSize?: number | string;
   fontWeight?: number;
   speed?: number;
   className?: string;
@@ -28,7 +29,7 @@ export function MarkerHighlight({
   markerColor = "#facc15",
   baseColor = "#171717",
   highlightedTextColor = "#171717",
-  fontSize = 72,
+  fontSize = titleVw(72),
   fontWeight = 600,
   speed = 1,
   className,

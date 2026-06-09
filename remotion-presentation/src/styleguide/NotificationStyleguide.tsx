@@ -4,6 +4,7 @@ import {
   notificationRenderers,
   notificationThemeVars,
 } from "../notifications";
+import { titleVw, vw } from "../lib/viewport-units";
 
 type StyleWithVars = CSSProperties & Record<string, string | number>;
 
@@ -58,14 +59,14 @@ const headerStyle: CSSProperties = {
 const eyebrowStyle: CSSProperties = {
   color: "var(--muted-foreground)",
   fontFamily: "var(--font-sans)",
-  fontSize: 13,
+  fontSize: vw(13),
   fontWeight: 500,
   letterSpacing: 0,
   margin: "0 0 10px",
 };
 
 const titleStyle: CSSProperties = {
-  fontSize: 28,
+  fontSize: titleVw(28),
   fontWeight: 600,
   letterSpacing: 0,
   lineHeight: 1.1,
@@ -74,7 +75,7 @@ const titleStyle: CSSProperties = {
 
 const summaryStyle: CSSProperties = {
   color: "var(--muted-foreground)",
-  fontSize: 16,
+  fontSize: vw(16),
   lineHeight: 1.35,
   margin: 0,
 };

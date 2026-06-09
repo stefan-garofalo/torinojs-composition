@@ -7,6 +7,7 @@ import {
   TypographyMuted,
   TypographyP,
 } from "../components/ui";
+import { vw } from "../lib/viewport-units";
 import type {
   ActionTone,
   NotificationAction,
@@ -134,12 +135,12 @@ const copyStyle: CSSProperties = {
 
 const textStyle: CSSProperties = {
   color: "var(--foreground)",
-  fontSize: 15,
+  fontSize: vw(15),
   lineHeight: 1.25,
 };
 
 const timeStyle: CSSProperties = {
-  fontSize: 13,
+  fontSize: vw(13),
   marginTop: 3,
 };
 

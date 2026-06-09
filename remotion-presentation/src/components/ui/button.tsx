@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, CSSProperties } from "react";
+import { vw } from "../../lib/viewport-units";
 
 export type ButtonVariant =
   | "default"
@@ -26,7 +27,7 @@ export function Button({
         borderRadius: "var(--radius-md)",
         display: "inline-flex",
         fontFamily: "var(--font-sans)",
-        fontSize: "0.875rem",
+        fontSize: vw(14),
         fontWeight: 500,
         gap: 8,
         justifyContent: "center",

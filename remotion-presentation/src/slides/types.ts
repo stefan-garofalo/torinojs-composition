@@ -36,12 +36,14 @@ export type CodeSnippet = {
 };
 
 export type NarrativeContent = {
+  readonly layout?: "default" | "yellow" | "right-column";
   readonly eyebrow?: string;
   readonly subtitle?: string;
   readonly bullets?: readonly string[];
   readonly leftItems?: readonly string[];
   readonly rightText?: string;
   readonly emphasis?: readonly string[];
+  readonly claim?: string;
   readonly code?: CodeSnippet;
 };
 

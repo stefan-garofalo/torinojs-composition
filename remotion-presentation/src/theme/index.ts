@@ -1,3 +1,5 @@
+import { titleVw, vw } from "../lib/viewport-units";
+
 export const JS_YELLOW = "#F0DB4F";
 export const DARK_BASE = "#323330";
 
@@ -40,20 +42,20 @@ export const stageSpacing = {
 } as const;
 
 export const stageTypography = {
-  sans: '"Geist", "Avenir Next", "Segoe UI", sans-serif',
+  sans: '"Montserrat", "Avenir Next", "Segoe UI", sans-serif',
   mono: '"Geist Mono", "JetBrains Mono", "SFMono-Regular", monospace',
   title: {
-    fontSize: "4.5rem",
+    fontSize: titleVw(72),
     lineHeight: "1",
     fontWeight: 700,
   },
   body: {
-    fontSize: "2rem",
+    fontSize: vw(32),
     lineHeight: "1.25",
     fontWeight: 500,
   },
   code: {
-    fontSize: "1.375rem",
+    fontSize: vw(22),
     lineHeight: "1.55",
     fontWeight: 500,
   },

@@ -1,6 +1,7 @@
 "use client";
 
 import { Sequence, interpolate, useCurrentFrame } from "remotion";
+import { vw } from "../../lib/viewport-units";
 
 export interface GlassCodeBlockProps {
   code?: string;
@@ -220,7 +221,7 @@ export function GlassCodeBlock({
                 flex: 1,
                 textAlign: "center",
                 color: "#a1a1aa",
-                fontSize: 12,
+                fontSize: vw(12),
                 letterSpacing: "0.02em",
               }}
             >
@@ -236,7 +237,7 @@ export function GlassCodeBlock({
               display: "flex",
               flexDirection: "column",
               gap: 4,
-              fontSize,
+              fontSize: vw(fontSize),
               lineHeight: 1.55,
             }}
           >

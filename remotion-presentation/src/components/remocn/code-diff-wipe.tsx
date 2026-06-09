@@ -1,6 +1,7 @@
 "use client";
 
 import { Easing, interpolate, useCurrentFrame } from "remotion";
+import { vw } from "../../lib/viewport-units";
 
 export interface CodeDiffWipeProps {
   before?: string;
@@ -143,7 +144,7 @@ export function CodeDiffWipe({
                 alignItems: "center",
                 justifyContent: "center",
                 color: "#0a0a0a",
-                fontSize: 18,
+                fontSize: vw(18),
                 fontWeight: 700,
                 boxShadow: `0 0 32px ${accent}aa`,
               }}
@@ -198,7 +199,7 @@ function CodePane({
         <div
           style={{
             color: "#71717a",
-            fontSize: 13,
+            fontSize: vw(13),
             fontFamily:
               "var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace",
           }}
@@ -207,7 +208,7 @@ function CodePane({
         </div>
         <div
           style={{
-            fontSize: 11,
+            fontSize: vw(11),
             fontWeight: 700,
             letterSpacing: "0.12em",
             color: labelColor,
@@ -228,7 +229,7 @@ function CodePane({
           margin: 0,
           padding: 24,
           color: dimmed ? "#71717a" : "#e4e4e7",
-          fontSize: 16,
+          fontSize: vw(16),
           lineHeight: 1.6,
           fontFamily:
             "var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace",

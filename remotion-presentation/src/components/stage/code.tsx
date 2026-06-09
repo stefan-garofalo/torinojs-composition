@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { vw } from "../../lib/viewport-units";
 import { stageTokens } from "./tokens";
 
 export interface StageCodeBlockProps {
@@ -91,7 +92,7 @@ export function StageCodeBlock({
         <span
           style={{
             color: stageTokens.color.textSubtle,
-            fontSize: 18,
+            fontSize: vw(18),
             marginLeft: 8,
           }}
         >
@@ -101,7 +102,7 @@ export function StageCodeBlock({
       <pre
         style={{
           flex: 1,
-          fontSize: 28,
+          fontSize: vw(28),
           lineHeight: 1.48,
           margin: 0,
           padding: "30px 34px",

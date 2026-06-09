@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400..900&display=swap");
 @import "tailwindcss";
 
 @theme inline {
@@ -20,7 +21,7 @@
   --color-ring: var(--ring);
   --color-stage-yellow: var(--stage-js-yellow);
   --color-stage-dark: var(--stage-dark-base);
-  --font-sans: "Geist", "Avenir Next", "Segoe UI", sans-serif;
+  --font-sans: "Montserrat", "Avenir Next", "Segoe UI", sans-serif;
   --font-mono: "Geist Mono", "JetBrains Mono", "SFMono-Regular", monospace;
   --radius: 0.625rem;
   --radius-xs: calc(var(--radius) * 0.5);
@@ -67,6 +68,8 @@
   --motion-duration-fast: 180ms;
   --motion-duration-standard: 320ms;
   --motion-duration-slow: 560ms;
+  --font-geist-sans: "Montserrat";
+  --font-geist-mono: "Geist Mono";
 }
 
 * {
@@ -77,5 +80,5 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: "Geist", "Avenir Next", "Segoe UI", sans-serif;
+  font-family: "Montserrat", "Avenir Next", "Segoe UI", sans-serif;
 }

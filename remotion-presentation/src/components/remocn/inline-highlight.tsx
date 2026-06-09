@@ -6,6 +6,7 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
+import { titleVw } from "../../lib/viewport-units";
 
 export interface InlineHighlightProps {
   before: string;
@@ -13,7 +14,7 @@ export interface InlineHighlightProps {
   after?: string;
   baseColor?: string;
   highlightColor?: string;
-  fontSize?: number;
+  fontSize?: number | string;
   fontWeight?: number;
   speed?: number;
   className?: string;
@@ -25,7 +26,7 @@ export function InlineHighlight({
   after = "",
   baseColor = "#171717",
   highlightColor = "#ff5e3a",
-  fontSize = 48,
+  fontSize = titleVw(48),
   fontWeight = 600,
   speed = 1,
   className,

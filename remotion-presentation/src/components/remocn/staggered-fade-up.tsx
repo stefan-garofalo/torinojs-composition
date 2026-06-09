@@ -1,12 +1,13 @@
 "use client";
 
 import { interpolate, useCurrentFrame } from "remotion";
+import { titleVw } from "../../lib/viewport-units";
 
 export interface StaggeredFadeUpProps {
   text: string;
   staggerDelay?: number;
   distance?: number;
-  fontSize?: number;
+  fontSize?: number | string;
   color?: string;
   fontWeight?: number;
   background?: string;
@@ -22,7 +23,7 @@ export function StaggeredFadeUp({
   text,
   staggerDelay = 4,
   distance = 20,
-  fontSize = 72,
+  fontSize = titleVw(72),
   color = "#171717",
   fontWeight = 600,
   background = "white",

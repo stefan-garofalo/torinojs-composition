@@ -4,12 +4,27 @@ import type {
 } from "../components/remocn/live-code-compilation";
 import { CodeDxTalkSlide } from "./code-dx-slide";
 import { CodeOnlyTalkSlide } from "./code-only-slide";
-import { NarrativeTalkSlide } from "./narrative-slide";
+import { NarrativeTalkSlide, RightColumnClaimSlide } from "./narrative-slide";
 import type { CodeDxContent, TalkSlide } from "./types";
 
 export function renderTalkSlide(slide: TalkSlide) {
   switch (slide.family) {
     case "narrative":
+      if (slide.content.layout === "right-column") {
+        return (
+          <RightColumnClaimSlide
+            claim={
+              slide.content.claim ??
+              slide.content.emphasis?.join("\n") ??
+              slide.content.bullets?.join("\n") ??
+              ""
+            }
+            subtitle={slide.content.subtitle ?? ""}
+            title={slide.title}
+          />
+        );
+      }
+
       return (
         <NarrativeTalkSlide
           bullets={[
@@ -23,6 +38,7 @@ export function renderTalkSlide(slide: TalkSlide) {
           eyebrow={slide.content.eyebrow}
           subtitle={slide.content.subtitle}
           title={slide.title}
+          variant={slide.content.layout === "yellow" ? "yellow" : "dark"}
         />
       );
     case "code-only":

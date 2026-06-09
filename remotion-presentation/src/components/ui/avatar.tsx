@@ -1,5 +1,6 @@
 import type { CSSProperties, HTMLAttributes, ImgHTMLAttributes } from "react";
 import { Img } from "remotion";
+import { vw } from "../../lib/viewport-units";
 
 type DivProps = HTMLAttributes<HTMLDivElement> & {
   style?: CSSProperties;
@@ -17,7 +18,7 @@ export function Avatar({ style, ...props }: DivProps) {
         display: "inline-flex",
         flexShrink: 0,
         fontFamily: "var(--font-sans)",
-        fontSize: "0.875rem",
+        fontSize: vw(14),
         fontWeight: 500,
         height: 56,
         justifyContent: "center",

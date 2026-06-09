@@ -1,4 +1,5 @@
 import type { CSSProperties, HTMLAttributes } from "react";
+import { titleVw, vw } from "../../lib/viewport-units";
 
 type DivProps = HTMLAttributes<HTMLDivElement> & {
   style?: CSSProperties;
@@ -41,7 +42,7 @@ export function CardTitle({ style, ...props }: DivProps) {
       style={{
         color: "var(--card-foreground)",
         fontFamily: "var(--font-sans)",
-        fontSize: "1.5rem",
+        fontSize: titleVw(24),
         fontWeight: 600,
         lineHeight: 1,
         ...style,
@@ -57,7 +58,7 @@ export function CardDescription({ style, ...props }: DivProps) {
       style={{
         color: "var(--muted-foreground)",
         fontFamily: "var(--font-sans)",
-        fontSize: "0.875rem",
+        fontSize: vw(14),
         lineHeight: 1.28,
         ...style,
       }}

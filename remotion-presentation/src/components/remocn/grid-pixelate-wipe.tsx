@@ -2,6 +2,7 @@
 
 import { type ReactNode, useMemo } from "react";
 import { interpolate, useCurrentFrame, useVideoConfig } from "remotion";
+import { titleVw } from "../../lib/viewport-units";
 
 export interface GridPixelateWipeProps {
   from?: ReactNode;
@@ -31,7 +32,7 @@ function DefaultPanel({ label, color }: { label: string; color: string }) {
         justifyContent: "center",
         color: "white",
         fontFamily: FONT_FAMILY,
-        fontSize: 96,
+        fontSize: titleVw(96),
         fontWeight: 700,
         letterSpacing: "-0.05em",
       }}

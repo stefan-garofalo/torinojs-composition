@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useCurrentFrame } from "remotion";
+import { vw } from "../../lib/viewport-units";
 import { GlassCodeBlock } from "./glass-code-block";
 
 export interface LiveCodeCompilationProps {
@@ -136,7 +137,7 @@ export function LiveCodeCompilation({
         padding: previewUi.padding ?? "10px 20px",
         borderRadius: previewUi.borderRadius ?? "4px",
         fontWeight: previewUi.fontWeight ?? 400,
-        fontSize: 18,
+        fontSize: vw(18),
         fontFamily: FONT_FAMILY,
         border: previewUi.background
           ? "none"
@@ -233,7 +234,7 @@ export function LiveCodeCompilation({
           />
           <div
             style={{
-              fontSize: 11,
+              fontSize: vw(11),
               fontFamily: MONO_FAMILY,
               color: "rgba(255,255,255,0.5)",
               textTransform: "uppercase",

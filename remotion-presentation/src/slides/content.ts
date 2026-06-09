@@ -12,6 +12,7 @@ export const talkSlides = [
     family: "narrative",
     durationInFrames: narrativeDuration,
     content: {
+      layout: "yellow",
       subtitle: "Through a composable React API",
     },
   },
@@ -317,7 +318,9 @@ const primary =
     family: "narrative",
     durationInFrames: narrativeDuration,
     content: {
+      layout: "right-column",
       subtitle: "Some changes are values.\nSome changes are shapes.",
+      claim: "When variation is structural, make the structure visible.",
       emphasis: [
         "When variation is structural,",
         "make the structure visible.",
@@ -330,7 +333,9 @@ const primary =
     family: "narrative",
     durationInFrames: narrativeDuration,
     content: {
+      layout: "right-column",
       subtitle: "Composition is for shape",
+      claim: "Configuration handles stable values. Composition exposes new parts, actions, and navigation.",
       bullets: [
         "Stable row, new label: prop",
         "Stable row, loading state: prop",
@@ -600,10 +605,17 @@ const primary =
     title: "Internal kit / public API",
     family: "narrative",
     durationInFrames: narrativeDuration,
-      content: {
-      leftItems: ["primitives", "context structure", "variant logic"],
-      rightText: "named variants\nsupported shapes\nstable imports",
-      emphasis: ["Flexibility inside.", "Local reasoning outside."],
+    content: {
+      layout: "yellow",
+      subtitle: "Flexibility inside.\nLocal reasoning outside.",
+      bullets: [
+        "primitives",
+        "context structure",
+        "variant logic",
+        "named variants",
+        "supported shapes",
+        "stable imports",
+      ],
     },
   },
   {
@@ -708,7 +720,9 @@ function useNotification() {
     family: "narrative",
     durationInFrames: narrativeDuration,
     content: {
+      layout: "right-column",
       subtitle: "Fewer shapes to reason about.",
+      claim: "Named variants keep the public surface small while the internal kit stays flexible.",
       bullets: [
         "flag bags widen the space",
         "explicit variants narrow the public set",

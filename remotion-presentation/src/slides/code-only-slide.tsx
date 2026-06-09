@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { AbsoluteFill } from "remotion";
 import { GlassCodeBlock } from "../components/remocn/glass-code-block";
 import { stageTokens } from "../components/stage";
+import { titleVw, vw } from "../lib/viewport-units";
 
 export interface CodeOnlyTalkSlideProps {
   code: string;
@@ -72,8 +73,8 @@ const headerStyle: CSSProperties = {
 
 const titleStyle: CSSProperties = {
   color: stageTokens.color.text,
-  fontSize: 50,
-  fontWeight: 780,
+  fontSize: titleVw(54),
+  fontWeight: 700,
   letterSpacing: 0,
   lineHeight: 1.05,
   margin: 0,
@@ -81,7 +82,7 @@ const titleStyle: CSSProperties = {
 
 const subtitleStyle: CSSProperties = {
   color: stageTokens.color.textMuted,
-  fontSize: 27,
+  fontSize: vw(28),
   lineHeight: 1.22,
   margin: 0,
 };

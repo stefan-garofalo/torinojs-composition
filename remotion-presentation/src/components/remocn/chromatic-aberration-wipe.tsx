@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
+import { titleVw } from "../../lib/viewport-units";
 
 export interface ChromaticAberrationWipeProps {
   from?: ReactNode;
@@ -29,7 +30,7 @@ function DefaultPanel({ label, color }: { label: string; color: string }) {
         justifyContent: "center",
         color: "white",
         fontFamily: FONT_FAMILY,
-        fontSize: 96,
+        fontSize: titleVw(96),
         fontWeight: 700,
         letterSpacing: "-0.05em",
       }}

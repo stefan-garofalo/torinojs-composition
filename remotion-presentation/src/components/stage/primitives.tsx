@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { AbsoluteFill } from "remotion";
+import { titleVw, vw } from "../../lib/viewport-units";
 import { StageCodeBlock } from "./code";
 import { stageTokens } from "./tokens";
 
@@ -310,7 +311,7 @@ function ActionRow({
                 ? stageTokens.color.darkBase
                 : stageTokens.color.text,
             fontFamily: stageTokens.font.sans,
-            fontSize: 21,
+            fontSize: vw(21),
             fontWeight: 700,
             lineHeight: 1,
             padding: "13px 17px",
@@ -329,7 +330,7 @@ function Eyebrow({ children }: { children: ReactNode }) {
     <p
       style={{
         color: stageTokens.color.jsYellow,
-        fontSize: 20,
+        fontSize: vw(20),
         fontWeight: 800,
         letterSpacing: 0,
         margin: "0 0 16px",
@@ -354,7 +355,7 @@ function MetricCard({ metric }: { metric: StageMetric }) {
       <div
         style={{
           color: stageTokens.color.textSubtle,
-          fontSize: 18,
+          fontSize: vw(18),
           marginBottom: 8,
         }}
       >
@@ -364,7 +365,7 @@ function MetricCard({ metric }: { metric: StageMetric }) {
         style={{
           color: stageTokens.color.text,
           fontFamily: stageTokens.font.mono,
-          fontSize: 30,
+          fontSize: vw(30),
           fontWeight: 700,
         }}
       >
@@ -386,7 +387,7 @@ function DxPanelRow({ item }: { item: DxPanelItem }) {
       <div
         style={{
           color: stageTokens.color.textSubtle,
-          fontSize: 17,
+          fontSize: vw(17),
           marginBottom: 7,
         }}
       >
@@ -395,7 +396,7 @@ function DxPanelRow({ item }: { item: DxPanelItem }) {
       <div
         style={{
           color: stageTokens.color.text,
-          fontSize: 27,
+          fontSize: vw(27),
           fontWeight: 750,
           lineHeight: 1.12,
         }}
@@ -409,7 +410,7 @@ function DxPanelRow({ item }: { item: DxPanelItem }) {
 
 const titleStyle: CSSProperties = {
   color: stageTokens.color.text,
-  fontSize: 78,
+  fontSize: titleVw(78),
   fontWeight: 820,
   letterSpacing: 0,
   lineHeight: 0.98,
@@ -419,7 +420,7 @@ const titleStyle: CSSProperties = {
 
 const sectionTitleStyle: CSSProperties = {
   color: stageTokens.color.text,
-  fontSize: 48,
+  fontSize: titleVw(48),
   fontWeight: 800,
   letterSpacing: 0,
   lineHeight: 1.04,
@@ -428,7 +429,7 @@ const sectionTitleStyle: CSSProperties = {
 
 const panelTitleStyle: CSSProperties = {
   color: stageTokens.color.text,
-  fontSize: 36,
+  fontSize: titleVw(36),
   fontWeight: 780,
   letterSpacing: 0,
   lineHeight: 1.08,
@@ -437,7 +438,7 @@ const panelTitleStyle: CSSProperties = {
 
 const bodyStyle: CSSProperties = {
   color: stageTokens.color.textMuted,
-  fontSize: 34,
+  fontSize: vw(34),
   lineHeight: 1.32,
   margin: "0 0 34px",
   maxWidth: 860,
@@ -445,14 +446,14 @@ const bodyStyle: CSSProperties = {
 
 const captionStyle: CSSProperties = {
   color: stageTokens.color.textMuted,
-  fontSize: 24,
+  fontSize: vw(24),
   lineHeight: 1.34,
   margin: 0,
 };
 
 const rowDetailStyle: CSSProperties = {
   color: stageTokens.color.textSubtle,
-  fontSize: 19,
+  fontSize: vw(19),
   lineHeight: 1.35,
   margin: "8px 0 0",
 };
@@ -461,7 +462,7 @@ const pointStyle: CSSProperties = {
   alignItems: "flex-start",
   color: stageTokens.color.textMuted,
   display: "grid",
-  fontSize: 21,
+  fontSize: vw(21),
   gap: 12,
   gridTemplateColumns: "14px 1fr",
   lineHeight: 1.32,

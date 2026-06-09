@@ -1,11 +1,12 @@
 "use client";
 
 import { interpolate, useCurrentFrame, useVideoConfig } from "remotion";
+import { titleVw } from "../../lib/viewport-units";
 
 export interface TextFadeReplaceProps {
   from: string;
   to: string;
-  fontSize?: number;
+  fontSize?: number | string;
   color?: string;
   fontWeight?: number;
   speed?: number;
@@ -15,7 +16,7 @@ export interface TextFadeReplaceProps {
 export function TextFadeReplace({
   from,
   to,
-  fontSize = 48,
+  fontSize = titleVw(48),
   color = "#171717",
   fontWeight = 600,
   speed = 1,
