@@ -4,7 +4,8 @@ import {
   VISUAL_SYSTEM_HEIGHT,
   VISUAL_SYSTEM_WIDTH,
 } from "../Composition";
-import { notificationCodeSnippets } from "./notification-code-snippets";
+import { notificationCodeSnippets } from "../deck/notification-code-snippets";
+import { renderDeckPreview } from "../deck/preview";
 import {
   FullYellowNarrativeSlide,
   RightColumnClaimSlide,
@@ -187,7 +188,9 @@ export function SlideOverview() {
                 acknowledgeRemotionLicense
                 allowFullscreen={false}
                 clickToPlay={false}
-                component={() => renderTalkSlide(slide)}
+                component={() =>
+                  renderTalkSlide(slide, { renderPreview: renderDeckPreview })
+                }
                 compositionHeight={VISUAL_SYSTEM_HEIGHT}
                 compositionWidth={VISUAL_SYSTEM_WIDTH}
                 controls={false}

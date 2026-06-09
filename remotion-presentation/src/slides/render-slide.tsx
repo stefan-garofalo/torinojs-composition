@@ -1,5 +1,6 @@
 import type {
   CodeEvent,
+  LiveCodeCompilationProps,
   UIState,
 } from "../components/remocn/live-code-compilation";
 import { CodeDxTalkSlide } from "./code-dx-slide";
@@ -7,7 +8,14 @@ import { CodeOnlyTalkSlide } from "./code-only-slide";
 import { NarrativeTalkSlide, RightColumnClaimSlide } from "./narrative-slide";
 import type { CodeDxContent, TalkSlide } from "./types";
 
-export function renderTalkSlide(slide: TalkSlide) {
+export type RenderTalkSlideOptions = {
+  readonly renderPreview?: LiveCodeCompilationProps["renderPreview"];
+};
+
+export function renderTalkSlide(
+  slide: TalkSlide,
+  options: RenderTalkSlideOptions = {},
+) {
   switch (slide.family) {
     case "narrative":
       if (slide.content.layout === "right-column") {
@@ -64,6 +72,7 @@ export function renderTalkSlide(slide: TalkSlide) {
           codeMaxWidth={slide.content.codeMaxWidth}
           codeTitle={slide.content.code.fileName}
           previewLabel={slide.content.previewFocus.join(" · ")}
+          renderPreview={options.renderPreview}
         />
       );
   }

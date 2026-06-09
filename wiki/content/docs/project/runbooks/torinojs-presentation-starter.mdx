@@ -1,0 +1,41 @@
+---
+title: TorinoJS Presentation Starter
+description: Fork and customize the presenter-only Remotion starter
+surface: project
+permission: project
+---
+
+# TorinoJS Presentation Starter
+
+The starter product surface is the fullscreen presenter at `http://localhost:3001/`.
+Do not use Remotion Studio as the default local workflow for fork users.
+
+## Local Workflow
+
+```console
+cd remotion-presentation
+bun install
+bun run dev
+```
+
+`bun run presenter` is an alias for the same Vite presenter command.
+
+## Authoring Boundary
+
+Fork authors should start in `remotion-presentation/src/deck/`:
+
+- `content.ts` owns slide order, ids, copy, durations, and code blocks.
+- `preview.tsx` owns the optional code-DX preview renderer.
+- `notification-code-snippets.ts` is specific to the current React composition talk and can be replaced for a new talk.
+
+Reusable rendering lives in `remotion-presentation/src/slides/`. Change it only when adding a reusable slide family or improving the shared visual system.
+
+## Validation
+
+```console
+cd remotion-presentation
+bun run lint
+bun run build:presenter
+```
+
+Then open `http://localhost:3001/` and smoke-test keyboard navigation: `ArrowRight`, `ArrowLeft`, `Home`, `End`, and `R`.

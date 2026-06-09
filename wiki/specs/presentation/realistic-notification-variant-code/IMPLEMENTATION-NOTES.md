@@ -54,7 +54,7 @@ updated: 2026-06-08
 | Moderation still | Passed | `/tmp/realistic-notifications-moderation-late.png` visually inspected; realistic code and moderation variant render. |
 | Post-comment still | Passed | `/tmp/realistic-notifications-post-comment-late.png` visually inspected; realistic code and post-comment variant render. |
 | Presenter browser smoke | Passed | `agent-browser` opened `http://localhost:3001/`, took screenshots, and exercised `ArrowRight`. |
-| Studio browser smoke | Passed | `agent-browser` opened `http://localhost:3000/MyComp` and captured a screenshot. |
+| Studio browser smoke | Historical | Earlier validation used a non-starter Remotion Studio route. The starter workflow now validates `http://localhost:3001/`. |
 
 ## Acceptance Criteria Status
 
@@ -74,7 +74,7 @@ updated: 2026-06-08
 | CLI | Re-run app checks | `cd remotion-presentation && bun run lint && bun run build` | Lint passes; build succeeds, with the known Remotion `zod` version warning. |
 | Visual stills | Inspect representative code-DX frames | Open `/tmp/realistic-notifications-moderation-late.png` and `/tmp/realistic-notifications-post-comment-late.png` | Realistic code appears on the left and real notification variants render on the right. |
 | Presenter | Smoke live presentation navigation | Open `http://localhost:3001/`, press `ArrowRight` through slides | Clean slide-only presenter surface advances without visible controls. |
-| Studio | Inspect Remotion composition | Open `http://localhost:3000/MyComp` | Remotion Studio loads `MyComp` for debugging/frame inspection. |
+| Presenter | Inspect current starter surface | Open `http://localhost:3001/` | The fullscreen presenter loads without Studio chrome. |
 | Tracker | Finish backlog sync when permissions allow | Create or identify a GitHub story for this follow-up and replace `TBD-new-GitHub-story` in the plan | Tracker has a real product-facing owner for this implemented follow-up. |
 
 ## Pre-existing Issues

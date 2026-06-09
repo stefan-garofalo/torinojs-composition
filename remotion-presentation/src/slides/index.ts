@@ -4,9 +4,8 @@ export {
   type CodeDxTalkSlideProps,
 } from "./code-dx-slide";
 export { CodeOnlyTalkSlide } from "./code-only-slide";
-export { talkSlides } from "./content";
 export { NarrativeTalkSlide } from "./narrative-slide";
-export { renderTalkSlide } from "./render-slide";
+export { renderTalkSlide, type RenderTalkSlideOptions } from "./render-slide";
 export type { CodeOnlyTalkSlideProps } from "./code-only-slide";
 export type {
   NarrativeEmphasisLine,

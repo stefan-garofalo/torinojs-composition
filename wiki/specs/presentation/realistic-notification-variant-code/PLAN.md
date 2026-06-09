@@ -406,7 +406,7 @@ graph TD
 - **status**: Complete
 - **log**:
 - RED: Final validation evidence and backlog link were absent before T5.
-- GREEN: `bun run lint` passed, `bun run build` passed with the existing Remotion `zod` version warning, representative moderation and post-comment stills rendered and were visually inspected, presenter opened at `http://localhost:3001/`, keyboard navigation worked, and Studio opened at `http://localhost:3000/MyComp`.
+- GREEN: `bun run lint` passed, `bun run build` passed with the existing Remotion `zod` version warning, representative moderation and post-comment stills rendered and were visually inspected, presenter opened at `http://localhost:3001/`, and keyboard navigation worked.
 - Backlog story creation remains blocked by GitHub connector `403 Resource not accessible by integration`; implementation is otherwise complete and the blocker is recorded in `IMPLEMENTATION-NOTES.md`.
 - Generated `remotion-presentation/build/` was removed after build validation.
 - **files edited/created**:

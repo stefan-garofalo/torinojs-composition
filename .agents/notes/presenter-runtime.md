@@ -1,7 +1,7 @@
 # Presenter Runtime
 
-Use `bun run presenter` in `remotion-presentation/` for the presentation-like surface. `bun run dev` opens Remotion Studio, which is only the debugging/scrubbing surface and does not satisfy the accepted live navigation requirement.
+Use `bun run dev` or `bun run presenter` in `remotion-presentation/` for the presentation-like surface at `http://localhost:3001/`. The starter no longer exposes Remotion Studio as the default route.
 
-Why: the deck requirement is keyboard-driven cue navigation on a clean projected surface. Studio exposes the timeline, so it is useful for inspection but wrong for rehearsal/delivery.
+Why: the deck requirement is keyboard-driven navigation on a clean projected surface, and fork users need one obvious local URL.
 
 Current caveat: the restored presenter host navigates the current 16-slide deck at slide granularity. The old presenter branch had the cue-schema direction, but the merged slide content still needs slide-local semantic cue arrays before every reveal/code-preview beat can be navigated individually.

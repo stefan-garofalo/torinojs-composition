@@ -5,7 +5,6 @@ import type {
   LiveCodeCompilationProps,
 } from "../components/remocn/live-code-compilation";
 import { LiveCodeCompilation } from "../components/remocn/live-code-compilation";
-import { MockNotificationPreview } from "../components/preview/mock-notification-preview";
 
 export interface CodeDxTalkSlideProps extends Omit<
   LiveCodeCompilationProps,
@@ -61,9 +60,7 @@ export function CodeDxTalkSlide({
   previewLabel = "DX panel · live preview",
   leftFlex = 1.08,
   rightFlex = 0.92,
-  renderPreview = ({ frame, ui }) => (
-    <MockNotificationPreview accentColor={accentColor} frame={frame} ui={ui} />
-  ),
+  renderPreview,
   ...props
 }: CodeDxTalkSlideProps) {
   return (

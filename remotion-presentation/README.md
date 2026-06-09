@@ -1,70 +1,51 @@
-# Remotion video
+# TorinoJS Presentation Starter
 
-<p align="center">
-  <a href="https://github.com/remotion-dev/logo">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-dark.apng">
-      <img alt="Animated Remotion Logo" src="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-light.gif">
-    </picture>
-  </a>
-</p>
+Forkable Remotion + React starter for TorinoJS talks.
 
-Welcome to your Remotion project!
+The app opens directly to the fullscreen presenter. There is no default Remotion Studio route.
 
-## Commands
-
-**Install Dependencies**
+## Run
 
 ```console
-npm i
+bun install
+bun run dev
 ```
 
-**Start Preview**
+Open `http://localhost:3001/`.
 
-```console
-npm run dev
-```
+`bun run presenter` is an alias for the same command.
 
-**Start Presenter**
+## Customize Your Talk
 
-```console
-bun run presenter
-```
+Edit these files first:
 
-Use the presenter URL for rehearsal/delivery. It renders the deck as a clean fullscreen Remotion Player surface with keyboard-only navigation: `Space`/`ArrowRight` next, `ArrowLeft` previous, `Home` first, `End` last, `R` replay current slide. Current navigation is slide-level because the merged 16-slide content does not yet carry slide-local semantic cue arrays. Remotion Studio remains the debugging surface.
+- `src/deck/content.ts` — ordered slide content, titles, durations, and code snippets.
+- `src/deck/notification-code-snippets.ts` — current talk code examples. Replace or delete when your talk is not about notifications.
+- `src/deck/preview.tsx` — optional code-preview renderer for code-DX slides.
 
-**Build Presenter For Vercel**
+Reusable slide rendering lives in `src/slides/`. Most forks should not need to edit it.
+
+## Slide Families
+
+- `narrative` — title, subtitle, bullets, emphasis, or claim slides.
+- `code-only` — code-focused slides with optional subtitle/bullets.
+- `code-dx` — code plus a live preview panel.
+
+Slide ids are plain strings. Add, remove, or rename slides only in `src/deck/content.ts`.
+
+## Build
 
 ```console
 bun run build:presenter
 ```
 
-Deploy this folder as the Vercel project root. The Vercel config builds the Vite presenter to `dist/`. Keep `bun run build` for Remotion bundle workflows.
+The Vercel config builds the Vite presenter to `dist/`. Deploy `remotion-presentation/` as the project root.
 
-**Render video**
-
-```console
-npx remotion render
-```
-
-**Upgrade Remotion**
+## Validate
 
 ```console
-npx remotion upgrade
+bun run lint
+bun run build:presenter
 ```
 
-## Docs
-
-Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).
-
-## Help
-
-We provide help on our [Discord server](https://discord.gg/6VzzNDwUwV).
-
-## Issues
-
-Found an issue with Remotion? [File an issue here](https://github.com/remotion-dev/remotion/issues/new).
-
-## License
-
-Note that for some entities a company license is needed. [Read the terms here](https://github.com/remotion-dev/remotion/blob/main/LICENSE.md).
+Then smoke-test `http://localhost:3001/` with `ArrowRight`, `ArrowLeft`, `Home`, `End`, and `R`.

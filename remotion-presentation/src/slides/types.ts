@@ -1,31 +1,6 @@
-import type { NotificationType } from "../notifications";
-
 export type TalkSlideFamily = "narrative" | "code-only" | "code-dx";
 
-export type TalkSlideId =
-  | "make-the-shape-visible"
-  | "component-earned-place"
-  | "post-like-clean"
-  | "follow-behavior-branch"
-  | "dm-behavior-branch"
-  | "request-usage-before-moderation"
-  | "moderation-internals"
-  | "fifth-shape"
-  | "props-outside-branches-inside"
-  | "structural-variation"
-  | "configuration-is-for-values"
-  | "extract-row-primitive"
-  | "extract-actor-primitive"
-  | "extract-body-primitive"
-  | "extract-media-primitive"
-  | "extract-actions-primitive"
-  | "make-supported-shapes-explicit"
-  | "shape-is-in-the-code"
-  | "internal-kit-public-api"
-  | "inner-context"
-  | "new-behavior-new-place"
-  | "every-public-combination-counts"
-  | "make-the-shape-visible-final";
+export type TalkSlideId = string;
 
 export type CodeLanguage = "tsx";
 
@@ -69,7 +44,7 @@ export type CodeDxContent = CodeContent & {
 
 export type PreviewStep = {
   readonly afterLine: number;
-  readonly variantId?: NotificationType;
+  readonly variantId?: string;
   readonly message: string;
   readonly compact?: boolean;
   readonly previewAll?: boolean;

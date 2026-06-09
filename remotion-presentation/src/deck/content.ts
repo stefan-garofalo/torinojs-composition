@@ -1,5 +1,5 @@
 import { notificationCodeSnippets } from "./notification-code-snippets";
-import type { TalkSlide } from "./types";
+import type { TalkSlide } from "../slides/types";
 
 const narrativeDuration = 420;
 const codeOnlyDuration = 480;

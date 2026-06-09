@@ -1,5 +1,7 @@
 import { Series } from "remotion";
-import { renderTalkSlide, talkSlides } from "./slides";
+import { talkSlides } from "./deck/content";
+import { renderDeckPreview } from "./deck/preview";
+import { renderTalkSlide } from "./slides";
 
 export const VISUAL_SYSTEM_FPS = 60;
 export const VISUAL_SYSTEM_WIDTH = 1920;
@@ -24,7 +26,7 @@ export const MyComposition = () => {
           key={slide.id}
           durationInFrames={slide.durationInFrames}
         >
-          {renderTalkSlide(slide)}
+          {renderTalkSlide(slide, { renderPreview: renderDeckPreview })}
         </Series.Sequence>
       ))}
     </Series>
