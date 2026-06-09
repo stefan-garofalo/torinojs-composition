@@ -1,6 +1,6 @@
 # Composition Is The API
 
-Start with a component that looks normal.
+Start with a useful component under pressure.
 
 Not absurd. Not obviously terrible. Just a React component that has been extended a few times.
 
@@ -36,7 +36,7 @@ Usually: in somebody's head, or inside a long conditional block.
 
 ---
 
-Boolean props are cheap to add and expensive to understand later.
+Boolean mode props are cheap to add and expensive to understand later.
 
 ---
 
@@ -54,7 +54,7 @@ Those are not independent facts anymore. They are trying to describe a state mod
 
 ---
 
-Once props become a small language, the component has become a parser.
+Once props become a small mode language, the component has become a parser.
 
 ---
 
@@ -83,7 +83,7 @@ The important shift is from "configure this object" to "compose these parts."
 
 ---
 
-The exported primitives become the vocabulary of the component.
+The exported primitives become the internal vocabulary of the component.
 
 If a primitive is exported, it is supported.
 If a variant exists, it has a name.
@@ -226,7 +226,7 @@ The opener should not present the bad component as obviously stupid.
 
 It should feel familiar.
 
-Something like: "This is the kind of component you end up with when every individual decision was reasonable."
+Something like: "This is what a useful component looks like once it has been asked to support too many modes through one API."
 
 That is the useful tension. The audience should recognize themselves in it, not feel like we are dunking on bad code.
 
@@ -429,7 +429,7 @@ Could be strong for an engineering audience because everyone has seen a design-s
 
 Opening sequence:
 
-"We already have a notification component."
+"We already have a useful notification component."
 
 It supports:
 
@@ -443,6 +443,8 @@ Then product asks for a moderation event.
 Then product asks for post comment notifications.
 
 This is better than starting with an already-broken component. The component becomes stressed in front of the audience.
+
+The copy should not say it "earned its place." That sounds sentimental and vague. Say it is useful, familiar, and under pressure.
 
 ---
 
@@ -618,6 +620,8 @@ Supported abstractions:
 `PostCommentNotification`
 
 Each one composes the same notification primitives.
+
+This matches the pattern language: explicit variants outside, compound primitives and provider contracts inside.
 
 ---
 
@@ -1950,7 +1954,7 @@ The central concepts are probably:
 
 - structural variation
 - public API as supported shape
-- named abstractions
+- named variants
 - primitive vocabulary
 - provider boundary
 - type-guided composition
@@ -2060,7 +2064,7 @@ Do not call it machinery if that feels vague.
 
 The precise thing is the React context layer inside the composition.
 
-Each named abstraction can establish the context for its shape: state, actions, derived model, permissions, routing callbacks, translation keys, refs, and metadata.
+Each named variant can establish the provider contract for its shape: state, actions, derived model, permissions, routing callbacks, translation keys, refs, and metadata.
 
 The primitives do not receive every value manually. They read the composition context and render the part they own.
 
@@ -2148,11 +2152,11 @@ State-space reduction can stay mostly implicit.
 
 But the sharper point is not only "fewer invalid combinations."
 
-It is also fewer valid public combinations.
+It is also fewer valid public modes.
 
 A generic prop API may technically support many valid combinations, but every valid combination becomes something a consumer, reviewer, and maintainer has to understand.
 
-Named abstractions reduce the public set of choices.
+Explicit variants reduce the public set of choices.
 
 Instead of asking "which combination of props describes this notification?" the consumer asks "which supported notification shape is this?"
 
@@ -2233,11 +2237,11 @@ const NOTIFICATIONS: Record<NotificationType, NotificationRenderer> = {
 
 When the backend adds a notification type, or when the frontend introduces a new abstraction, the registry is where the baseline gets backtested.
 
-If a primitive changes and a named abstraction no longer satisfies the expected contract, TypeScript can make that visible.
+If a primitive changes and a named variant no longer satisfies the expected contract, TypeScript can make that visible.
 
 If a notification type exists but has no supported renderer, the record should fail before users find the missing shape.
 
-This is practical, not theoretical. Registry typechecking catches real bugs because it forces the product taxonomy and the UI taxonomy to stay aligned.
+This is practical, not theoretical. Registry typechecking catches real bugs because it forces the product taxonomy and the explicit variant set to stay aligned.
 
 ---
 
@@ -2277,7 +2281,7 @@ This term may be too abstract unless explained carefully.
 
 What it means:
 
-When a named abstraction composes primitives, those primitives assume a certain context exists.
+When a named variant composes primitives, those primitives assume a certain context exists.
 
 `Notification.Actor` assumes there is an actor in `state`.
 
@@ -2319,7 +2323,7 @@ type NotificationContext = {
 }
 ```
 
-The context structure is the internal shape each named abstraction provides to its primitives.
+The provider contract is the internal shape each named variant provides to its primitives.
 
 If a primitive reads `state.actor`, the abstraction that renders it needs to provide actor state.
 
@@ -2343,7 +2347,7 @@ Then move on.
 
 The important content is not "how context works."
 
-The important content is that each named abstraction owns the context structure required by the primitives it renders.
+The important content is that each named variant owns the provider contract required by the primitives it renders.
 
 ---
 
@@ -2398,7 +2402,7 @@ Outside the module, consumers get named supported shapes that are easy to read a
 
 Where product rules live:
 
-Product rules should live in named abstractions and their context structure, not in generic renderer conditionals.
+Product rules should live in named variants and their provider contract, not in generic renderer conditionals.
 
 Moderation rules belong in `ModerationNotification`.
 
@@ -2444,7 +2448,7 @@ The problem is conditionals that hide supported product shapes inside a generic 
 
 The pattern does not remove branching.
 
-It moves branching into named abstractions where each branch has a place, a name, and a local context structure.
+It moves branching into named variants where each branch has a place, a name, and a local provider contract.
 
 ---
 
@@ -2457,7 +2461,7 @@ The pinned concepts are:
 - internal kit / public API
 - open React composition vs closed supported API
 - flexibility inside, local reasoning outside
-- named abstractions as supported shapes
+- named variants as supported shapes
 - primitives as internal kit
 - context structure: state, actions, meta
 - registry as coverage surface

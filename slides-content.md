@@ -24,25 +24,26 @@ I want to talk about what happens when a component has to support more product s
 Visual / animation:
 Clean title slide. No code. Keep it calm.
 
-## Slide 2 - A Component That Earned Its Place
+## Slide 2 - A Useful Component Under Pressure
 
 Template shape: white/yellow split slide
 
 Title:
-A component that earned its place
+A useful component under pressure
 
 Subtitle:
 None.
 
 Content:
 Left side:
-- Follow requests
-- Post likes
-- DM requests
-- Photo tags
+- Follow request: actor + follow back
+- Post like: actor + thumbnail + post link
+- DM request: preview + accept / ignore
+- Photo tag: thumbnail + remove tag
 
 Right side:
-Useful, but already carrying product rules.
+One row.
+Several product shapes.
 
 Code:
 Optional small code block if space allows:
@@ -63,41 +64,18 @@ This starts with a useful component.
 
 Not bad code. Not a contrived example.
 
-`NotificationItem` already supports follow requests, post likes, DM requests, and photo tags. Each feature made sense when it arrived. The component just learned a few more props and a few more branches.
+`NotificationItem` already supports follow requests, post likes, DM requests, and photo tags. Each feature made sense when it arrived.
 
-Visual / animation:
-Reveal the four supported shapes first. Then reveal the right-side line. If code is shown, animate only the prop names, not the whole block.
-
-## Slide 3 - Same Surface, Different Shapes
-
-Template shape: white bullet slide
-
-Title:
-Same surface, different shapes
-
-Subtitle:
-None.
-
-Content:
-- Follow request: actor + follow back
-- Post like: actor + thumbnail + post link
-- DM request: preview + accept / ignore
-- Photo tag: thumbnail + remove tag
-
-Code:
-None.
-
-Script:
-They all render as notifications, but they are not the same shape.
+They all render as one notification row, but they are not the same shape.
 
 Follow request needs an action. Post like needs media. DM request needs a preview and two decisions. Photo tag needs media plus different behavior.
 
 This is already structural variation. It is just still manageable enough that the component gets away with it.
 
 Visual / animation:
-Use the white bullet template. Highlight the right-hand side of each bullet after the colon: action, thumbnail/link, preview/actions, thumbnail/remove tag.
+Reveal the four supported shapes first. Highlight the structural part after each colon: action, thumbnail/link, preview/actions, thumbnail/remove tag. Then reveal the right-side contrast line.
 
-## Slide 4 - The Fifth Shape
+## Slide 3 - The Fifth Shape
 
 Template shape: white/yellow split slide
 
@@ -142,7 +120,7 @@ It looks like one more notification, but it behaves like a new shape.
 Visual / animation:
 Use the split template. Left side lists the rule changes. Right yellow panel carries the contrast line. If code appears, animate the new props one by one: `showActor`, `showSystemIcon`, `showInlineReason`, actions.
 
-## Slide 5 - Props Outside, Branches Inside
+## Slide 4 - Props Outside, Branches Inside
 
 Template shape: white code slide
 
@@ -188,7 +166,7 @@ That is prop soup.
 Visual / animation:
 Use a code-heavy slide. Animate a line from each prop in Slide 4 to a branch here. Make the right side feel heavier as branches appear.
 
-## Slide 6 - Structural Variation
+## Slide 5 - Structural Variation
 
 Template shape: dark emphasis slide
 
@@ -218,7 +196,7 @@ When variation is structural, make the structure visible.
 Visual / animation:
 Use the dark emphasis template. Keep text sparse. Bring in four small words around the title if useful: parts, actions, navigation, permissions.
 
-## Slide 7 - Configuration Is For Values
+## Slide 6 - Configuration Is For Values
 
 Template shape: white bullet slide
 
@@ -248,12 +226,12 @@ That is when the shape should move into code you can see.
 Visual / animation:
 Use the white bullet slide. Reveal the first two as normal/configuration examples, then visually emphasize the third line as the pivot to composition.
 
-## Slide 8 - Make Supported Shapes Explicit
+## Slide 7 - Make The Variants Explicit
 
 Template shape: white code slide
 
 Title:
-Make supported shapes explicit
+Make the variants explicit
 
 Subtitle:
 None.
@@ -279,18 +257,18 @@ export {
 Script:
 So the public API changes shape.
 
-Instead of one generic component with a growing prop language, the module exports the notification shapes it supports.
+Instead of one generic component with a growing mode language, the module exports explicit variants for the notification shapes it supports.
 
 Each export is a product shape with a name.
 
 The app no longer asks, "which prop combination describes this notification?"
 
-It asks, "which supported notification shape is this?"
+It asks, "which supported notification variant is this?"
 
 Visual / animation:
 This is the first relief slide. Animate the old `NotificationItem type="..."` collapsing into the export list.
 
-## Slide 9 - The Shape Is In The Code
+## Slide 8 - The Shape Is In The Code
 
 Template shape: white code slide
 
@@ -333,7 +311,7 @@ The product shape has a name, and the structure is visible from the code.
 Visual / animation:
 Animate the old moderation props fading out, then reveal the primitives in order: system icon, body, reason, actions, date.
 
-## Slide 10 - Internal Kit / Public API
+## Slide 9 - Internal Kit / Public API
 
 Template shape: white/yellow split slide
 
@@ -350,7 +328,7 @@ Left side:
 - variant logic
 
 Right side:
-- named abstractions
+- named variants
 - supported shapes
 - stable imports
 
@@ -360,7 +338,7 @@ None.
 Script:
 This is still compound components, but with a boundary.
 
-The primitives are the internal kit. The named notification abstractions are the public API.
+The primitives are the internal kit. The named notification variants are the public API.
 
 App code does not need to assemble every notification by hand. It imports the shapes the module supports.
 
@@ -371,7 +349,7 @@ Flexibility inside. Local reasoning outside.
 Visual / animation:
 Use the split template. Left side is internal, right yellow panel is public. End by emphasizing the line: flexibility inside, local reasoning outside.
 
-## Slide 11 - The Inner Context
+## Slide 10 - The Inner Context
 
 Template shape: white code slide
 
@@ -398,16 +376,16 @@ type NotificationContext = {
 Script:
 The data did not disappear.
 
-Each named abstraction owns the context structure its primitives need.
+Each named variant owns the provider boundary its primitives need.
 
 `state` is what primitives render. `actions` are what primitives can trigger. `meta` is the operational context around them: refs, ids, labels, formatting, tracking, platform details.
 
-`Notification.ViewDecision` does not need five props at the call site. It reads the action from the context structure provided by `ModerationNotification`.
+`Notification.ViewDecision` does not need five props at the call site. It consumes the generic context interface implemented by `ModerationNotification`.
 
 Visual / animation:
 Show the context type in the center. Highlight `actions` when mentioning `ViewDecision`; highlight `meta` only briefly so it does not become a detour.
 
-## Slide 12 - The Registry Backtests The API
+## Slide 11 - The Registry Backtests The API
 
 Template shape: white code slide
 
@@ -419,7 +397,7 @@ product type -> supported shape
 
 Content:
 - product taxonomy
-- UI taxonomy
+- explicit variant set
 - type coverage
 
 Code:
@@ -439,16 +417,16 @@ const NOTIFICATIONS: Record<
 Script:
 The registry is where this stops being just a nice refactor.
 
-This record is a coverage surface. It forces the product taxonomy and the UI taxonomy to stay aligned.
+This record is a coverage surface. It forces the product taxonomy and the explicit variant set to stay aligned.
 
 When a backend notification type exists, the frontend needs a supported shape for it.
 
-When primitives or abstraction props change, the registry helps backtest the baseline we already claimed to support.
+When primitives or variant props change, the registry helps backtest the baseline we already claimed to support.
 
 Visual / animation:
-Animate a new `NotificationType` appearing without a renderer, then the record failing until a named abstraction is added. Keep it IDE-like, not theatrical.
+Animate a new `NotificationType` appearing without a renderer, then the record failing until a named variant is added. Keep it IDE-like, not theatrical.
 
-## Slide 13 - The IDE Knows The Shapes
+## Slide 12 - The IDE Knows The Shapes
 
 Template shape: white/yellow split slide
 
@@ -465,7 +443,7 @@ Left side:
 - exact props
 
 Right side:
-Fewer valid public combinations.
+Fewer public modes.
 
 Code:
 ```tsx
@@ -482,14 +460,14 @@ TypeScript helps because the supported shapes are explicit.
 
 Not with clever types for their own sake. Mostly with unions and records.
 
-The IDE can autocomplete the shapes the module supports. Each abstraction can ask for the exact props it needs. The registry can fail when the supported set and the rendered set drift apart.
+The IDE can autocomplete the variants the module supports. Each variant can ask for the exact props it needs. The registry can fail when the supported type set and the rendered variant set drift apart.
 
-The point is not fewer characters. The point is fewer valid public combinations to reason about.
+The point is not fewer characters. The point is fewer public modes to reason about.
 
 Visual / animation:
-Show an IDE-like autocomplete moment. Highlight `NotificationType`, then the matching exported abstraction. Keep the right yellow panel as the conceptual takeaway.
+Show an IDE-like autocomplete moment. Highlight `NotificationType`, then the matching exported variant. Keep the right yellow panel as the conceptual takeaway.
 
-## Slide 14 - New Behavior, New Place
+## Slide 13 - New Behavior, New Place
 
 Template shape: white code slide
 
@@ -534,12 +512,12 @@ It can share primitives without pretending to be another notification type.
 Visual / animation:
 Show `PostLikeNotification` and `DMRequestNotification` primitives ghosted in the background, then assemble `PostCommentNotification` from shared pieces plus `Reply`.
 
-## Slide 15 - Every Public Combination Counts
+## Slide 14 - Shrink The Public State Space
 
 Template shape: dark emphasis slide
 
 Title:
-Every public combination counts
+Shrink the public state space
 
 Subtitle:
 Fewer shapes to reason about.
@@ -555,16 +533,16 @@ None.
 Script:
 This is the small theory behind the pattern.
 
-A component API has a state space. Every public prop combination is a state someone can write, review, and maintain.
+A component API has a public state space. Every public prop combination is a state someone can write, review, and maintain.
 
-A bag of flags creates a wide space of combinations. Named abstractions create a smaller set of supported shapes.
+A bag of flags creates a wide space of possible modes. Explicit variants create a smaller set of supported shapes.
 
-The goal is not only to reject impossible states. It is also to reduce the number of valid public combinations people have to think about.
+The goal is not only to reject impossible states. It is to make the public set small enough that people can hold it in their head.
 
 Visual / animation:
 Use the dark emphasis slide. Animate many small prop combinations collapsing into a short list of named shapes.
 
-## Slide 16 - Make The Shape Visible
+## Slide 15 - Make The Shape Visible
 
 Template shape: yellow final title slide
 

@@ -39,6 +39,7 @@ export function NarrativeTalkSlide({
               color={stageTokens.color.text}
               fontSize={82}
               fontWeight={820}
+              justifyContent="flex-start"
               text={title}
             />
           </div>
@@ -151,7 +152,7 @@ const supportColumnStyle: CSSProperties = {
 
 const titleFrameStyle: CSSProperties = {
   borderRadius: stageTokens.radius.card,
-  height: 330,
+  height: 220,
   overflow: "hidden",
   position: "relative",
 };

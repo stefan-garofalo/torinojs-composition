@@ -1,6 +1,6 @@
 # Make The Shape Visible
 
-We start with a component that already earned its place.
+We start with a useful component under pressure.
 
 `NotificationItem` supports follow requests, post likes, DM requests, and photo tags. None of those features were unreasonable. Each one needed a slightly different row, so the component learned a few more props and a few more branches.
 
@@ -20,10 +20,6 @@ This is not disaster code.
 
 It is a useful component that has been asked to support several product shapes through one public API.
 
----
-
-The existing shapes are already different.
-
 Follow request needs an actor and a follow-back action.
 
 Post like needs an actor, a post thumbnail, and a post link.
@@ -33,6 +29,10 @@ DM request needs an actor, a message preview, and accept / ignore actions.
 Photo tag needs an actor, a photo thumbnail, and maybe remove-tag behavior.
 
 They all fit inside a notification row, but they are not the same shape.
+
+The component is starting to expose a small mode language: type, action props, preview props, media props.
+
+That language is still manageable. But it is already there.
 
 ---
 
@@ -190,7 +190,7 @@ Local reasoning outside.
 
 The data did not disappear.
 
-Each named abstraction owns the context structure its primitives need.
+Each named variant owns the provider contract its primitives need.
 
 ```tsx
 type NotificationContext = {
@@ -227,11 +227,11 @@ const NOTIFICATIONS: Record<
 
 This record is a coverage surface.
 
-It forces the product taxonomy and the UI taxonomy to stay aligned.
+It forces the product taxonomy and the explicit variant set to stay aligned.
 
 When a backend notification type exists, the frontend needs a supported shape for it.
 
-When primitives or abstraction props change, the registry helps backtest the baseline we already claimed to support.
+When primitives or variant props change, the registry helps backtest the baseline we already claimed to support.
 
 ---
 
@@ -250,15 +250,15 @@ type NotificationType =
   | "moderation"
 ```
 
-The IDE can autocomplete the shapes the module supports.
+The IDE can autocomplete the variants the module supports.
 
-Each abstraction can ask for the exact props it needs.
+Each variant can ask for the exact props it needs.
 
-The registry can fail when the supported set and the rendered set drift apart.
+The registry can fail when the supported type set and the rendered variant set drift apart.
 
 The point is not fewer characters.
 
-The point is fewer valid public combinations to reason about.
+The point is fewer public modes to reason about.
 
 ---
 
@@ -297,17 +297,19 @@ It can share primitives without pretending to be another notification type.
 
 This is the small theory behind the pattern.
 
-A component API has a state space.
+A component API has a public state space.
 
 Every public prop combination is a state someone can write, review, and maintain.
 
-A bag of flags creates a wide space of combinations.
+A bag of flags creates a wide space of possible modes.
 
-Named abstractions create a smaller set of supported shapes.
+Explicit variants create a smaller set of supported shapes.
 
 The goal is not only to reject impossible states.
 
-It is also to reduce the number of valid public combinations people have to think about.
+It is also to reduce the number of valid public modes people have to think about.
+
+The API gets easier because the public mode language gets smaller.
 
 ---
 

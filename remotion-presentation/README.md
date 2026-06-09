@@ -33,6 +33,14 @@ bun run presenter
 
 Use the presenter URL for rehearsal/delivery. It renders the deck as a clean fullscreen Remotion Player surface with keyboard-only navigation: `Space`/`ArrowRight` next, `ArrowLeft` previous, `Home` first, `End` last, `R` replay current slide. Current navigation is slide-level because the merged 16-slide content does not yet carry slide-local semantic cue arrays. Remotion Studio remains the debugging surface.
 
+**Build Presenter For Vercel**
+
+```console
+bun run build:presenter
+```
+
+Deploy this folder as the Vercel project root. The Vercel config builds the Vite presenter to `dist/`. Keep `bun run build` for Remotion bundle workflows.
+
 **Render video**
 
 ```console

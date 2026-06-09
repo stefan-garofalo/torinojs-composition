@@ -5,7 +5,6 @@ export type TalkSlideFamily = "narrative" | "code-only" | "code-dx";
 export type TalkSlideId =
   | "make-the-shape-visible"
   | "component-earned-place"
-  | "same-surface-different-shapes"
   | "post-like-clean"
   | "follow-behavior-branch"
   | "dm-behavior-branch"

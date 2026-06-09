@@ -17,12 +17,17 @@ export const talkSlides = [
   },
   {
     id: "component-earned-place",
-    title: "A component that earned its place",
+    title: "A useful component under pressure",
     family: "narrative",
     durationInFrames: narrativeDuration,
     content: {
-      subtitle: "Useful, but already carrying product rules.",
-      leftItems: ["Follow requests", "Post likes", "DM requests", "Photo tags"],
+      subtitle: "One row.\nSeveral product shapes.",
+      leftItems: [
+        "Follow request: actor + follow back",
+        "Post like: actor + thumbnail + post link",
+        "DM request: preview + accept / ignore",
+        "Photo tag: thumbnail + remove tag",
+      ],
       code: {
         language: "tsx",
         fileName: "notification-item.tsx",
@@ -35,20 +40,6 @@ export const talkSlides = [
   secondaryAction="ignore"
 />`,
       },
-    },
-  },
-  {
-    id: "same-surface-different-shapes",
-    title: "Same surface, different shapes",
-    family: "narrative",
-    durationInFrames: narrativeDuration,
-    content: {
-      bullets: [
-        "Follow request: actor + follow back",
-        "Post like: actor + thumbnail + post link",
-        "DM request: preview + accept / ignore",
-        "Photo tag: thumbnail + remove tag",
-      ],
     },
   },
   {
@@ -341,8 +332,8 @@ const primary =
     content: {
       subtitle: "Composition is for shape",
       bullets: [
-        "Same surface, new label: prop",
-        "Same surface, loading state: prop",
+        "Stable row, new label: prop",
+        "Stable row, loading state: prop",
         "New parts / actions / navigation: composition",
       ],
     },
@@ -529,7 +520,7 @@ const primary =
   },
   {
     id: "make-supported-shapes-explicit",
-    title: "Then scale the pattern",
+    title: "Make the variants explicit",
     family: "code-dx",
     durationInFrames: codeDxDuration,
     content: {
@@ -609,9 +600,9 @@ const primary =
     title: "Internal kit / public API",
     family: "narrative",
     durationInFrames: narrativeDuration,
-    content: {
+      content: {
       leftItems: ["primitives", "context structure", "variant logic"],
-      rightText: "named abstractions\nsupported shapes\nstable imports",
+      rightText: "named variants\nsupported shapes\nstable imports",
       emphasis: ["Flexibility inside.", "Local reasoning outside."],
     },
   },
@@ -713,15 +704,15 @@ function useNotification() {
   },
   {
     id: "every-public-combination-counts",
-    title: "Every public combination counts",
+    title: "Shrink the public state space",
     family: "narrative",
     durationInFrames: narrativeDuration,
     content: {
       subtitle: "Fewer shapes to reason about.",
       bullets: [
         "flag bags widen the space",
-        "named shapes narrow the public set",
-        "fewer valid combinations to understand",
+        "explicit variants narrow the public set",
+        "fewer public modes to understand",
       ],
     },
   },
