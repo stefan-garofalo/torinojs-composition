@@ -1,8 +1,10 @@
-# Make The Shape Visible
+# Make The Shape Visible - Slide Copy
+
+This file is the copy map for the live Remotion deck in `remotion-presentation/src/deck/content.ts`.
+Keep titles, subtitles, bullets, claims, focus strips, and step messages in sync with the TypeScript deck source.
+Code snippets live in TypeScript and `notification-code-snippets.ts`; do not duplicate full code here.
 
 ## Slide 1 - Make The Shape Visible
-
-Template shape: yellow title slide
 
 Title:
 Make The Shape Visible
@@ -10,165 +12,139 @@ Make The Shape Visible
 Subtitle:
 Through a composable React API
 
-Content:
-None.
-
-Code:
-None.
-
-Script:
-I want to talk about React compound components, but not as a cute children API.
-
-I want to talk about what happens when a component has to support more product shapes than its public API can honestly describe.
-
-Visual / animation:
-Clean title slide. No code. Keep it calm.
-
 ## Slide 2 - A Useful Component Under Pressure
-
-Template shape: white/yellow split slide
 
 Title:
 A useful component under pressure
 
 Subtitle:
-None.
+One row.
+Several product shapes.
 
 Content:
-Left side:
 - Follow request: actor + follow back
 - Post like: actor + thumbnail + post link
 - DM request: preview + accept / ignore
 - Photo tag: thumbnail + remove tag
 
-Right side:
-One row.
-Several product shapes.
-
-Code:
-Optional small code block if space allows:
-
-```tsx
-<NotificationItem
-  type="dmRequest"
-  actor={user}
-  message={request}
-  showPreview
-  primaryAction="accept"
-  secondaryAction="ignore"
-/>
-```
-
-Script:
-This starts with a useful component.
-
-Not bad code. Not a contrived example.
-
-`NotificationItem` already supports follow requests, post likes, DM requests, and photo tags. Each feature made sense when it arrived.
-
-They all render as one notification row, but they are not the same shape.
-
-Follow request needs an action. Post like needs media. DM request needs a preview and two decisions. Photo tag needs media plus different behavior.
-
-This is already structural variation. It is just still manageable enough that the component gets away with it.
-
-Visual / animation:
-Reveal the four supported shapes first. Highlight the structural part after each colon: action, thumbnail/link, preview/actions, thumbnail/remove tag. Then reveal the right-side contrast line.
-
-## Slide 3 - The Fifth Shape
-
-Template shape: white/yellow split slide
+## Slide 3 - One Clean Shape
 
 Title:
-The fifth shape
+One clean shape
 
-Subtitle:
-None.
+Focus:
+- one product shape
+- actor + body + media
+- simple because singular
+
+Step messages:
+- One notification shape can stay simple.
+- The trouble starts when this shape becomes the shared container.
+
+## Slide 4 - Add Interaction
+
+Title:
+Add interaction
+
+Focus:
+- follow request arrives
+- one branch feels reasonable
+- behavior starts entering the surface
+
+Step messages:
+- A follow request adds one reasonable action.
+- The branch is still small enough to feel harmless.
+
+## Slide 5 - Then Two Actions
+
+Title:
+Then two actions
+
+Focus:
+- DM request arrives
+- accept + ignore
+- the renderer starts parsing shape
+
+Step messages:
+- DM request adds decisions, hooks, and routes.
+- The shared item now knows which actions are legal.
+
+## Slide 6 - The Outside Still Looks Fine
+
+Title:
+The outside still looks fine
+
+Focus:
+- short follow usage
+- short DM usage
+- complexity hides as a set
+
+Step messages:
+- A single call site still looks reviewable.
+- But the API fails as combinations grow.
+
+## Slide 7 - More Branches
+
+Title:
+More branches
 
 Content:
-Left side:
+- decision href
+- actor removal
+- system icon
+- appeal handlers
+
+Right text:
+The generic item is learning another product concept.
+
+Focus:
+- moderation adds product rules
+- actor identity becomes conditional
+- decision and appeal move inside
+
+Step messages:
+- Moderation looks like another type, but changes the rules.
+- Navigation now depends on the hidden product shape.
+- Identity is no longer always an actor.
+- The renderer now owns product behavior.
+
+## Slide 8 - Then Moderation Breaks It
+
+Title:
+Then moderation breaks it
+
+Content:
 - no actor link
 - system icon
 - sensitive copy
 - decision / appeal
 
-Right side:
+Right text:
 Looks like another notification.
 Behaves like a new shape.
 
-Code:
-```tsx
-<NotificationItem
-  type="moderation"
-  showActor={false}
-  showSystemIcon
-  showInlineReason
-  primaryAction="viewDecision"
-  secondaryAction="appeal"
-/>
-```
+Focus:
+- showActor encodes identity
+- system icon changes the shape
+- decision and appeal encode behavior
 
-Script:
-Then product asks for moderation events.
+Step messages:
+- We are no longer configuring details of the same row.
+- Identity, navigation, copy, actions, and permissions changed.
+- Another prop is the wrong level of expression.
 
-On paper, this is just another notification type. In the component, it changes the rules.
-
-There may be no actor profile to link. The row needs a system icon. The copy is sensitive. The primary action opens a decision. The secondary action may be an appeal.
-
-It looks like one more notification, but it behaves like a new shape.
-
-Visual / animation:
-Use the split template. Left side lists the rule changes. Right yellow panel carries the contrast line. If code appears, animate the new props one by one: `showActor`, `showSystemIcon`, `showInlineReason`, actions.
-
-## Slide 4 - Props Outside, Branches Inside
-
-Template shape: white code slide
+## Slide 9 - Props Outside, Branches Inside
 
 Title:
 Props outside, branches inside
 
-Subtitle:
-None.
-
 Content:
-- icon branch
-- href branch
-- action branch
-- permission branch
+- one prop chooses icon
+- one prop chooses href
+- one prop chooses action
+- one prop patches a mode
 
-Code:
-```tsx
-const icon =
-  showSystemIcon ? <SystemIcon /> : <Avatar user={actor} />
-
-const href =
-  type === "moderation" ? decisionHref :
-  type === "dmRequest" ? requestHref :
-  profileHref
-
-const primary =
-  primaryAction === "appeal" ? appeal :
-  primaryAction === "accept" ? acceptRequest :
-  undefined
-```
-
-Script:
-Now the outside API has to be decoded inside the component.
-
-The issue is not that this code has an `if`. Branches are fine.
-
-The issue is that supported product shapes are hidden inside a generic renderer. The component now knows what moderation is, what a DM request is, which route each one opens, and which action is legal.
-
-Many props on the outside. Many branches on the inside.
-
-That is prop soup.
-
-Visual / animation:
-Use a code-heavy slide. Animate a line from each prop in Slide 4 to a branch here. Make the right side feel heavier as branches appear.
-
-## Slide 5 - Structural Variation
-
-Template shape: dark emphasis slide
+## Slide 10 - Structural Variation
 
 Title:
 Structural variation
@@ -177,28 +153,14 @@ Subtitle:
 Some changes are values.
 Some changes are shapes.
 
-Content:
-When variation is structural,
-make the structure visible.
-
-Code:
-None.
-
-Script:
-This is the point where I reach for a different lens.
-
-Some product changes are value changes. Some product changes are shape changes.
-
-Moderation is not just a different label inside the same notification. It changes the parts, the actions, the navigation, and the permissions around what can be shown.
-
+Claim:
 When variation is structural, make the structure visible.
 
-Visual / animation:
-Use the dark emphasis template. Keep text sparse. Bring in four small words around the title if useful: parts, actions, navigation, permissions.
+Emphasis:
+- When variation is structural,
+- make the structure visible.
 
-## Slide 6 - Configuration Is For Values
-
-Template shape: white bullet slide
+## Slide 11 - Configuration Is For Values
 
 Title:
 Configuration is for values
@@ -206,35 +168,106 @@ Configuration is for values
 Subtitle:
 Composition is for shape
 
+Claim:
+Configuration is for values. Composition is for shape.
+
 Content:
-- Same surface, new label: prop
-- Same surface, loading state: prop
+- Stable shape, new label: prop
+- Stable shape, loading state: prop
 - New parts / actions / navigation: composition
 
-Code:
-None.
+## Slide 12 - Extract The Row
 
-Script:
-This distinction makes the refactor make sense.
+Title:
+Extract the row
 
-Props are fine for independent facts inside a stable shape. A label, a date, a disabled state, a loading state.
+Focus:
+- row becomes a primitive
+- shared frame stays boring
+- variant owns behavior
 
-But if the product change alters the parts, actions, navigation, permissions, or ownership boundary, the API should stop pretending this is just another value.
+Step messages:
+- Start by extracting the shared row as a stable primitive.
+- The row renders; the variant decides the product shape.
 
-That is when the shape should move into code you can see.
+## Slide 13 - Extract Identity
 
-Visual / animation:
-Use the white bullet slide. Reveal the first two as normal/configuration examples, then visually emphasize the third line as the pivot to composition.
+Title:
+Extract identity
 
-## Slide 7 - Make The Variants Explicit
+Focus:
+- identity becomes explicit
+- system icon is chosen in JSX
+- no optional actor fiction
 
-Template shape: white code slide
+Step messages:
+- Moderation renders system identity directly.
+
+## Slide 14 - Extract Copy
+
+Title:
+Extract copy
+
+Focus:
+- named body slot
+- named timestamp slot
+- copy belongs to shape
+
+Step messages:
+- Copy stops being a special case inside a generic renderer.
+
+## Slide 15 - Extract Media
+
+Title:
+Extract media
+
+Focus:
+- media as a visible part
+- only shapes that need media render it
+
+Step messages:
+- Media appears only in the shapes that truly need it.
+
+## Slide 16 - Extract Actions
+
+Title:
+Extract actions
+
+Focus:
+- actions as behavior
+- two DM decisions
+- behavior belongs to the shape
+
+Step messages:
+- Accept and ignore become visible behavior primitives.
+
+## Slide 17 - The Shape Is In The Code
+
+Title:
+The shape is in the code
+
+Content:
+- no `showActor={false}`
+- no `primaryAction="viewDecision"`
+- no generic moderation branch
+
+Focus:
+- system icon
+- body
+- report reason
+- actions
+- date
+
+Step messages:
+- The supported behavior has a name.
+- The row is still an abstraction, but it is readable.
+- Reason and visibility are explicit parts of this shape.
+- Actions are visible in the composed shape.
+
+## Slide 18 - Make The Variants Explicit
 
 Title:
 Make the variants explicit
-
-Subtitle:
-None.
 
 Content:
 - FollowRequestNotification
@@ -242,309 +275,93 @@ Content:
 - DMRequestNotification
 - PhotoTagNotification
 - ModerationNotification
+- PostCommentNotification
 
-Code:
-```tsx
-export {
-  FollowRequestNotification,
-  PostLikeNotification,
-  DMRequestNotification,
-  PhotoTagNotification,
-  ModerationNotification,
-}
-```
+Focus:
+- named variants
+- supported shapes
+- local reasoning
 
-Script:
-So the public API changes shape.
+Step messages:
+- The module exports supported shapes by name.
+- Post like stops being a prop combination.
+- DM request becomes the shape you render.
+- Photo tag owns media and remove-tag behavior.
+- Moderation gets a real place in the API.
+- The public question becomes: which supported shape is this?
 
-Instead of one generic component with a growing mode language, the module exports explicit variants for the notification shapes it supports.
-
-Each export is a product shape with a name.
-
-The app no longer asks, "which prop combination describes this notification?"
-
-It asks, "which supported notification variant is this?"
-
-Visual / animation:
-This is the first relief slide. Animate the old `NotificationItem type="..."` collapsing into the export list.
-
-## Slide 8 - The Shape Is In The Code
-
-Template shape: white code slide
-
-Title:
-The shape is in the code
-
-Subtitle:
-None.
-
-Content:
-- no `showActor={false}`
-- no `primaryAction="viewDecision"`
-- no generic moderation branch
-
-Code:
-```tsx
-export function ModerationNotification(props) {
-  return (
-    <Notification.Container {...props}>
-      <Notification.SystemIcon />
-      <Notification.Body />
-      <Notification.ReportReason />
-      <Notification.Actions>
-        <Notification.ViewDecision />
-        <Notification.Appeal />
-      </Notification.Actions>
-      <Notification.Date />
-    </Notification.Container>
-  )
-}
-```
-
-Script:
-Open one of those exports and the shape is right there.
-
-No `showActor={false}`. No `primaryAction="viewDecision"`. No generic row quietly learning moderation rules.
-
-The product shape has a name, and the structure is visible from the code.
-
-Visual / animation:
-Animate the old moderation props fading out, then reveal the primitives in order: system icon, body, reason, actions, date.
-
-## Slide 9 - Internal Kit / Public API
-
-Template shape: white/yellow split slide
+## Slide 19 - Internal Kit / Public API
 
 Title:
 Internal kit / public API
 
 Subtitle:
-None.
+Flexibility inside.
+Local reasoning outside.
 
 Content:
-Left side:
-- primitives
-- context structure
-- variant logic
-
-Right side:
+- visual primitives
+- behavior primitives
+- provider contracts
 - named variants
 - supported shapes
-- stable imports
+- local reasoning
 
-Code:
-None.
-
-Script:
-This is still compound components, but with a boundary.
-
-The primitives are the internal kit. The named notification variants are the public API.
-
-App code does not need to assemble every notification by hand. It imports the shapes the module supports.
-
-Module authors still get the flexibility of composition when a new shape arrives.
-
-Flexibility inside. Local reasoning outside.
-
-Visual / animation:
-Use the split template. Left side is internal, right yellow panel is public. End by emphasizing the line: flexibility inside, local reasoning outside.
-
-## Slide 10 - The Inner Context
-
-Template shape: white code slide
+## Slide 20 - The Inner Context
 
 Title:
 The inner context
 
 Subtitle:
-state / actions / meta
+primitives consume an interface
 
 Content:
 - `state`: what primitives render
 - `actions`: what primitives trigger
-- `meta`: refs, ids, labels, formatting
+- `meta`: refs, ids, labels, tracking
 
-Code:
-```tsx
-type NotificationContext = {
-  state: NotificationState
-  actions: NotificationActions
-  meta: NotificationMeta
-}
-```
-
-Script:
-The data did not disappear.
-
-Each named variant owns the provider boundary its primitives need.
-
-`state` is what primitives render. `actions` are what primitives can trigger. `meta` is the operational context around them: refs, ids, labels, formatting, tracking, platform details.
-
-`Notification.ViewDecision` does not need five props at the call site. It consumes the generic context interface implemented by `ModerationNotification`.
-
-Visual / animation:
-Show the context type in the center. Highlight `actions` when mentioning `ViewDecision`; highlight `meta` only briefly so it does not become a detour.
-
-## Slide 11 - The Registry Backtests The API
-
-Template shape: white code slide
-
-Title:
-The registry backtests the API
-
-Subtitle:
-product type -> supported shape
-
-Content:
-- product taxonomy
-- explicit variant set
-- type coverage
-
-Code:
-```tsx
-const NOTIFICATIONS: Record<
-  NotificationType,
-  NotificationRenderer
-> = {
-  followRequest: FollowRequestNotification,
-  postLike: PostLikeNotification,
-  dmRequest: DMRequestNotification,
-  photoTag: PhotoTagNotification,
-  moderation: ModerationNotification,
-}
-```
-
-Script:
-The registry is where this stops being just a nice refactor.
-
-This record is a coverage surface. It forces the product taxonomy and the explicit variant set to stay aligned.
-
-When a backend notification type exists, the frontend needs a supported shape for it.
-
-When primitives or variant props change, the registry helps backtest the baseline we already claimed to support.
-
-Visual / animation:
-Animate a new `NotificationType` appearing without a renderer, then the record failing until a named variant is added. Keep it IDE-like, not theatrical.
-
-## Slide 12 - The IDE Knows The Shapes
-
-Template shape: white/yellow split slide
-
-Title:
-The IDE knows the shapes
-
-Subtitle:
-None.
-
-Content:
-Left side:
-- unions
-- records
-- exact props
-
-Right side:
-Fewer public modes.
-
-Code:
-```tsx
-type NotificationType =
-  | "followRequest"
-  | "postLike"
-  | "dmRequest"
-  | "photoTag"
-  | "moderation"
-```
-
-Script:
-TypeScript helps because the supported shapes are explicit.
-
-Not with clever types for their own sake. Mostly with unions and records.
-
-The IDE can autocomplete the variants the module supports. Each variant can ask for the exact props it needs. The registry can fail when the supported type set and the rendered variant set drift apart.
-
-The point is not fewer characters. The point is fewer public modes to reason about.
-
-Visual / animation:
-Show an IDE-like autocomplete moment. Highlight `NotificationType`, then the matching exported variant. Keep the right yellow panel as the conceptual takeaway.
-
-## Slide 13 - New Behavior, New Place
-
-Template shape: white code slide
+## Slide 21 - New Behavior, New Place
 
 Title:
 New behavior, new place
 
 Subtitle:
-Post comments do not become more props.
+New complexity gets a new place.
 
 Content:
-- shares post thumbnail
-- shares text preview
+- reuses actor / body / media
+- owns comment preview
 - owns reply behavior
 
-Code:
-```tsx
-export function PostCommentNotification(props) {
-  return (
-    <Notification.Container {...props}>
-      <Notification.Actor />
-      <Notification.Body />
-      <Notification.CommentPreview />
-      <Notification.PostThumbnail />
-      <Notification.Actions>
-        <Notification.Reply />
-      </Notification.Actions>
-      <Notification.Date />
-    </Notification.Container>
-  )
-}
-```
+Focus:
+- reused actor primitive
+- comment preview
+- post thumbnail
+- reply action
 
-Script:
-Then product asks for post comment notifications.
+Step messages:
+- Composition does not remove complexity; it gives it a home.
+- The comment preview is not hidden behind a mode.
+- Media is reused without pretending every shape has it.
+- Reply behavior is owned by the post-comment shape.
 
-In the old API, this would be another overlap problem. It looks a bit like post like because there is a post thumbnail. It looks a bit like DM request because there is a text preview. It may have its own reply action and comment permalink.
-
-With the new shape, it gets a name.
-
-It can share primitives without pretending to be another notification type.
-
-Visual / animation:
-Show `PostLikeNotification` and `DMRequestNotification` primitives ghosted in the background, then assemble `PostCommentNotification` from shared pieces plus `Reply`.
-
-## Slide 14 - Shrink The Public State Space
-
-Template shape: dark emphasis slide
+## Slide 22 - Shrink The Public State Space
 
 Title:
 Shrink the public state space
 
 Subtitle:
-Fewer shapes to reason about.
+Fewer public modes to keep in your head.
+
+Claim:
+Every public prop combination is a state someone can write, review, test, and maintain.
 
 Content:
-- flag bags widen the space
-- named shapes narrow the public set
-- fewer valid combinations to understand
+- flag bags widen the state space
+- explicit variants narrow the public set
+- TypeScript helps with named shapes
 
-Code:
-None.
-
-Script:
-This is the small theory behind the pattern.
-
-A component API has a public state space. Every public prop combination is a state someone can write, review, and maintain.
-
-A bag of flags creates a wide space of possible modes. Explicit variants create a smaller set of supported shapes.
-
-The goal is not only to reject impossible states. It is to make the public set small enough that people can hold it in their head.
-
-Visual / animation:
-Use the dark emphasis slide. Animate many small prop combinations collapsing into a short list of named shapes.
-
-## Slide 15 - Make The Shape Visible
-
-Template shape: yellow final title slide
+## Slide 23 - Make The Shape Visible
 
 Title:
 Make The Shape Visible
@@ -556,21 +373,4 @@ Composition is for shape.
 Content:
 - Supported behavior gets a name.
 - Supported shape becomes visible.
-- Flexibility inside. Local reasoning outside.
-
-Code:
-None.
-
-Script:
-That is the rule I want to leave with.
-
-Configuration is for values. Composition is for shape.
-
-If a product behavior is supported, give it a name. If a shape is supported, make it visible.
-
-If a rule changes the parts, actions, navigation, permissions, or ownership boundary, do not hide it inside another prop on a generic component.
-
-Keep the flexibility inside the module. Give local reasoning to the outside.
-
-Visual / animation:
-Return to the yellow title style. Keep it sparse. Bring back the final line from Slide 10: flexibility inside, local reasoning outside.
+- No archeology required.
