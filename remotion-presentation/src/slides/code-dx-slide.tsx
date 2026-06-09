@@ -54,7 +54,7 @@ export function CodeDxTalkSlide({
   accentColor = "#f0db4f",
   codeEvents = notificationCodeEvents,
   codeTitle = "moderation-notification.tsx",
-  codeMaxWidth = 700,
+  codeMaxWidth = 805,
   codeFontSize = 16,
   codeBodyMinHeight = 760,
   previewLabel = "DX panel · live preview",

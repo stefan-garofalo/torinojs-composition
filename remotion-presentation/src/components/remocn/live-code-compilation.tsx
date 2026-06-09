@@ -193,7 +193,7 @@ export function LiveCodeCompilation({
           height={codeBodyMinHeight + 40}
           showBackdrop={false}
           speed={speed}
-          staggerFrames={5}
+          staggerFrames={2}
           title={codeTitle}
           width={codeMaxWidth}
         />

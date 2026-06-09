@@ -1,352 +1,349 @@
 # Make The Shape Visible - Speaker Script
 
-## 1. Make The Shape Visible
+## Slide 1 — Make The Shape Visible
 
-I want to talk about React composition, but not as a cute `children` trick.
+Questo talk parla di React API design.
 
-I want to talk about what happens when a useful component has to support more product shapes than its public API can honestly describe.
+Uso i compound components come esempio concreto per arrivare alla domanda vera: cosa appartiene alle props e cosa appartiene alla composition.
 
-The version of this that hurts is rarely dramatic at first.
+Perché la public API di un componente diventa il modo in cui il resto del codebase pensa a quel componente.
 
-Nobody wakes up and says: today I will build an impossible component.
+La composition è l'unico modo sano per architettare componenti React quando devono sopravvivere alla dinamicità reale di prodotto.
 
-Usually the component is useful. It gets reused. Product asks for one more case. Then another. Each change is small. Each change is reasonable. And then, a few months later, the API has become a little language that nobody remembers designing.
+Le props vanno benissimo per i values. Ma sono un pessimo posto dove nascondere l'architectura.
 
-So the frame for this talk is simple:
+Perciò il seguente mental model:
 
-When variation is structural, make the structure visible.
+Configuration for values. Composition for shape.
 
-## 2. A Useful Component Under Pressure
 
-Start with a notification row.
+## Slide 2 — A Useful Component Under Pressure
 
-Nothing exotic. Avatar, text, maybe a timestamp. The kind of thing every app has.
+Partiamo da un componente per le notifiche.
 
-Then the row gets used for follow requests. That needs an actor and a follow-back action.
+Niente di strano. Avatar, testo, magari timestamp. Il tipo di componente che ogni app ha.
 
-Then post likes. That needs an actor, a post thumbnail, and a link to the post.
+Però ora avremmo bisogno di coprirea anche le follow requests. Serve perciò un actor e una follow-back action.
 
-Then DM requests. That needs a message preview and two decisions: accept or ignore.
+Ora anche per i post likes. Serve aggiungere una thumbnail del post, e un link al post.
 
-Then photo tags. That needs media, and maybe a remove-tag behavior.
+Poi per le richieste di DM. Serve una preview del messaggio e due actions: accept o reject.
 
-None of these features are unreasonable.
+Poi per i photo tags. Serve media, e magari anche un remove-tag behavior.
 
-The important part is that they all fit inside the phrase "notification row", but they are not the same shape.
+Il problema è che sono tutte semanticamente parte delle notifiche, ma abbastanza diverse da richiedere una propria shape differente.
 
-At the call site, this still looks fine:
+Dal call site sembra ancora tutto ok:
 
 `type="dmRequest"`, actor, message, preview, primary action, secondary action.
 
-But the component has started to expose a mode language.
+Però il componente ha già iniziato a esporre un'interfaccia confusa.
 
-It is still quiet. Still manageable. But the shape problem is already there.
+## Slide 3 — One Clean Shape
 
-## 3. One Clean Shape
+Se guardiamo un caso isolato, è pulito.
 
-If we look at one case by itself, it is clean.
+Una post-like notification ha un solo job.
 
-A post-like notification has one job.
+Renderizza actor. Renderizza body. Renderizza media del post.
 
-Render the actor. Render the body. Render the post media.
+Non c'è nessun problema profondo di architecture. Un componente che possiede una sola product shape può restare banalissimo, ed è una cosa positiva.
 
-There is no deep architecture problem here. A single component that owns one product shape can stay boring, and boring is good.
+Il problema nasce quando questa shape pulita diventa il posto condiviso dove infilare ogni shape futura.
 
-The trouble starts when this one clean shape becomes the shared place where every future shape has to live.
+Il componente sta ancora facendo il suo lavoro. Ha solo iniziato ad attrarre ogni nuova esigenza.
 
-That is the pressure point.
+## Slide 4 — Add Interaction
 
-The component is not wrong yet. It is just becoming attractive as a place to put the next thing.
+Poi arrivano le follow requests.
 
-## 4. Add Interaction
+Ancora tutto ragionevole.
 
-Now follow requests arrive.
+Aggiungiamo un follow-back hook. Renderizziamo un button solo quando il type è `followRequest`.
 
-Still reasonable.
+Questa è la prima branch che dice: la row non sta più solo renderizzando notification data. Ora conosce un product behavior.
 
-We add a follow-back hook. We render a button only when the type is `followRequest`.
+Una branch può andare benissimo.
 
-This is the first branch that says: the row is no longer just rendering notification data. It knows about one product behavior.
+La domanda è se questa branch rappresenta una piccola differenza di value, oppure il primo segnale che stiamo spingendo behaviors diversi attraverso una sola surface.
 
-That may be completely fine. A branch is not a crime.
+A questo punto è ancora ambiguo.
 
-The question is: is this branch representing a small value difference, or is it the first sign that different shapes are being pushed through one surface?
+Ed è proprio per questo che questo pattern si insinua così facilmente.
 
-At this point, the answer is still ambiguous.
+## Slide 5 — Then Two Actions
 
-And that is why this pattern sneaks in.
+Poi arriva la DM request.
 
-## 5. Then Two Actions
+Adesso la row deve supportare accept e ignore.
 
-Then DM request shows up.
+Servono hook diversi, button diversi, magari anche una destination diversa.
 
-Now the row needs accept and ignore.
+Di nuovo, ogni riga ha una ragione per esistere.
 
-It needs different hooks, different buttons, and maybe a different destination.
+Ma la shared row si sta allargando. Ora conosce follow-back, accept, ignore, message request navigation, media rendering, e le condizioni per ognuna di queste cose.
 
-Again, each line has a reason to exist.
+Questo è il momento in cui il componente inizia a diventare un parser.
 
-But the shared row is getting wider. It now knows about follow-back, accept, ignore, message request navigation, media rendering, and the conditions for each.
+La public API gli passa una descrizione. Dentro il componente noi decodifichiamo quale product shape quella descrizione stava cercando di rappresentare.
 
-This is the moment where the component starts becoming a parser.
+## Slide 6 — The Outside Still Looks Fine
 
-The public API gives it a description, and inside the component we decode which product shape that description was trying to mean.
+La parte fastidiosa è che da fuori sembra ancora accettabile.
 
-## 6. The Outside Still Looks Fine
+La usage della follow request è piccola.
 
-The annoying part is that the outside still looks acceptable.
+La usage della DM request è piccola.
 
-Follow request usage looks small.
+Se fai review di un solo call site probabilmente la approvi.
 
-DM request usage looks small.
+Ma le API cedono come insieme, non call site per call site.
 
-If you review only one call site, you probably approve it.
+Lo spazio delle combinazioni possibili cresce, e le combinazioni valide vivono quasi sempre nella nostra testa.
 
-But APIs do not fail one call site at a time. They fail as a set.
+Quali actions sono legali per quale type?
 
-The set of possible prop combinations is growing, and the valid combinations are mostly living in our heads.
+Quali fields sono required?
 
-Which actions are legal for which type?
+Quali fields vengono ignorati?
 
-Which fields are required?
+Quale prop vince quando due modes si contraddicono?
 
-Which fields are ignored?
+Di solito la risposta è: da qualche parte nel body del componente.
 
-Which prop wins when two modes disagree?
+E lì parte il gesto rassegnato che conosciamo tutti: apri il componente, la prop list non ti spiega davvero il behavior, e quindi fai search nel repo per trovare un altro call site con la stessa combinazione.
 
-Usually the answer is: somewhere in the component body.
+Sembra ricerca, ma in realtà è archeologia forzata.
 
-## 7. More Branches
+L'API ha smesso di essere leggibile da sola.
 
-Now product asks for moderation.
+## Slide 7 — More Branches
 
-This is where the abstraction starts to tell the truth badly.
+Poi product chiede moderation.
 
-Supporting moderation means teaching the generic item another product.
+Qui l'abstraction inizia a mentire male.
 
-There is a decision href. Actor identity might disappear. The avatar becomes a system icon. Appeal and view-decision handlers move inside the shared component.
+Supportare moderation significa insegnare al generic item un altro product concept.
 
-The row now knows what a report is, what a DM request is, what a follow request is, what route each one opens, and which actions are allowed.
+C'è una decision href. L'actor identity può sparire. L'avatar diventa un system icon. Appeal e view-decision handlers finiscono dentro il componente condiviso.
 
-The issue is not that the code has conditionals.
+La row ora sa cos'è un report, cos'è una DM request, cos'è una follow request, quale route apre ognuna, e quali actions sono permesse.
 
-The issue is that supported product shapes are hidden inside one generic renderer.
+Le conditionals sono solo il sintomo.
 
-Many props outside. Many branches inside.
+Le product shapes supportate sono nascoste dentro un generic renderer.
 
-That is prop soup.
+Tante props fuori. Tante branches dentro.
 
-## 8. Then Moderation Breaks It
+Questa è prop soup.
 
-At the call site, moderation looks like another notification type.
+## Slide 8 — Then Moderation Breaks It
 
-But look at what we have to say:
+Dal call site moderation sembra solo un altro notification type.
+
+Ma guardiamo cosa siamo costretti a dire:
 
 No actor. Hide actor. Show system icon. Show inline reason. Primary action is view decision. Secondary action is appeal.
 
-This is not just a different label inside the same row.
+Qui non cambia una label dentro la stessa row.
 
-It changes identity, navigation, copy sensitivity, actions, and permissions.
+Cambiano identity, navigation, copy sensitivity, actions, permissions.
 
-That is a shape change.
+Questa è una shape change.
 
-And when a product change is a shape change, another prop is usually the wrong level of expression.
+E quando un product change è una shape change, un'altra prop è il livello di espressione sbagliato.
 
-The API is pretending we are configuring values.
+L'API sta fingendo che stiamo configurando values.
 
-But really we are describing structure.
+In realtà stiamo descrivendo structure.
 
-## 9. Props Outside, Branches Inside
+## Slide 9 — Props Outside, Branches Inside
 
-This is the pattern in miniature.
+Questo è il pattern in piccolo.
 
-`showSystemIcon` becomes an icon branch.
+`showSystemIcon` diventa una icon branch.
 
-`type` becomes an href branch.
+`type` diventa una href branch.
 
-`primaryAction` becomes an action branch.
+`primaryAction` diventa una action branch.
 
-Soon there is a permission branch too, because moderation copy has different visibility rules.
+Poi arriva anche una permission branch, perché la moderation copy ha regole diverse di visibilità.
 
-Again: branches are fine.
+Prop soup è quando le props smettono di essere inputs e iniziano a diventare un programming language.
 
-But here the branches are not just implementation details. They are the real list of supported product states.
+Una prop seleziona il mode. Un'altra patcha l'eccezione. Un'altra disabilita una cosa che esiste solo in un mode. Un'altra cambia behavior perché il mode non era abbastanza specifico.
 
-The component API says: pass me props.
+A quel punto la component API ha perso la semplicità che prometteva.
 
-The component body says: I know the product taxonomy.
+È composition codificata male.
 
-That mismatch is where the maintenance cost comes from.
+## Slide 10 — Structural Variation
 
-## 10. Structural Variation
+Questo è il lens che uso.
 
-This is the lens I reach for.
+Alcuni cambiamenti sono values.
 
-Some changes are values.
+Alcuni cambiamenti sono shapes.
 
-Some changes are shapes.
+Cambia una label? Quello è un value.
 
-A label changes? Fine, that is a value.
+Cambia un loading state? Probabilmente è un value.
 
-A loading state changes? Fine, that is probably a value.
+Ma se cambiano le parts, se cambiano le actions, se cambia la navigation, se cambia l'ownership boundary, o se le permissions cambiano cosa può essere mostrato, quella è structural variation.
 
-But if the parts change, if the actions change, if the navigation changes, if the ownership boundary changes, or if permissions change what can be shown, that is structural variation.
+E quando la variation è structural, make the structure visible.
 
-And when variation is structural, make the structure visible.
-
-Not clever.
+Non clever.
 
 Visible.
 
-## 11. Configuration Is For Values
+## Slide 11 — Configuration Is For Values
 
-So the rule becomes:
+Quindi la regola diventa:
 
 Configuration is for values.
 
 Composition is for shape.
 
-Props are not bad. Boolean props are not automatically bad.
+Smettiamo di gestire behavior con props.
 
-`disabled` is fine. `checked` is fine. `loading` is often fine.
+Behavior is composition-bound.
 
-Those are independent facts inside a stable shape.
+Values e configuration sono prop-bound.
 
-The trouble starts when props become a hidden mode system.
+Una prop può dire qual è la label. Una prop può dire se un button è disabled. Una prop può passare date, count, href, loading state.
 
-`showActor`, `showSystemIcon`, `showInlineReason`, `primaryAction`, `secondaryAction`, `type`.
+Ma se la domanda è "quale behavior esiste qui?", quello deve essere visibile nella composition.
 
-Together, those are not simple values anymore. They are trying to describe what kind of thing this component is.
+Le parts che renderizzi sono il behavior contract.
 
-That description belongs in visible structure.
+## Slide 12 — Extract The Row
 
-## 12. Extract The Row
+Quindi il refactor non parte inventando un framework enorme.
 
-So the refactor does not start by inventing a huge framework.
+Parte estraendo la row.
 
-Start by extracting the row.
+Il shared container diventa una primitive.
 
-The shared container becomes a primitive.
+Ora una variant può comporre la row invece di configurarla.
 
-Now a variant can compose the row instead of configuring it.
+Questo è importante perché la row è stabile. La row è il frame.
 
-This matters because the row is stable. The row is the frame.
+Ma il contenuto della row cambia da shape a shape.
 
-But the contents of that row are not always stable.
+Quindi teniamo la shared shell noiosa, e smettiamo di chiederle di capire ogni product behavior.
 
-So we keep the boring shared shell, and we stop asking that shell to understand every product behavior.
+La variant possiede la composition.
 
-The variant owns the composition.
+La primitive possiede il rendering contract condiviso.
 
-The primitive owns the shared rendering contract.
+## Slide 13 — Extract Identity
 
-## 13. Extract Identity
+Poi rendiamo esplicita l'identity.
 
-Next, identity becomes explicit.
+In una actor-based notification renderizzi `Notification.Actor`.
 
-In an actor-based notification, render `Notification.Actor`.
+In moderation renderizzi `Notification.SystemIcon`.
 
-In moderation, render `Notification.SystemIcon`.
+Niente `showActor={false}`.
 
-No `showActor={false}`.
+Niente actor prop tecnicamente optional ma solo per un mode.
 
-No actor prop that is technically optional but only for one mode.
+Niente generic component che decide se questa cosa è una persona, un system event, o altro.
 
-No generic component deciding whether this is a person, a system event, or something else.
+La moderation shape sceglie direttamente un system icon.
 
-The moderation shape chooses a system icon directly.
+È una piccola cosa, ma cambia completamente la reading experience.
 
-That is a tiny change, but it changes the reading experience.
+Ora la product rule si vede nel JSX.
 
-You can now see the product rule in the JSX.
+## Slide 14 — Extract Copy
 
-## 14. Extract Copy
+Poi la copy diventa una primitive.
 
-Then copy becomes a primitive.
+Body. Timestamp. Magari più avanti reason, preview, primary detail.
 
-Body. Timestamp. Maybe later reason, preview, primary detail.
+Stiamo dando un nome agli slots stabili della famiglia.
 
-The point is not to make everything into a tiny component for fun.
+Il component kit ci dà un vocabulary.
 
-The point is to name the slots that are stable across the family.
+La variant decide quali parole di quel vocabulary fanno parte di questa shape.
 
-The component kit gives us vocabulary.
-
-The variant decides which words in that vocabulary are part of this shape.
-
-So instead of a generic item branching internally on which copy to show, the shape says:
+Quindi invece di avere un generic item che branch-a internamente su quale copy mostrare, la shape dice:
 
 system icon, body, timestamp.
 
-Small, readable, local.
+Piccolo. Leggibile. Locale.
 
-## 15. Extract Media
+## Slide 15 — Extract Media
 
-Media is a good example because not every notification has it.
+Media è un buon esempio perché non tutte le notifications ce l'hanno.
 
-Photo tags need it.
+Photo tags ne hanno bisogno.
 
-Post likes need it.
+Post likes ne hanno bisogno.
 
-Moderation may deliberately not show it, even if the underlying target had media.
+Moderation magari decide apposta di non mostrarlo, anche se il target sotto era un post con media.
 
-So media should not be a flag that every notification carries around.
+Quindi media non dovrebbe essere una flag che ogni notification si porta dietro.
 
-It should be a primitive used by shapes that actually need media.
+Dovrebbe essere una primitive usata dalle shapes che davvero hanno bisogno di media.
 
-This is where composition starts to feel practical.
+Qui composition inizia a diventare pratica.
 
-Shared parts, but no requirement that every shape pretend to have every part.
+Shared parts, ma nessun obbligo per ogni shape di fingere di avere ogni part.
 
-## 16. Extract Actions
+## Slide 16 — Extract Actions
 
-Actions are even more important.
+Le actions sono ancora più importanti.
 
-DM request has accept and ignore.
+DM request ha accept e ignore.
 
-Follow request has follow back.
+Follow request ha follow back.
 
-Moderation has view decision and appeal.
+Moderation ha view decision e appeal.
 
-Those are not just buttons.
+Qui non stiamo parlando di buttons generici.
 
-They are product behaviors with different hooks, routes, permissions, labels, and tracking.
+Stiamo parlando di UX behavior primitives.
 
-So the shape should own them.
+`FollowBack` implica un actor, una relationship action, optimistic state, magari tracking, magari disabled state dopo il click.
 
-The action primitive can still provide shared layout and shared styling.
+`ViewDecision` implica moderation context, un decision target, permission per ispezionarlo, e una support route.
 
-But the list of actions belongs to the variant.
+`Appeal` implica un permission path diverso e una product promise diversa.
 
-That keeps behavior near the product shape that explains it.
+Questi behaviors non dovrebbero essere string values passati dentro `primaryAction`.
 
-## 17. The Shape Is In The Code
+Dovrebbero essere pezzi visibili della composed shape.
 
-Open moderation now and the shape is right there.
+## Slide 17 — The Shape Is In The Code
 
-It derives a view model.
+Ora apriamo moderation, e la shape è lì.
 
-It renders a row.
+Deriva un view model.
 
-Then system icon, body, timestamp, actions.
+Renderizza una row.
 
-No `showActor={false}`.
+Poi system icon, body, timestamp, actions.
 
-No `primaryAction="viewDecision"`.
+Niente `showActor={false}`.
 
-No generic moderation branch hiding inside a giant row.
+Niente `primaryAction="viewDecision"`.
 
-The supported behavior has a name.
+Niente generic moderation branch nascosta dentro una row gigante.
 
-The supported shape is visible.
+Il behavior supportato ha un nome.
 
-This is still abstraction, but it is abstraction you can read from the outside.
+La shape supportata è visibile.
 
-## 18. Make The Variants Explicit
+È ancora abstraction, ma è abstraction che puoi leggere da fuori.
 
-Now the public API changes.
+## Slide 18 — Make The Variants Explicit
 
-Instead of one generic component with a growing mode language, the module exports the notification shapes it supports.
+Ora cambia la public API.
+
+Invece di un generic component con un mode language in crescita, il modulo esporta le notification shapes che supporta.
 
 `FollowRequestNotification`.
 
@@ -360,302 +357,144 @@ Instead of one generic component with a growing mode language, the module export
 
 `PostCommentNotification`.
 
-Each export is a product shape with a name.
+Ogni export è una product shape con un nome.
 
-The app no longer asks: which prop combination describes this notification?
+L'app non chiede più: quale combinazione di props descrive questa notification?
 
-It asks: which supported notification shape is this?
+Chiede: qual è la supported notification shape?
 
-And the registry matters here.
+E qui la registry conta.
 
-The registry is not just plumbing. It is a coverage surface.
+La registry diventa una coverage surface.
 
-If the backend has a notification type, the frontend needs a supported renderer for it.
+Se il backend ha un notification type, il frontend deve avere un renderer supportato.
 
-The product taxonomy and the UI taxonomy stay aligned.
+La product taxonomy e la UI taxonomy restano allineate.
 
-## 19. Internal Kit / Public API
+## Slide 19 — Internal Kit / Public API
 
-This is the boundary I like.
+Questo è il boundary che mi interessa.
 
-The primitives are the internal kit.
+Composition tiene insieme compound components e named variants.
 
-The named variants are the public API.
+Splitti ogni behavior in primitives più piccole, sia quando quel behavior è visual UI, sia quando è proprio UX behavior.
 
-App code should not need to assemble every notification by hand. That would just move complexity to every call site.
+`Actor`, `Body`, `Timestamp`, `Media` sono visual primitives.
 
-Instead, app code imports supported shapes.
+`FollowBack`, `ViewDecision`, `Appeal` sono behavior primitives.
 
-Module authors still get the flexibility of composition when a new shape arrives.
+La visual primitive dice cosa appare.
 
-So the split is:
+La behavior primitive dice cosa l'utente può fare.
 
-Flexibility inside.
+Ogni primitive possiede un piccolo reusable scope. Poi quelle primitives collaborano con le sibling per formare l'abstraction finale.
 
-Local reasoning outside.
+L'abstraction finale dichiara esplicitamente quale UX supporta.
 
-That is the balance.
+E per questo il JSX diventa documentazione utile: mostra la UI visibile e la UX supportata nello stesso punto.
 
-Compound components are useful here because they let the module keep a small vocabulary of parts without making the whole app speak in raw primitives all the time.
+## Slide 20 — The Inner Context
 
-## 20. The Inner Context
+Il data resta lì.
 
-The data did not disappear.
+Si sposta dietro un provider boundary.
 
-It moved behind a provider boundary.
+Ogni named variant possiede il provider contract di cui le sue primitives hanno bisogno.
 
-Each named variant owns the provider contract its primitives need.
+Mi piace la divisione `state`, `actions`, `meta` perché dà al context una shape noiosa e prevedibile.
 
-I like the `state`, `actions`, `meta` split because it gives the context a shape that is boring and predictable.
+`state` è quello che le primitives renderizzano.
 
-`state` is what primitives render.
+`actions` sono quello che le primitives possono triggerare.
 
-`actions` are what primitives can trigger.
+`meta` è il contesto operativo: refs, ids, labels, formatting, tracking, platform details.
 
-`meta` is the operational context around them: refs, ids, labels, formatting, tracking, platform details.
+La regola importante è che le primitives consumano l'interface, non l'implementation.
 
-The important rule is that primitives consume the interface, not the implementation.
+`Notification.Actions` non deve sapere se lo stato moderation arriva da un hook, da un server payload, da local state, o da global store.
 
-`Notification.Actions` does not need to know whether moderation state came from a hook, a server payload, local state, or a global store.
+Il provider è l'unico punto che sa come viene gestito lo state.
 
-The provider is the only place that knows how the state is managed.
+Così l'implementation resta privata, mentre la composition resta esplicita.
 
-That is how the implementation stays private while the composition stays explicit.
+## Slide 21 — New Behavior, New Place
 
-## 21. New Behavior, New Place
+Poi product chiede post comment notifications.
 
-Now product asks for post comment notifications.
+Nella vecchia API sarebbe stato un altro overlap problem.
 
-In the old API, this would be another overlap problem.
+Sembra un po' post like, perché c'è una post thumbnail.
 
-It looks a bit like post like because there is a post thumbnail.
+Sembra un po' DM request, perché c'è una text preview.
 
-It looks a bit like DM request because there is a text preview.
+Magari ha una reply action e un comment permalink.
 
-It may have its own reply action and comment permalink.
-
-With the new shape, it gets a name.
+Con la nuova shape, prende un nome.
 
 `PostCommentNotification`.
 
-It can share actor, body, media, and actions primitives without pretending to be a post like, a DM request, or a moderation event.
+Può condividere actor, body, media, actions primitives senza fingere di essere una post like, una DM request, o una moderation event.
 
-That is the nice part.
+Questa è la parte interessante.
 
-Composition does not make complexity disappear.
+Composition decide dove vive la complessità.
 
-It decides where the complexity lives.
+Qui la complessità vive in named variants, exported primitives, provider contracts, e una registry che possiamo controllare.
 
-Here, the complexity lives in named variants, exported primitives, provider contracts, and a registry we can check.
+Non in combinazioni accidentali di props.
 
-Not in accidental prop combinations.
+## Slide 22 — Shrink The Public State Space
 
-## 22. Shrink The Public State Space
+Questa è la piccola teoria dietro al pattern.
 
-This is the small theory behind the pattern.
+Una component API ha un public state space.
 
-A component API has a public state space.
+Ogni combinazione pubblica di props è uno state che qualcuno può scrivere, revieware, testare, mantenere.
 
-Every public prop combination is a state someone can write, review, test, and maintain.
+Un bag di flags allarga quello spazio.
 
-A bag of flags widens that space.
+Suggerisce più combinazioni di quante il prodotto supporti davvero.
 
-It suggests more combinations than the product actually supports.
+Explicit variants restringono il public set.
 
-Explicit variants narrow the public set.
+Dicono: queste sono le shapes che supportiamo.
 
-They say: these are the shapes we support.
+A volte la versione composta ha più righe.
 
-The goal is not fewer characters.
+Il goal è avere meno public modes da tenere in testa.
 
-Sometimes the composed version has more lines.
+L'IDE può autocomplete-are le supported shapes.
 
-The goal is fewer public modes to reason about.
+TypeScript può controllare la registry.
 
-The IDE can autocomplete the supported shapes.
+Una reviewer può leggere il JSX e capire cos'è il componente.
 
-TypeScript can check the registry.
+Piccola parentesi AI: questa cosa conta ancora di più adesso, perché AI legge meglio codice esplicito. Named shapes e named primitives danno semantic handles agli agents. E se composition genera un po' più di boilerplate, AI è molto brava a pagare quel costo.
 
-A reviewer can read the JSX and see what the component is.
+## Slide 23 — Make The Shape Visible
 
-Good TypeScript makes the IDE feel like part of the design system.
-
-## 23. Make The Shape Visible
-
-So this is the rule I want to leave with.
+Quindi la regola finale è questa.
 
 Configuration is for values.
 
 Composition is for shape.
 
-If a behavior is supported, give it a name.
+Se un behavior è supportato, dagli un nome.
 
-If a shape is supported, make it visible.
+Se una shape è supportata, rendila visibile.
 
-If a rule changes the parts, actions, navigation, permissions, or ownership boundary, do not hide it inside one more prop on a generic component.
+Se una regola cambia parts, actions, navigation, permissions, o ownership boundary, non nasconderla dentro un'altra prop su un generic component.
 
-Props are still useful.
+Se gestisci behavior tramite props, probabilmente hai costruito un componente implicito dentro il componente.
 
-Composition is not a religion.
+Rendilo reale.
 
-For small independent behavior, a prop can be exactly right.
+Dagli un nome.
 
-But when the public API starts becoming a little undocumented language, that is the signal.
+Renderizza le sue parts.
 
-Move the shape into code people can see.
+Sposta la shape nel codice che le persone possono vedere.
 
-Keep the flexibility inside the module.
+Tieni la flexibility dentro il modulo.
 
-Give local reasoning to the outside.
-
----
-
-My point of view is stronger than "composition is a nice React pattern."
-
-Composition is the only sane way to architect React components once a component has to survive real product pressure.
-
-Props are fine for values, but they are a terrible place to hide architecture.
-
-If the API is mostly flags, the component is asking every caller to participate in its internal state machine.
-
-That is not reuse. That is outsourcing confusion.
-
----
-
-The failure mode is the big spaghetti component with multiple behaviors hidden behind outside props.
-
-From the call site, you cannot reconstruct what it actually does.
-
-You see `type`, `showSomething`, `primaryAction`, maybe `variant`, maybe three optional objects, and the only honest next move is to `ctrl+f` around the codebase looking for usage examples.
-
-That is the smell: the component API does not teach you the component anymore.
-
-The real documentation is scattered across call sites and conditionals.
-
----
-
-There is a resigned version of this that every React developer knows.
-
-You open the component. The prop list does not tell you the behavior.
-
-So you search the repo.
-
-Not because you are doing deep research. Because the API has stopped being readable on its own.
-
-You are looking for someone else's call site that happens to use the same combination of props you need.
-
-That is the moment composition is supposed to prevent.
-
----
-
-Stop managing behavior with props.
-
-Behavior is composition-bound.
-
-Values and configuration are prop-bound.
-
-A prop can say what the label is.
-
-A prop can say whether the button is disabled.
-
-A prop can pass the date, the count, the href, the loading state.
-
-But if the question is "what behavior exists here?", that should be visible in the composition.
-
-The parts you render are the behavior contract.
-
----
-
-Possible boundary examples.
-
-`disabled` is a prop.
-
-`loading` is a prop.
-
-`children` is composition.
-
-`label` is a prop.
-
-`timestamp` is a prop.
-
-`FollowBack` versus `Appeal` is composition.
-
-The difference is not syntax. The difference is whether the choice changes the kind of thing being rendered.
-
----
-
-This should not feel like a refactor recipe.
-
-The refactor is the example.
-
-The real subject is React API design.
-
-A component API is not just a list of inputs. It is the vocabulary you give other developers for thinking about the UI.
-
-If the vocabulary is flags, people think in flag combinations.
-
-If the vocabulary is named shapes and composable parts, people think in supported behaviors.
-
-That is the design choice.
-
----
-
-Possible opener revision:
-
-This is a talk about React API design.
-
-The example is compound components, but the point is not the syntax.
-
-The point is how you decide what belongs in props and what belongs in composition.
-
-Because the public API of a component becomes the way the rest of the codebase thinks about that component.
-
----
-
-Prop soup is when props stop being inputs and start being a programming language.
-
-One prop selects the mode.
-
-Another prop patches an exception.
-
-Another prop disables a thing that only exists in one mode.
-
-Another prop changes behavior because the mode was not specific enough.
-
-At that point, the component API is not simpler than composition.
-
-It is just composition encoded badly.
-
----
-
-Do not soften the thesis too much.
-
-The point is not "composition can be nice sometimes."
-
-The point is that behavior belongs in composition.
-
-If behavior is managed through props, you have probably built an implicit component inside the component.
-
-Make that implicit component real.
-
-Give it a name.
-
-Render its parts.
-
----
-
-Composition is not only "use compound components."
-
-And it is not only "make named variants."
-
-It is the combination.
-
-Split each behavior into smaller primitives, whether that behavior is visual UI or actual UX behavior.
-
-Each primitive owns a small reusable scope.
-
-Then those primitives co-operate with their siblings to form the final abstraction.
-
-The final abstraction should explicitly report which UX it supports.
-
-That is the reason composition is readable: the supported behavior is not inferred from props, it is reported by the parts that appear in the tree.
+Dai local reasoning a chi usa l'API.

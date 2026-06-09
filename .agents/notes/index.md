@@ -1,2 +1,3 @@
 - remocn-typography-background.md — Remocn typography demos can bring full-scene backgrounds; set transparent background when embedding in dark slides.
 - presenter-runtime.md — Use `bun run dev` or `bun run presenter` for the starter presenter at `http://localhost:3001/`.
+- talk-language-style.md — Talk scripts are spoken in Italian while preserving English technical terms, aligned to the direct personal style of the sibling TorinoJS keynote.

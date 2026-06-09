@@ -187,7 +187,7 @@ export const talkSlides = [
     content: {
       codeBodyMinHeight: 860,
       codeFontSize: 13,
-      codeMaxWidth: 740,
+      codeMaxWidth: 851,
       leftItems: [
         "decision href",
         "actor removal",
@@ -531,7 +531,7 @@ const primary =
     content: {
       codeBodyMinHeight: 820,
       codeFontSize: 12,
-      codeMaxWidth: 740,
+      codeMaxWidth: 851,
       bullets: [
         "FollowRequestNotification",
         "PostLikeNotification",
@@ -625,7 +625,7 @@ const primary =
     durationInFrames: codeOnlyDuration,
     content: {
       subtitle: "the primitives read one derived view",
-      codeFontSize: 20,
+      codeFontSize: 16,
       codeHeight: 790,
       codeWidth: 1500,
       bullets: [

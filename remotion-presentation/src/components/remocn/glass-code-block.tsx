@@ -143,7 +143,7 @@ export function GlassCodeBlock({
   fontSize = 16,
   background = "#0a0a0a",
   glassColor = "rgba(10, 10, 10, 0.6)",
-  staggerFrames = 4,
+  staggerFrames = 2,
   embedded = false,
   showBackdrop = true,
   showTrafficLights = true,
@@ -281,11 +281,11 @@ function CodeLine({
   fontSize: number;
 }) {
   const frame = useCurrentFrame();
-  const opacity = interpolate(frame, [0, 8], [0, 1], {
+  const opacity = interpolate(frame, [0, 5], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
-  const ty = interpolate(frame, [0, 8], [4, 0], {
+  const ty = interpolate(frame, [0, 5], [4, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
