@@ -57,7 +57,7 @@ export function CodeDxTalkSlide({
   codeTitle = "moderation-notification.tsx",
   codeMaxWidth = 700,
   codeFontSize = 16,
-  codeBodyMinHeight = 500,
+  codeBodyMinHeight = 760,
   previewLabel = "DX panel · live preview",
   leftFlex = 1.08,
   rightFlex = 0.92,

@@ -1,3 +1,4 @@
+import { notificationCodeSnippets } from "./notification-code-snippets";
 import type { TalkSlide } from "./types";
 
 const narrativeDuration = 420;
@@ -20,8 +21,8 @@ export const talkSlides = [
     family: "narrative",
     durationInFrames: narrativeDuration,
     content: {
+      subtitle: "Useful, but already carrying product rules.",
       leftItems: ["Follow requests", "Post likes", "DM requests", "Photo tags"],
-      rightText: "Useful, but already carrying product rules.",
       code: {
         language: "tsx",
         fileName: "notification-item.tsx",
@@ -51,8 +52,200 @@ export const talkSlides = [
     },
   },
   {
+    id: "post-like-clean",
+    title: "One clean shape",
+    family: "code-dx",
+    durationInFrames: codeDxDuration,
+    content: {
+      previewMode: "final",
+      previewFocus: [
+        "one lean post-like component",
+        "actor plus body plus media",
+        "single responsibility",
+      ],
+      previewSteps: [
+        {
+          afterLine: 1,
+          message: "Start with one notification shape that owns one job.",
+          variantId: "post-like",
+        },
+        {
+          afterLine: 5,
+          compact: true,
+          message: "The component can stay lean while the behavior is singular.",
+          reviewed: true,
+          showActions: true,
+          variantId: "post-like",
+        },
+      ],
+      code: {
+        language: "tsx",
+        fileName: "post-like-notification.tsx",
+        code: notificationCodeSnippets.postLikeClean,
+      },
+    },
+  },
+  {
+    id: "follow-behavior-branch",
+    title: "Add interaction",
+    family: "code-dx",
+    durationInFrames: codeDxDuration,
+    content: {
+      previewMode: "final",
+      previewFocus: [
+        "follow behavior arrives",
+        "generic item gets first action hook",
+        "type check enters the row",
+      ],
+      previewSteps: [
+        {
+          afterLine: 2,
+          message: "Follow request adds the first interactive behavior.",
+          variantId: "follow-request",
+        },
+        {
+          afterLine: 9,
+          compact: true,
+          message: "A type check decides whether the row owns follow-back.",
+          reviewed: true,
+          showActions: true,
+          variantId: "follow-request",
+        },
+      ],
+      code: {
+        language: "tsx",
+        fileName: "notification-item.tsx",
+        code: notificationCodeSnippets.followBranch,
+      },
+    },
+  },
+  {
+    id: "dm-behavior-branch",
+    title: "Then two actions",
+    family: "code-dx",
+    durationInFrames: codeDxDuration,
+    content: {
+      previewMode: "final",
+      previewFocus: [
+        "message request arrives",
+        "accept and ignore hooks",
+        "the shared row gets wider",
+      ],
+      previewSteps: [
+        {
+          afterLine: 4,
+          message: "DM request adds two handlers to the shared item.",
+          variantId: "dm-request",
+        },
+        {
+          afterLine: 15,
+          compact: true,
+          message: "Accept and ignore now live beside the previous branches.",
+          reviewed: true,
+          showActions: true,
+          variantId: "dm-request",
+        },
+      ],
+      code: {
+        language: "tsx",
+        fileName: "notification-item.tsx",
+        code: notificationCodeSnippets.dmBranch,
+      },
+    },
+  },
+  {
+    id: "request-usage-before-moderation",
+    title: "The outside still looks fine",
+    family: "code-dx",
+    durationInFrames: codeDxDuration,
+    content: {
+      previewMode: "final",
+      previewFocus: [
+        "follow request usage",
+        "dm request usage",
+        "the call sites still look acceptable",
+      ],
+      previewSteps: [
+        {
+          afterLine: 1,
+          message: "From the outside, follow still looks like a small variation.",
+          variantId: "follow-request",
+        },
+        {
+          afterLine: 7,
+          compact: true,
+          message: "DM request still fits the same generic surface.",
+          reviewed: true,
+          showActions: true,
+          variantId: "dm-request",
+        },
+      ],
+      code: {
+        language: "tsx",
+        fileName: "notification-usage.tsx",
+        code: notificationCodeSnippets.requestUsageBeforeModeration,
+      },
+    },
+  },
+  {
+    id: "moderation-internals",
+    title: "More branches",
+    family: "code-dx",
+    durationInFrames: codeDxDuration,
+    content: {
+      codeBodyMinHeight: 860,
+      codeFontSize: 13,
+      codeMaxWidth: 740,
+      leftItems: [
+        "decision href",
+        "actor removal",
+        "system icon",
+        "appeal handlers",
+      ],
+      previewMode: "final",
+      rightText: "Supporting moderation means teaching the generic item another product.",
+      previewFocus: [
+        "moderation adds a new href branch",
+        "actor identity becomes optional",
+        "decision and appeal handlers move inside",
+      ],
+      previewSteps: [
+        {
+          afterLine: 4,
+          message: "Moderation adds decision hooks to the generic item.",
+          variantId: "moderation",
+        },
+        {
+          afterLine: 11,
+          compact: true,
+          message: "The row contract now branches on moderation navigation.",
+          variantId: "moderation",
+        },
+        {
+          afterLine: 17,
+          compact: true,
+          message: "Actor rendering becomes a system-icon branch.",
+          variantId: "moderation",
+        },
+        {
+          afterLine: 22,
+          compact: true,
+          message: "Decision and appeal handlers live in the shared component.",
+          reviewed: true,
+          showActions: true,
+          variantId: "moderation",
+        },
+      ],
+      code: {
+        language: "tsx",
+        fileName: "notification-item.tsx",
+        code: notificationCodeSnippets.moderationInternals,
+      },
+    },
+  },
+  {
     id: "fifth-shape",
-    title: "The fifth shape",
+    title: "Then moderation breaks it",
     family: "code-dx",
     durationInFrames: codeDxDuration,
     content: {
@@ -68,17 +261,32 @@ export const talkSlides = [
         "system icon replaces actor identity",
         "decision and appeal actions alter behavior",
       ],
+      previewSteps: [
+        {
+          afterLine: 2,
+          compact: false,
+          message: "A generic item is now carrying moderation shape.",
+          variantId: "moderation",
+        },
+        {
+          afterLine: 5,
+          compact: true,
+          message: "System icon replaces actor identity.",
+          variantId: "moderation",
+        },
+        {
+          afterLine: 8,
+          compact: true,
+          message: "Decision and appeal behavior leak into props.",
+          reviewed: true,
+          showActions: true,
+          variantId: "moderation",
+        },
+      ],
       code: {
         language: "tsx",
         fileName: "moderation-before.tsx",
-        code: `<NotificationItem
-  type="moderation"
-  showActor={false}
-  showSystemIcon
-  showInlineReason
-  primaryAction="viewDecision"
-  secondaryAction="appeal"
-/>`,
+        code: notificationCodeSnippets.moderationBefore,
       },
     },
   },
@@ -140,11 +348,194 @@ const primary =
     },
   },
   {
-    id: "make-supported-shapes-explicit",
-    title: "Make supported shapes explicit",
+    id: "extract-row-primitive",
+    title: "Extract the row",
     family: "code-dx",
     durationInFrames: codeDxDuration,
     content: {
+      previewMode: "final",
+      previewFocus: [
+        "container becomes a primitive",
+        "row shape moves inside",
+        "variant owns composition",
+      ],
+      previewSteps: [
+        {
+          afterLine: 1,
+          message: "First pull the shared row surface into a primitive.",
+          variantId: "moderation",
+        },
+        {
+          afterLine: 6,
+          compact: true,
+          message: "The variant composes the row instead of configuring it.",
+          reviewed: true,
+          showActions: true,
+          variantId: "moderation",
+        },
+      ],
+      code: {
+        language: "tsx",
+        fileName: "moderation-notification.tsx",
+        code: notificationCodeSnippets.extractContainer,
+      },
+    },
+  },
+  {
+    id: "extract-actor-primitive",
+    title: "Extract identity",
+    family: "code-dx",
+    durationInFrames: codeDxDuration,
+    content: {
+      previewMode: "final",
+      previewFocus: [
+        "actor becomes a primitive",
+        "system icon is local",
+        "no showActor flag",
+      ],
+      previewSteps: [
+        {
+          afterLine: 6,
+          message: "Moderation chooses a system icon directly.",
+          reviewed: true,
+          showActions: true,
+          variantId: "moderation",
+        },
+      ],
+      code: {
+        language: "tsx",
+        fileName: "moderation-notification.tsx",
+        code: notificationCodeSnippets.extractActor,
+      },
+    },
+  },
+  {
+    id: "extract-body-primitive",
+    title: "Extract copy",
+    family: "code-dx",
+    durationInFrames: codeDxDuration,
+    content: {
+      previewMode: "final",
+      previewFocus: ["body primitive", "timestamp primitive", "copy lives with shape"],
+      previewSteps: [
+        {
+          afterLine: 8,
+          message: "The copy and timestamp are named slots, not prop branches.",
+          reviewed: true,
+          showActions: true,
+          variantId: "moderation",
+        },
+      ],
+      code: {
+        language: "tsx",
+        fileName: "moderation-notification.tsx",
+        code: notificationCodeSnippets.extractBody,
+      },
+    },
+  },
+  {
+    id: "extract-media-primitive",
+    title: "Extract media",
+    family: "code-dx",
+    durationInFrames: codeDxDuration,
+    content: {
+      previewMode: "final",
+      previewFocus: ["media primitive", "only shapes that need it render it"],
+      previewSteps: [
+        {
+          afterLine: 8,
+          message: "Media is a primitive used by shapes that actually need media.",
+          reviewed: true,
+          showActions: true,
+          variantId: "photo-tag",
+        },
+      ],
+      code: {
+        language: "tsx",
+        fileName: "photo-tag-notification.tsx",
+        code: notificationCodeSnippets.extractMedia,
+      },
+    },
+  },
+  {
+    id: "extract-actions-primitive",
+    title: "Extract actions",
+    family: "code-dx",
+    durationInFrames: codeDxDuration,
+    content: {
+      previewMode: "final",
+      previewFocus: ["actions primitive", "two DM actions", "behavior belongs to the variant"],
+      previewSteps: [
+        {
+          afterLine: 8,
+          message: "The two DM actions become a local composition choice.",
+          reviewed: true,
+          showActions: true,
+          variantId: "dm-request",
+        },
+      ],
+      code: {
+        language: "tsx",
+        fileName: "dm-request-notification.tsx",
+        code: notificationCodeSnippets.extractActions,
+      },
+    },
+  },
+  {
+    id: "shape-is-in-the-code",
+    title: "The shape is in the code",
+    family: "code-dx",
+    durationInFrames: codeDxDuration,
+    content: {
+      bullets: [
+        "no `showActor={false}`",
+        'no `primaryAction="viewDecision"`',
+        "no generic moderation branch",
+      ],
+      previewFocus: ["system icon", "body", "report reason", "actions", "date"],
+      previewSteps: [
+        {
+          afterLine: 1,
+          message: "The shape has a name.",
+          variantId: "moderation",
+        },
+        {
+          afterLine: 5,
+          compact: true,
+          message: "The container receives an already-derived view model.",
+          variantId: "moderation",
+        },
+        {
+          afterLine: 8,
+          compact: true,
+          message: "Reason and visibility are local primitives.",
+          variantId: "moderation",
+        },
+        {
+          afterLine: 10,
+          compact: true,
+          message: "Actions are part of the moderation composition.",
+          reviewed: true,
+          showActions: true,
+          variantId: "moderation",
+        },
+      ],
+      code: {
+        language: "tsx",
+        fileName: "moderation-notification.tsx",
+        code: notificationCodeSnippets.moderationNotification,
+      },
+    },
+  },
+  {
+    id: "make-supported-shapes-explicit",
+    title: "Then scale the pattern",
+    family: "code-dx",
+    durationInFrames: codeDxDuration,
+    content: {
+      codeBodyMinHeight: 820,
+      codeFontSize: 12,
+      codeMaxWidth: 740,
       bullets: [
         "FollowRequestNotification",
         "PostLikeNotification",
@@ -161,49 +552,55 @@ const primary =
         "system icon and appeal",
         "comment preview and reply",
       ],
+      previewSteps: [
+        {
+          afterLine: 2,
+          message: "After one good abstraction, the exports stay named.",
+          previewAll: true,
+          variantId: "follow-request",
+        },
+        {
+          afterLine: 3,
+          compact: true,
+          message: "Post like keeps thumbnail behavior local.",
+          previewAll: true,
+          variantId: "post-like",
+        },
+        {
+          afterLine: 4,
+          compact: true,
+          message: "DM request owns accept and ignore actions.",
+          previewAll: true,
+          variantId: "dm-request",
+        },
+        {
+          afterLine: 5,
+          compact: true,
+          message: "Photo tag owns review media and remove tag.",
+          previewAll: true,
+          variantId: "photo-tag",
+        },
+        {
+          afterLine: 6,
+          compact: true,
+          message: "Moderation owns system review shape.",
+          previewAll: true,
+          variantId: "moderation",
+        },
+        {
+          afterLine: 20,
+          compact: true,
+          message: "The registry backtests the supported shape set.",
+          previewAll: true,
+          reviewed: true,
+          showActions: true,
+          variantId: "post-comment",
+        },
+      ],
       code: {
         language: "tsx",
         fileName: "notifications.ts",
-        code: `export {
-  FollowRequestNotification,
-  PostLikeNotification,
-  DMRequestNotification,
-  PhotoTagNotification,
-  ModerationNotification,
-  PostCommentNotification,
-}`,
-      },
-    },
-  },
-  {
-    id: "shape-is-in-the-code",
-    title: "The shape is in the code",
-    family: "code-dx",
-    durationInFrames: codeDxDuration,
-    content: {
-      bullets: [
-        "no `showActor={false}`",
-        'no `primaryAction="viewDecision"`',
-        "no generic moderation branch",
-      ],
-      previewFocus: ["system icon", "body", "report reason", "actions", "date"],
-      code: {
-        language: "tsx",
-        fileName: "moderation-notification.tsx",
-        code: `export function ModerationNotification(props) {
-  return (
-    <Notification.Container {...props}>
-      <Notification.SystemIcon />
-      <Notification.Body />
-      <Notification.ReportReason />
-      <Notification.Actions>
-        <Notification.ViewDecision />
-        <Notification.Appeal />
-      </Notification.Actions>
-      <Notification.Date />
-    </Notification.Container>
-  )
-}`,
+        code: notificationCodeSnippets.supportedShapes,
       },
     },
   },
@@ -224,7 +621,10 @@ const primary =
     family: "code-only",
     durationInFrames: codeOnlyDuration,
     content: {
-      subtitle: "state / actions / meta",
+      subtitle: "the primitives read one derived view",
+      codeFontSize: 20,
+      codeHeight: 790,
+      codeWidth: 1500,
       bullets: [
         "`state`: what primitives render",
         "`actions`: what primitives trigger",
@@ -237,50 +637,25 @@ const primary =
   state: NotificationState
   actions: NotificationActions
   meta: NotificationMeta
+}
+
+function NotificationProvider({ notification, children }) {
+  const state = deriveNotificationState(notification)
+  const actions = useNotificationActions(notification)
+  const meta = useNotificationMeta(notification)
+
+  return (
+    <NotificationContext.Provider value={{ state, actions, meta }}>
+      {children}
+    </NotificationContext.Provider>
+  )
+}
+
+function useNotification() {
+  const context = useContext(NotificationContext)
+  if (!context) throw new Error("Missing NotificationProvider")
+  return context
 }`,
-      },
-    },
-  },
-  {
-    id: "registry-backtests-api",
-    title: "The registry backtests the API",
-    family: "code-only",
-    durationInFrames: codeOnlyDuration,
-    content: {
-      subtitle: "product type -> supported shape",
-      bullets: ["product taxonomy", "UI taxonomy", "type coverage"],
-      code: {
-        language: "tsx",
-        fileName: "notification-registry.ts",
-        code: `const NOTIFICATIONS: Record<
-  NotificationType,
-  NotificationRenderer
-> = {
-  followRequest: FollowRequestNotification,
-  postLike: PostLikeNotification,
-  dmRequest: DMRequestNotification,
-  photoTag: PhotoTagNotification,
-  moderation: ModerationNotification,
-}`,
-      },
-    },
-  },
-  {
-    id: "ide-knows-shapes",
-    title: "The IDE knows the shapes",
-    family: "code-only",
-    durationInFrames: codeOnlyDuration,
-    content: {
-      bullets: ["unions", "records", "exact props"],
-      code: {
-        language: "tsx",
-        fileName: "notification-type.ts",
-        code: `type NotificationType =
-  | "followRequest"
-  | "postLike"
-  | "dmRequest"
-  | "photoTag"
-  | "moderation"`,
       },
     },
   },
@@ -302,23 +677,37 @@ const primary =
         "post thumbnail",
         "reply action",
       ],
+      previewSteps: [
+        {
+          afterLine: 1,
+          message: "New behavior gets a new named place.",
+          variantId: "post-comment",
+        },
+        {
+          afterLine: 8,
+          compact: true,
+          message: "Comment preview is explicit in the composition.",
+          variantId: "post-comment",
+        },
+        {
+          afterLine: 9,
+          compact: true,
+          message: "Post/thread media stays local to this shape.",
+          variantId: "post-comment",
+        },
+        {
+          afterLine: 10,
+          compact: true,
+          message: "Reply is a fake action owned by the variant.",
+          reviewed: true,
+          showActions: true,
+          variantId: "post-comment",
+        },
+      ],
       code: {
         language: "tsx",
         fileName: "post-comment-notification.tsx",
-        code: `export function PostCommentNotification(props) {
-  return (
-    <Notification.Container {...props}>
-      <Notification.Actor />
-      <Notification.Body />
-      <Notification.CommentPreview />
-      <Notification.PostThumbnail />
-      <Notification.Actions>
-        <Notification.Reply />
-      </Notification.Actions>
-      <Notification.Date />
-    </Notification.Container>
-  )
-}`,
+        code: notificationCodeSnippets.postCommentNotification,
       },
     },
   },

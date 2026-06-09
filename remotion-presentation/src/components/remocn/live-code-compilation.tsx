@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useCurrentFrame } from "remotion";
+import { GlassCodeBlock } from "./glass-code-block";
 
 export interface LiveCodeCompilationProps {
   accentColor?: string;
@@ -76,7 +77,6 @@ const DEFAULT_EVENTS: CodeEvent[] = [
   },
 ];
 
-const CHARS_PER_FRAME = 1.6;
 const DWELL_FRAMES = 5;
 const INITIAL_OFFSET = 8;
 
@@ -89,38 +89,11 @@ function buildTimeline(events: readonly CodeEvent[]): TimelineEntry[] {
   let cursor = INITIAL_OFFSET;
   return events.map((ev) => {
     const start = cursor;
-    const end = start + Math.ceil(ev.code.length / CHARS_PER_FRAME);
+    const lineCount = Math.max(1, ev.code.split("\n").length);
+    const end = start + lineCount * 5;
     cursor = end + DWELL_FRAMES;
     return { ...ev, start, end };
   });
-}
-
-function highlightLine(line: string, accentColor: string) {
-  // very simple tokenizer: keywords, strings, props
-  const tokens: { text: string; color: string }[] = [];
-  const regex =
-    /(\bexport\b|\bfunction\b|\breturn\b)|("[^"]*")|(\b[a-zA-Z_][a-zA-Z0-9_]*)(?=:)|(\{|\}|\(|\)|<|>|\/)|([0-9]+)/g;
-  let lastIndex = 0;
-  let m: RegExpExecArray | null = regex.exec(line);
-  while (m !== null) {
-    if (m.index > lastIndex) {
-      tokens.push({
-        text: line.slice(lastIndex, m.index),
-        color: "#e4e4e7",
-      });
-    }
-    if (m[1]) tokens.push({ text: m[1], color: "#c084fc" });
-    else if (m[2]) tokens.push({ text: m[2], color: "#86efac" });
-    else if (m[3]) tokens.push({ text: m[3], color: accentColor });
-    else if (m[4]) tokens.push({ text: m[4], color: "#71717a" });
-    else if (m[5]) tokens.push({ text: m[5], color: "#fbbf24" });
-    lastIndex = regex.lastIndex;
-    m = regex.exec(line);
-  }
-  if (lastIndex < line.length) {
-    tokens.push({ text: line.slice(lastIndex), color: "#e4e4e7" });
-  }
-  return tokens;
 }
 
 export function LiveCodeCompilation({
@@ -140,50 +113,37 @@ export function LiveCodeCompilation({
   className,
 }: LiveCodeCompilationProps) {
   const remotionFrame = useCurrentFrame();
-  const frame = remotionFrame * speed;
   const timeline = buildTimeline(codeEvents);
-  const timelineEnd = timeline[timeline.length - 1]?.end ?? 0;
 
-  // Build the visible code character-by-character from the auto-staggered
-  // timeline. UI state only flips once a fragment is fully typed.
-  let visibleCode = "";
-  const ui: UIState = {};
+  const fullCode = codeEvents.map((event) => event.code).join("");
+  const previewUi: UIState = {};
   for (const t of timeline) {
-    if (frame < t.start) break;
-    const elapsed = frame - t.start;
-    const charsTyped = Math.min(
-      t.code.length,
-      Math.floor(elapsed * CHARS_PER_FRAME),
-    );
-    visibleCode += t.code.slice(0, charsTyped);
-    if (frame >= t.end) Object.assign(ui, t.ui);
+    Object.assign(previewUi, t.ui);
   }
+  const previewFrame = timeline[timeline.length - 1]?.end ?? remotionFrame;
+  const buttonLabel = previewUi.label ?? "Button";
 
-  const lines = visibleCode.split("\n");
-  const buttonLabel = ui.label ?? "Button";
-
-  // Blinking caret while typing is still in progress.
-  const cursorVisible = frame < timelineEnd && Math.floor(frame / 12) % 2 === 0;
-  const lastLineIndex = lines.length - 1;
   const preview = renderPreview?.({
     accentColor,
-    frame: remotionFrame,
-    ui,
+    frame: previewFrame,
+    ui: previewUi,
   }) ?? (
     <button
       type="button"
       style={{
-        background: ui.background ?? "rgba(255,255,255,0.06)",
-        color: ui.color ?? "rgba(255,255,255,0.4)",
-        padding: ui.padding ?? "10px 20px",
-        borderRadius: ui.borderRadius ?? "4px",
-        fontWeight: ui.fontWeight ?? 400,
+        background: previewUi.background ?? "rgba(255,255,255,0.06)",
+        color: previewUi.color ?? "rgba(255,255,255,0.4)",
+        padding: previewUi.padding ?? "10px 20px",
+        borderRadius: previewUi.borderRadius ?? "4px",
+        fontWeight: previewUi.fontWeight ?? 400,
         fontSize: 18,
         fontFamily: FONT_FAMILY,
-        border: ui.background ? "none" : "1px dashed rgba(255,255,255,0.15)",
+        border: previewUi.background
+          ? "none"
+          : "1px dashed rgba(255,255,255,0.15)",
         cursor: "pointer",
-        boxShadow: ui.background
-          ? `0 10px 30px ${ui.background}55, 0 0 0 1px rgba(255,255,255,0.08)`
+        boxShadow: previewUi.background
+          ? `0 10px 30px ${previewUi.background}55, 0 0 0 1px rgba(255,255,255,0.08)`
           : "none",
       }}
     >
@@ -223,131 +183,19 @@ export function LiveCodeCompilation({
           position: "relative",
         }}
       >
-        <div
-          style={{
-            width: "100%",
-            maxWidth: codeMaxWidth,
-            position: "relative",
-            borderRadius: 14,
-            padding: 1,
-            background:
-              "linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.06) 100%)",
-            boxShadow: "0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.4)",
-          }}
-        >
-          <div
-            style={{
-              borderRadius: 13,
-              background: "rgba(12,12,14,0.85)",
-              backdropFilter: "blur(20px)",
-              overflow: "hidden",
-            }}
-          >
-            {/* Title bar */}
-            <div
-              style={{
-                height: 38,
-                display: "flex",
-                alignItems: "center",
-                padding: "0 16px",
-                borderBottom: "1px solid rgba(255,255,255,0.06)",
-                gap: 8,
-              }}
-            >
-              <div
-                style={{
-                  width: 11,
-                  height: 11,
-                  borderRadius: 6,
-                  background: "#ff5f57",
-                  opacity: 0.6,
-                }}
-              />
-              <div
-                style={{
-                  width: 11,
-                  height: 11,
-                  borderRadius: 6,
-                  background: "#febc2e",
-                  opacity: 0.6,
-                }}
-              />
-              <div
-                style={{
-                  width: 11,
-                  height: 11,
-                  borderRadius: 6,
-                  background: "#28c840",
-                  opacity: 0.6,
-                }}
-              />
-              <div
-                style={{
-                  marginLeft: 12,
-                  fontSize: 12,
-                  color: "rgba(255,255,255,0.45)",
-                  fontFamily: MONO_FAMILY,
-                }}
-              >
-                {codeTitle}
-              </div>
-            </div>
-            {/* Code body */}
-            <div
-              style={{
-                padding: "20px 22px",
-                fontFamily: MONO_FAMILY,
-                fontSize: codeFontSize,
-                lineHeight: 1.65,
-                color: "#e4e4e7",
-                minHeight: codeBodyMinHeight,
-                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
-              }}
-            >
-              {lines.map((line, i) => {
-                const tokens = highlightLine(line, accentColor);
-                const isLast = i === lastLineIndex;
-                return (
-                  <div key={i} style={{ display: "flex", whiteSpace: "pre" }}>
-                    <span
-                      style={{
-                        width: 28,
-                        color: "rgba(255,255,255,0.2)",
-                        userSelect: "none",
-                        flexShrink: 0,
-                      }}
-                    >
-                      {i + 1}
-                    </span>
-                    <span>
-                      {tokens.length === 0 ? (
-                        <span> </span>
-                      ) : (
-                        tokens.map((t, j) => (
-                          <span key={j} style={{ color: t.color }}>
-                            {t.text}
-                          </span>
-                        ))
-                      )}
-                      {isLast && cursorVisible && (
-                        <span
-                          style={{
-                            display: "inline-block",
-                            width: 8,
-                            height: 16,
-                            marginLeft: 1,
-                            verticalAlign: "text-bottom",
-                            background: accentColor,
-                          }}
-                        />
-                      )}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+        <GlassCodeBlock
+          background="transparent"
+          code={fullCode}
+          embedded
+          fontSize={codeFontSize}
+          glassColor="rgba(12,12,14,0.85)"
+          height={codeBodyMinHeight + 40}
+          showBackdrop={false}
+          speed={speed}
+          staggerFrames={5}
+          title={codeTitle}
+          width={codeMaxWidth}
+        />
       </div>
 
       {/* RIGHT: Live preview */}

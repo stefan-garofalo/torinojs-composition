@@ -8,6 +8,9 @@ export interface CodeOnlyTalkSlideProps {
   title?: string;
   subtitle?: string;
   codeTitle?: string;
+  codeFontSize?: number;
+  codeHeight?: number;
+  codeWidth?: number;
 }
 
 export function CodeOnlyTalkSlide({
@@ -15,6 +18,9 @@ export function CodeOnlyTalkSlide({
   title,
   subtitle,
   codeTitle = "slide.tsx",
+  codeFontSize = 30,
+  codeHeight = 760,
+  codeWidth = 1500,
 }: CodeOnlyTalkSlideProps) {
   return (
     <AbsoluteFill style={slideShellStyle}>
@@ -30,11 +36,11 @@ export function CodeOnlyTalkSlide({
           <GlassCodeBlock
             background={stageTokens.color.backgroundDeep}
             code={code}
-            fontSize={30}
+            fontSize={codeFontSize}
             glassColor="rgba(18, 18, 17, 0.78)"
-            height={760}
+            height={codeHeight}
             title={codeTitle}
-            width={1500}
+            width={codeWidth}
           />
         </div>
       </main>

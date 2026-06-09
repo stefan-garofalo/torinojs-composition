@@ -8,7 +8,16 @@ export interface StageCodeBlockProps {
   style?: CSSProperties;
 }
 
-type TokenKind = "comment" | "keyword" | "string" | "number" | "punctuation" | "code";
+type TokenKind =
+  | "code"
+  | "comment"
+  | "keyword"
+  | "number"
+  | "prop"
+  | "punctuation"
+  | "string"
+  | "tag"
+  | "typeName";
 
 interface CodeToken {
   kind: TokenKind;
@@ -35,8 +44,11 @@ const tokenColor: Record<TokenKind, string> = {
   comment: stageTokens.color.codeComment,
   keyword: stageTokens.color.codeKeyword,
   number: stageTokens.color.codeKeyword,
+  prop: "#93c5fd",
   punctuation: stageTokens.color.codePunctuation,
   string: stageTokens.color.codeString,
+  tag: "#67e8f9",
+  typeName: "#bfdbfe",
 };
 
 export function StageCodeBlock({
@@ -142,17 +154,32 @@ function tokenizeLine(line: string): CodeToken[] {
 
   const tokens: CodeToken[] = [];
   const matcher =
-    /("[^"]*"|'[^']*'|`[^`]*`|\b\d+\b|\b[A-Za-z_$][\w$]*\b|[{}()[\].,;:=<>/+-]|\s+|.)/g;
+    /(<\/?\s*[A-Z][\w.]*|<\/?\s*[a-z][\w.-]*|\b[A-Za-z_$][\w$-]*(?=\s*=)|"[^"]*"|'[^']*'|`[^`]*`|\b\d+\b|\b[A-Za-z_$][\w$]*\b|[{}()[\].,;:=<>/?!|&+-]|\s+|.)/g;
   let match: RegExpExecArray | null = matcher.exec(line);
 
   while (match !== null) {
     const text = match[0];
-    if (/^["'`]/.test(text)) {
+    if (text.startsWith("<")) {
+      const tagParts = text.match(/^<\/?\s*/);
+      if (tagParts?.[0]) {
+        tokens.push({ kind: "punctuation", text: tagParts[0] });
+        tokens.push({ kind: "tag", text: text.slice(tagParts[0].length) });
+      } else {
+        tokens.push({ kind: "tag", text });
+      }
+    } else if (
+      /^[A-Za-z_$][\w$-]*$/.test(text) &&
+      /^[=:]/.test(line.slice(matcher.lastIndex).trimStart())
+    ) {
+      tokens.push({ kind: "prop", text });
+    } else if (/^["'`]/.test(text)) {
       tokens.push({ kind: "string", text });
     } else if (/^\d+$/.test(text)) {
       tokens.push({ kind: "number", text });
     } else if (KEYWORDS.has(text)) {
       tokens.push({ kind: "keyword", text });
+    } else if (/^[A-Z][A-Za-z0-9_$]*$/.test(text)) {
+      tokens.push({ kind: "typeName", text });
     } else if (/^[{}()[\].,;:=<>/+-]$/.test(text)) {
       tokens.push({ kind: "punctuation", text });
     } else {

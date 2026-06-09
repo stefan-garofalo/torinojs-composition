@@ -11,6 +11,8 @@ export interface GlassCodeBlockProps {
   background?: string;
   glassColor?: string;
   staggerFrames?: number;
+  embedded?: boolean;
+  showBackdrop?: boolean;
   showTrafficLights?: boolean;
   speed?: number;
   className?: string;
@@ -55,7 +57,16 @@ const KEYWORDS = new Set([
 
 type Token = {
   text: string;
-  kind: "code" | "comment" | "string" | "keyword" | "number";
+  kind:
+    | "code"
+    | "comment"
+    | "string"
+    | "keyword"
+    | "number"
+    | "tag"
+    | "prop"
+    | "punctuation"
+    | "typeName";
 };
 
 function tokenizeLine(line: string): Token[] {
@@ -66,18 +77,44 @@ function tokenizeLine(line: string): Token[] {
   }
 
   const tokens: Token[] = [];
-  // Split keeping delimiters: words, strings, numbers, everything else.
-  const re = /("[^"]*"|'[^']*'|`[^`]*`|\b\d+\b|\b[A-Za-z_$][\w$]*\b|[^\w"']+)/g;
+  const re =
+    /(<\/?\s*[A-Z][\w.]*|<\/?\s*[a-z][\w.-]*|\b[A-Za-z_$][\w$-]*(?=\s*=)|"[^"]*"|'[^']*'|`[^`]*`|\b\d+\b|\b[A-Za-z_$][\w$]*\b|[{}()[\].,;:=<>/?!|&+-]|\s+|.)/g;
   let match: RegExpExecArray | null;
   while ((match = re.exec(line)) !== null) {
     const t = match[0];
     const first = t[0];
-    if (first === '"' || first === "'" || first === "`") {
+    if (t.startsWith("<")) {
+      const tagParts = t.match(/^<\/?\s*/);
+      if (tagParts?.[0]) {
+        tokens.push({ text: tagParts[0], kind: "punctuation" });
+        tokens.push({ text: t.slice(tagParts[0].length), kind: "tag" });
+      } else {
+        tokens.push({ text: t, kind: "tag" });
+      }
+    } else if (
+      /^[A-Za-z_$][\w$-]*$/.test(t) &&
+      /^[=:]/.test(line.slice(re.lastIndex).trimStart())
+    ) {
+      tokens.push({ text: t, kind: "prop" });
+    } else if (/^[A-Za-z_$][\w$-]*(?=\s*$)/.test(t)) {
+      tokens.push({
+        text: t,
+        kind: KEYWORDS.has(t)
+          ? "keyword"
+          : /^[A-Z][A-Za-z0-9_$]*$/.test(t)
+            ? "typeName"
+            : "code",
+      });
+    } else if (first === '"' || first === "'" || first === "`") {
       tokens.push({ text: t, kind: "string" });
     } else if (/^\d+$/.test(t)) {
       tokens.push({ text: t, kind: "number" });
     } else if (/^[A-Za-z_$][\w$]*$/.test(t) && KEYWORDS.has(t)) {
       tokens.push({ text: t, kind: "keyword" });
+    } else if (/^[A-Z][A-Za-z0-9_$]*$/.test(t)) {
+      tokens.push({ text: t, kind: "typeName" });
+    } else if (/^[{}()[\].,;:=<>/?!|&+-]$/.test(t)) {
+      tokens.push({ text: t, kind: "punctuation" });
     } else {
       tokens.push({ text: t, kind: "code" });
     }
@@ -91,6 +128,10 @@ const TOKEN_COLORS: Record<Token["kind"], string> = {
   string: "#86efac",
   keyword: "#c4b5fd",
   number: "#fcd34d",
+  prop: "#93c5fd",
+  punctuation: "#71717a",
+  tag: "#67e8f9",
+  typeName: "#bfdbfe",
 };
 
 export function GlassCodeBlock({
@@ -102,6 +143,8 @@ export function GlassCodeBlock({
   background = "#0a0a0a",
   glassColor = "rgba(10, 10, 10, 0.6)",
   staggerFrames = 4,
+  embedded = false,
+  showBackdrop = true,
   showTrafficLights = true,
   speed = 1,
   className,
@@ -112,17 +155,19 @@ export function GlassCodeBlock({
     <div
       className={className}
       style={{
-        position: "absolute",
-        inset: 0,
+        position: embedded ? "relative" : "absolute",
+        inset: embedded ? undefined : 0,
         background,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        height: embedded ? height : undefined,
+        width: embedded ? width : undefined,
       }}
     >
       {/* Animated background hint behind the glass so the blur has something
           to chew on. Pure CSS — no extra deps. */}
-      <BackdropAura />
+      {showBackdrop ? <BackdropAura /> : null}
 
       {/* 1px gradient ring acting as a microborder */}
       <div

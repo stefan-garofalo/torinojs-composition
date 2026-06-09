@@ -26,6 +26,8 @@ export function NarrativeTalkSlide({
   emphasisLines = [],
   eyebrow,
 }: NarrativeTalkSlideProps) {
+  const subtitleLineCount = subtitle ? subtitle.split("\n").length : 0;
+
   return (
     <AbsoluteFill style={slideShellStyle}>
       <main style={contentStyle}>
@@ -40,7 +42,28 @@ export function NarrativeTalkSlide({
               text={title}
             />
           </div>
-          {subtitle ? <p style={subtitleStyle}>{subtitle}</p> : null}
+          {subtitle ? (
+            <div
+              style={{
+                ...subtitleFrameStyle,
+                height: subtitleLineCount > 1 ? 112 : 62,
+              }}
+            >
+              <StaggeredFadeUp
+                background="transparent"
+                color={stageTokens.color.textMuted}
+                distance={14}
+                fontSize={40}
+                fontWeight={500}
+                justifyContent="flex-start"
+                letterSpacing={0}
+                lineHeight={1.22}
+                startFrame={18}
+                staggerDelay={3}
+                text={subtitle}
+              />
+            </div>
+          ) : null}
         </section>
 
         <aside style={supportColumnStyle}>
@@ -142,12 +165,10 @@ const eyebrowStyle: CSSProperties = {
   textTransform: "uppercase",
 };
 
-const subtitleStyle: CSSProperties = {
-  color: stageTokens.color.textMuted,
-  fontSize: 40,
-  lineHeight: 1.18,
-  margin: 0,
+const subtitleFrameStyle: CSSProperties = {
   maxWidth: 980,
+  overflow: "hidden",
+  position: "relative",
 };
 
 const bulletListStyle: CSSProperties = {

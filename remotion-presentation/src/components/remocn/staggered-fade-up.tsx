@@ -11,6 +11,10 @@ export interface StaggeredFadeUpProps {
   fontWeight?: number;
   background?: string;
   speed?: number;
+  startFrame?: number;
+  justifyContent?: CSSStyleDeclaration["justifyContent"];
+  letterSpacing?: string | number;
+  lineHeight?: number;
   className?: string;
 }
 
@@ -23,11 +27,16 @@ export function StaggeredFadeUp({
   fontWeight = 600,
   background = "white",
   speed = 1,
+  startFrame = 0,
+  justifyContent = "center",
+  letterSpacing = "-0.03em",
+  lineHeight = 1.05,
   className,
 }: StaggeredFadeUpProps) {
-  const frame = useCurrentFrame() * speed;
+  const frame = useCurrentFrame() * speed - startFrame;
 
-  const words = text.split(" ");
+  const tokens = text.split(/(\s+)/);
+  let animatedIndex = 0;
 
   return (
     <div
@@ -36,7 +45,7 @@ export function StaggeredFadeUp({
         inset: 0,
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent,
         background,
       }}
     >
@@ -46,13 +55,20 @@ export function StaggeredFadeUp({
           fontSize,
           fontWeight,
           color,
-          letterSpacing: "-0.03em",
+          letterSpacing,
+          lineHeight,
+          whiteSpace: "pre-wrap",
           fontFamily:
             "var(--font-geist-sans), -apple-system, BlinkMacSystemFont, sans-serif",
         }}
       >
-        {words.map((word, i) => {
-          const local = frame - i * staggerDelay;
+        {tokens.map((token, i) => {
+          if (/^\s+$/.test(token)) {
+            return token;
+          }
+
+          const local = frame - animatedIndex * staggerDelay;
+          animatedIndex += 1;
           const opacity = interpolate(local, [0, 12], [0, 1], {
             extrapolateLeft: "clamp",
             extrapolateRight: "clamp",
@@ -66,12 +82,11 @@ export function StaggeredFadeUp({
               key={i}
               style={{
                 display: "inline-block",
-                marginRight: "0.25em",
                 opacity,
                 transform: `translateY(${y}px)`,
               }}
             >
-              {word}
+              {token}
             </span>
           );
         })}
